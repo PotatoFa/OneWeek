@@ -18,13 +18,15 @@ import retrofit.converter.GsonConverter;
  */
 public class ApplicationController extends Application {
     private static  ApplicationController instance;
-    public static ApplicationController getInstance() {return instance; }
+    public static ApplicationController getInstance() {return instance;}
+    private static GPSTracker gpsTracker;
+    public static GPSTracker getGpsTracker() {return gpsTracker;}
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         ApplicationController.instance = this;
+        ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
     }
 
     private ServerInterface api;
