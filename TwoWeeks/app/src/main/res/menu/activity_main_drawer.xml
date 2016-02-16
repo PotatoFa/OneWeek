@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_lacation_setting"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="Location Setting" />
+        <item android:id="@+id/nav_setting"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Setting" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item android:id="@+id/nav_info"
+                android:icon="@android:drawable/ic_menu_share"
+                android:title="Info" />
+            <item android:id="@+id/nav_logout"
+                android:icon="@android:drawable/ic_menu_share"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

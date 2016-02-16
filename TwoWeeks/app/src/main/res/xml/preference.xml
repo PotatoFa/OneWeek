@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="어플 정보" >
+
+        <Preference
+            android:summary="개발자 정보를 확인합니다"
+            android:title="개발자 정보"
+            android:key="info_develop">
+            <intent
+                android:targetClass="company.twoweeks.twoweeks.MainActivity"
+                android:targetPackage="company.twoweeks.twoweeks" />
+        </Preference>
+
+        <Preference
+            android:summary="개발자에게 메일을 보냅니다"
+            android:title="메일 보내기" >
+            <intent
+                android:action="android.intent.action.SENDTO"
+                android:data="mailto:masd6444@naver.com" />
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="정보" >
+
+        <Preference
+            android:title="데이터 동기화"
+            android:key="datasync"
+            android:summary="데이터 업데이트를 확인합니다" />
+
+        <CheckBoxPreference
+            android:key="alarm"
+            android:title="알림 설정"
+            android:summary="알림 사운드 설정"/>
+
+        <Preference
+            android:title="로그아웃"
+            android:summary="Logout"
+            android:key="logout"/>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

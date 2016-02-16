@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="360dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:scaleType="centerCrop"
+        android:background="#999999"
+        android:id="@+id/timelineitem_image"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/timelineitem_view"
+        android:layout_height="360dp">
+
+        <company.twoweeks.twoweeks.AutoSizeText.AutoResizeTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/timelineitem_text"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:maxLines="1"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_marginTop="90dp"
+            android:textSize="80dp"
+            android:maxLength="14"
+            android:text="country"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timelineitem_toltc"
+            android:textColor="#ffffff"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="22dp"
+            android:text="toLTC"
+            android:layout_alignParentBottom="true"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timelineitem_fromltc"
+            android:textColor="#ffffff"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="22dp"
+            android:text="fromLTC"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
+
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

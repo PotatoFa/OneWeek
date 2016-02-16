@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="company.twoweeks.twoweeks.Camera.EditSavePhotoFragment">
+
+    <View
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <company.twoweeks.twoweeks.AutoSizeText.AutoResizeEditText
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="wrap_content"
+        android:maxLength="14"
+        android:lines="1"
+        android:singleLine="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="120dp"
+        android:textStyle="bold"
+        android:textCursorDrawable="@drawable/edittext_cursor"
+        android:background="#00000000"
+        android:textColor="#ffffff"
+        android:id="@+id/camera_text"
+        android:layout_centerInParent="true"/>
+
+    <company.twoweeks.twoweeks.Camera.SquareImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topView"
+        android:scaleType="centerCrop"/>
+
+    <ImageButton
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@drawable/squarecamera__cancel_drawable"
+        android:background="@android:color/transparent"
+        android:onClick="onCancel"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="T"
+        android:id="@+id/button_editfocus"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_select"
+        android:text="Next"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

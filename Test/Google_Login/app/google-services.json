@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_id": "twoweeks-1113",
+    "project_number": "243787068094",
+    "name": "Twoweeks"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243787068094:android:a63dcc91e56a11a1",
+        "client_id": "android:wad.google_login",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "wad.google_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243787068094-04jp38u1fetrdjotnqm3k3h9fcmfh1vo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wad.google_login",
+            "certificate_hash": "B5AE128BB2AFF020855408CF48C4B38A50B49D44"
+          }
+        },
+        {
+          "client_id": "243787068094-kgqb1is588rh616mbqagpsaput6r0114.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
