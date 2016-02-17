@@ -1,5 +1,6 @@
 package wad.google_login;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,11 +15,12 @@ import retrofit.client.Response;
 
 public class JoinActivity extends AppCompatActivity {
 
+    String TAG = "JOIN_LOG";
     ApplicationController applicationController;
     ServerInterface api;
     GPSTracker gpsTracker;
     SharedPreferences sharedPreferences;
-    String user_id;
+    String user_id, gcm_token;
     Button btn_logout, btn_login, btn_location;
     TextView text_location;
 
@@ -28,7 +30,8 @@ public class JoinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_join);
 
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        user_id = sharedPreferences.getString("id", "error");
+        user_id = sharedPreferences.getString("id", null);
+        gcm_token = sharedPreferences.getString("gcm_token", null);
 
         applicationController = ApplicationController.getInstance();
         applicationController.buildServerInterface("ec2-54-92-43-111.ap-northeast-1.compute.amazonaws.com");
@@ -36,6 +39,18 @@ public class JoinActivity extends AppCompatActivity {
         api = applicationController.getServerInterface();
         gpsTracker = applicationController.getGpsTracker();
 
+        if(user_id.isEmpty()){
+            //로그인 ID값이 잘못 되었음. 오류 출력 및 재 로그인 요청
+            Log.i(TAG, " id_isEmpty");
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }else{
+            initView();
+        }
+
+    }
+
+    private void initView(){
         btn_logout = (Button)findViewById(R.id.btn_logout);
         btn_login = (Button)findViewById(R.id.btn_login);
         btn_location = (Button)findViewById(R.id.btn_location);
@@ -61,18 +76,18 @@ public class JoinActivity extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    api.get_logout(user_id, new Callback<Return>() {
-                        @Override
-                        public void success(Return aReturn, Response response) {
-                            Log.i("LOGOUT : ", aReturn.getLogoutStatus());
-                        }
+                api.get_logout(user_id, new Callback<Return>() {
+                    @Override
+                    public void success(Return aReturn, Response response) {
+                        Log.i("LOGOUT : ", aReturn.getLogoutStatus());
+                    }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Log.i("LOGOUT : ", "FAIL");
-                            error.printStackTrace();
-                        }
-                    });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.i("LOGOUT : ", "FAIL");
+                        error.printStackTrace();
+                    }
+                });
             }
         });
         btn_location.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +96,6 @@ public class JoinActivity extends AppCompatActivity {
                 location_load();
             }
         });
-
     }
 
     private void location_load(){
@@ -95,4 +109,5 @@ public class JoinActivity extends AppCompatActivity {
             //TODO showing dialog GPS ON
         }
     }
+
 }
