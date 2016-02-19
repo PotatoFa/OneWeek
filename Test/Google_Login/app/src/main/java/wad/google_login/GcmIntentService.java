@@ -18,6 +18,7 @@ public class GcmIntentService extends IntentService {
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
+    //http://berabue.blogspot.kr/2015/03/android-gcm-client.html 참고URL
     public GcmIntentService() {
 //        Used to name the worker thread, important only for debugging.
         super("GcmIntentService");
