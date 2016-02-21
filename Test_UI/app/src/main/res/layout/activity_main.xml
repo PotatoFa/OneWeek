@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/image_test"
+        android:layout_height="360dp"
+        android:background="@drawable/test"/>
+    <!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +25,7 @@
         app:circular_parallax="true">
 
     </com.nirhart.parallaxscroll.views.ParallaxListView>
+    -->
 
 
 
