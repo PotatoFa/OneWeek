@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ScrollviewActivity extends AppCompatActivity {
@@ -23,9 +27,16 @@ public class ScrollviewActivity extends AppCompatActivity {
     int scroll_max_y;
     int linear_max, content_max;
 
-    ImageView content_first, content_second , content_third;
+    RelativeLayout.LayoutParams text_param_country =
+            new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-    LinearLayout.LayoutParams content_first_param, content_second_param, content_third_param;
+    RelativeLayout.LayoutParams text_param_city =
+            new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+    TextView[] textView_Country = new TextView[3];
+    TextView[] textView_City = new TextView[3];
+    RelativeLayout[] content_layout = new RelativeLayout[3];
+    LinearLayout.LayoutParams[] content_layout_param = new LinearLayout.LayoutParams[3];
 
 
     @Override
@@ -45,25 +56,35 @@ public class ScrollviewActivity extends AppCompatActivity {
         content = (ScrollView)findViewById(R.id.scrollview);
         scroll_linear = (LinearLayout)findViewById(R.id.scroll_linear);
 
-        content_first = new ImageView(this);
-        content_second = new ImageView(this);
-        content_third = new ImageView(this);
+        content_layout_param[0] = new LinearLayout.LayoutParams(view_width, content_height[0]);
+        content_layout_param[1] = new LinearLayout.LayoutParams(view_width, content_height[1]);
+        content_layout_param[2] = new LinearLayout.LayoutParams(view_width, content_height[2]);
 
-        content_first_param = new LinearLayout.LayoutParams(view_width, content_height[0]);
-        content_second_param = new LinearLayout.LayoutParams(view_width, content_height[1]);
-        content_third_param = new LinearLayout.LayoutParams(view_width, content_height[2]);
 
-        scroll_linear.addView(content_first, content_first_param);
-        scroll_linear.addView(content_second, content_second_param);
-        scroll_linear.addView(content_third, content_third_param);
+        for(int i=0; i<3; i++){
 
-        content_first.setBackgroundResource(R.drawable.test);
-        content_second.setBackgroundResource(R.drawable.test2);
-        content_third.setBackgroundResource(R.drawable.test);
+            content_layout[i] = new RelativeLayout(this);
+            scroll_linear.addView(content_layout[i], content_layout_param[i]);
+            content_layout[i].setBackgroundResource(R.drawable.test2);
 
-        content_first.setScaleType(ImageView.ScaleType.MATRIX);
-        content_second.setScaleType(ImageView.ScaleType.MATRIX);
-        content_third.setScaleType(ImageView.ScaleType.MATRIX);
+            textView_Country[i] = new TextView(this);
+            textView_Country[i].setText("Country");
+            textView_Country[i].setTextSize(50);
+            textView_Country[i].setId(i);
+            text_param_country.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
+            content_layout[i].addView(textView_Country[i]);
+            textView_Country[i].setLayoutParams(text_param_country);
+
+            textView_City[i] = new TextView(this);
+            textView_City[i].setText("CITY");
+            textView_City[i].setTextSize(30);
+            text_param_city.addRule(RelativeLayout.BELOW, i);
+            text_param_city.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            content_layout[i].addView(textView_City[i]);
+            textView_City[i].setLayoutParams(text_param_city);
+
+        }
 
 
         scroll_linear.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -116,25 +137,27 @@ public class ScrollviewActivity extends AppCompatActivity {
                     Log.i("Two :", String.valueOf(content_height[0])+"/"+String.valueOf(content_height[1])+"/"+String.valueOf(content_height[2]));
                 }
 
-                content_first_param.height = content_height[0];
-                content_second_param.height = content_height[1];
-                content_third_param.height = content_height[2];
+                for(int i=0; i<3; i++){
 
-                content_first.setLayoutParams(content_first_param);
-                content_second.setLayoutParams(content_second_param);
-                content_third.setLayoutParams(content_third_param);
+                    content_layout_param[i].height = content_height[i];
+                    content_layout[i].setLayoutParams(content_layout_param[i]);
+                    textView_City[i].setLayoutParams(text_param_city);
+                    textView_Country[i].setLayoutParams(text_param_country);
+                }
 
+                /*
+                content_layout_param[0].height = content_height[0];
+                content_layout_param[1].height = content_height[1];
+                content_layout_param[2].height = content_height[2];
 
-/*
-                int sd = convert_int_map(current_y, 0, scroll_max_y, view_width/2, view_width);
-                // imageView.setLayoutParams(new LinearLayout.LayoutParams(width, imageView.getHeight()-content.getScrollY()));
-                //Log.i("contentsize:", String.valueOf(sd));
+                content_layout[0].setLayoutParams(content_layout_param[0]);
+                content_layout[1].setLayoutParams(content_layout_param[1]);
+                content_layout[2].setLayoutParams(content_layout_param[2]);
 
-                String content_size = String.valueOf(content_height[0]) + "/"
-                        + String.valueOf(content_height[1]) + "/"
-                        + String.valueOf(content_height[2]);
-                //Log.i("contentsize:", content_size);
+                textView_City[i].setLayoutParams(text_param_city);
+                textView_Country[i].setLayoutParams(text_param_country);
 */
+
             }
         });
 
