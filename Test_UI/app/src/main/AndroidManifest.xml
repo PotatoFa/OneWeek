@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".ViewPagerActivity" >
         </activity>
+        <activity android:name=".CameraActivity" >
+        </activity>
     </application>
 
 </manifest>

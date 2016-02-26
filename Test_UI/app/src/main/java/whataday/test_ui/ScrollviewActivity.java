@@ -1,10 +1,12 @@
 package whataday.test_ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -46,10 +48,12 @@ public class ScrollviewActivity extends AppCompatActivity {
     RelativeLayout.LayoutParams[] country_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] city_textview_param = new RelativeLayout.LayoutParams[3];
 
+    SwipeRefreshLayout swipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_scrollview);
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
         view_width = dm.widthPixels;
@@ -150,47 +154,64 @@ public class ScrollviewActivity extends AppCompatActivity {
                 if (current_y < scroll_max_y / 2) {
                     //첫번째_decrease / 두번째_increase / 세번째 고정
                     //첫번째 = width~width/2 : 0~scroll_max_y/2
-                    content_height[0] = convert_int_map(current_y, 0, scroll_max_y/2, view_width, view_width/2);
+                    content_height[0] = convert_int_map(current_y, 0, scroll_max_y / 2, view_width, view_width / 2);
                     //두번째 = width/2~width : 0~scroll_max_y/2
-                    content_height[1] = convert_int_map(current_y, 0, scroll_max_y/2, view_width/2, view_width);
+                    content_height[1] = convert_int_map(current_y, 0, scroll_max_y / 2, view_width / 2, view_width);
                     //세번째 = width/2
-                    content_height[2] = view_width/2;
+                    content_height[2] = view_width / 2;
 
-                    if(content_height[0] < content_height[1]){
+                    if (content_height[0] < content_height[1]) {
                         focus_item = 1;
-                    }else{
+                    } else {
                         focus_item = 0;
                     } //포커스 이동
                     //Log.i("One :", String.valueOf(content_height[0])+"/"+String.valueOf(content_height[1])+"/"+String.valueOf(content_height[2]));
                 } else if (current_y > scroll_max_y / 2) {
                     //첫번째_고정 / 두번째_decrease / 세번째_increase
                     //첫번째 = width/2 : scroll_max_y/2~scroll_max_y
-                    if(current_y > scroll_max_y)
-                    content_height[0] = view_width/2;
+                    if (current_y > scroll_max_y)
+                        content_height[0] = view_width / 2;
                     //두번째 = width~width/2 : scroll_max_y/2~scroll_max_y
-                    content_height[1] = convert_int_map(current_y, scroll_max_y/2, scroll_max_y, view_width, view_width/2);
+                    content_height[1] = convert_int_map(current_y, scroll_max_y / 2, scroll_max_y, view_width, view_width / 2);
                     //세번째 = width/2~width : scroll_max_y/2~scroll_max_y
-                    content_height[2] = convert_int_map(current_y, scroll_max_y/2, scroll_max_y, view_width/2, view_width);
+                    content_height[2] = convert_int_map(current_y, scroll_max_y / 2, scroll_max_y, view_width / 2, view_width);
 
-                    if(content_height[1] < content_height[2]){
+                    if (content_height[1] < content_height[2]) {
                         focus_item = 2;
-                    }else {
+                    } else {
                         focus_item = 1;
                     }
-                   // Log.i("Two :", String.valueOf(content_height[0])+"/"+String.valueOf(content_height[1])+"/"+String.valueOf(content_height[2]));
+                    // Log.i("Two :", String.valueOf(content_height[0])+"/"+String.valueOf(content_height[1])+"/"+String.valueOf(content_height[2]));
                 }
 
-                for(int i=0; i<3; i++){
+                for (int i = 0; i < 3; i++) {
                     content_layout_param[i].height = content_height[i];
                     content_layout[i].setLayoutParams(content_layout_param[i]);
-                    dark_alpha[i] = convert_float_map(content_height[i], view_width/2, view_width, max_alpha, min_alpha);
+                    dark_alpha[i] = convert_float_map(content_height[i], view_width / 2, view_width, max_alpha, min_alpha);
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
 
             }
         });
+
+        swipe = (SwipeRefreshLayout)findViewById(R.id.swipe);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+                overridePendingTransition(R.anim.down_top, R.anim.top_down);
+            }
+        });
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+
+    }
+
+
 
     int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
         return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;

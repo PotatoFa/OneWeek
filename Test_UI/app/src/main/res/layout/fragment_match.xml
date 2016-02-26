@@ -2,9 +2,10 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/match_swipe"
     android:layout_height="wrap_content">
 
-        <ScrollView
+        <whataday.test_ui.MyScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/match_scroll">
@@ -17,7 +18,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </whataday.test_ui.MyScrollView>
 
 
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(getApplicationContext(), ViewPagerActivity.class));
-       // startActivity(new Intent(getApplicationContext(), ScrollviewActivity.class));
+       startActivity(new Intent(getApplicationContext(), ViewPagerActivity.class));
+        //startActivity(new Intent(getApplicationContext(), ScrollviewActivity.class));
 
     }
 }

@@ -1,22 +1,30 @@
 package whataday.test_ui.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import whataday.test_ui.CameraActivity;
+import whataday.test_ui.MyScrollView;
 import whataday.test_ui.R;
 
 /**
@@ -24,16 +32,24 @@ import whataday.test_ui.R;
  */
 public class MatchFragment extends android.support.v4.app.Fragment {
 
+    SwipeRefreshLayout match_swipe;
     View rootView;
 
+    Button btn_camera;
 
-    ScrollView match_scroll;
+    //ScrollView match_scroll;
+    MyScrollView match_scroll;
     LinearLayout match_vertical;
 
     int view_width, view_height;
     int[] content_height = new int[3];
 
-    int scroll_max_y;
+
+    private int scrolled_distance = 0;
+    private static final int HIDE_THRESHOLD = 10;
+    private boolean toolbar_visible = true;
+
+    int scroll_max_y, current_y, pre_y;
     int linear_max, content_max;
     int focus_item;
     Float min_alpha = new Float(0);
@@ -52,6 +68,9 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     LinearLayout.LayoutParams[] content_layout_param = new LinearLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] country_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] city_textview_param = new RelativeLayout.LayoutParams[3];
+
+    Toolbar toolbar;
+
 
     public static MatchFragment newInstance() {
         MatchFragment matchFragment = new MatchFragment();
@@ -80,11 +99,25 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
         getResizeBitmap();
         initView();
+
+        match_swipe = (SwipeRefreshLayout)rootView.findViewById(R.id.match_swipe);
+        match_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
+                getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
+                Log.i("SWIPE ::", "235235253");
+            }
+        });
     }
 
     private void initView(){
 
-        match_scroll = (ScrollView)rootView.findViewById(R.id.match_scroll);
+        btn_camera = (Button)getActivity().findViewById(R.id.btn_camera);
+
+        toolbar = (Toolbar)getActivity().findViewById(R.id.toolbar_main);
+        match_scroll = (MyScrollView)rootView.findViewById(R.id.match_scroll);
         match_vertical = (LinearLayout)rootView.findViewById(R.id.match_vertical);
         focus_item = 0;
 
@@ -164,11 +197,44 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
             }
         });
+        match_scroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    match_scroll.startScrollerTask();
+                }
+                return false;
+            }
+        });
+
+        match_scroll.setOnScrollStoppedListener(new MyScrollView.OnScrollStoppedListener() {
+            @Override
+            public void onScrollStopped() {
+                if(!toolbar_visible){
+                show_toolbar();
+                }
+            }
+        });
 
         match_scroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
             @Override
             public void onScrollChanged() {
-                int current_y = match_scroll.getScrollY();
+                pre_y = current_y;
+                current_y = match_scroll.getScrollY();
+
+                if(toolbar_visible){
+                    //툴바가 보여지고 있을때
+                    scrolled_distance += current_y - pre_y;
+                        if(Math.abs(scrolled_distance) > HIDE_THRESHOLD){
+                            //이동시킨 스크롤 값이 문턱치 이상일때
+                            hide_toolbar();
+                            scrolled_distance = 0;
+                            //툴바를 숨기고 이동거리를 초기화. -> 툴바가 보여지는 부분은 stopListener
+                    }
+                }
+
+
                 if (current_y < scroll_max_y / 2) {
                     //첫번째_decrease / 두번째_increase / 세번째 고정
                     //첫번째 = width~width/2 : 0~scroll_max_y/2
@@ -209,10 +275,20 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
-
             }
+
+
         });
 
+    }
+
+    private void hide_toolbar(){
+        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        toolbar_visible = false;
+    }
+    private void show_toolbar(){
+        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        toolbar_visible = true;
     }
 
     int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){

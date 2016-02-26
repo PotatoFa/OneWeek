@@ -3,6 +3,7 @@ package whataday.test_ui.Fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.Toolbar;
 
 /**
  * Created by hoon on 2016-02-23.
@@ -12,7 +13,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
     int MAX_PAGE = 2;
 
     public PagerAdapter(FragmentManager fm) {
-        super(fm);
+        super(fm);;
     }
     @Override
     public Fragment getItem(int position) {
