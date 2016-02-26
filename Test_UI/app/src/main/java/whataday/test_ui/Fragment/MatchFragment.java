@@ -101,9 +101,12 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         initView();
 
         match_swipe = (SwipeRefreshLayout)rootView.findViewById(R.id.match_swipe);
+        //match_swipe.setProgressBackgroundColorSchemeColor(Color.parseColor("#00000000"));
         match_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                match_swipe.setRefreshing(false);
 
                 getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
                 getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
