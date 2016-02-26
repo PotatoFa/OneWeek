@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import whataday.test_ui.CameraActivity;
 import whataday.test_ui.MyScrollView;
 import whataday.test_ui.R;
@@ -33,11 +41,13 @@ import whataday.test_ui.R;
 public class MatchFragment extends android.support.v4.app.Fragment {
 
     SwipeRefreshLayout match_swipe;
+    PtrFrameLayout store_house_ptr_frame;
+    StoreHouseHeader header;
+
     View rootView;
 
     Button btn_camera;
 
-    //ScrollView match_scroll;
     MyScrollView match_scroll;
     LinearLayout match_vertical;
 
@@ -84,10 +94,12 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        SwipeRefreshLayout rootView = (SwipeRefreshLayout)inflater.inflate(R.layout.fragment_match, container, false);
+        RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.fragment_match, container, false);
         this.rootView = rootView;
         return rootView;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -100,20 +112,43 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         getResizeBitmap();
         initView();
 
-        match_swipe = (SwipeRefreshLayout)rootView.findViewById(R.id.match_swipe);
-        //match_swipe.setProgressBackgroundColorSchemeColor(Color.parseColor("#00000000"));
-        match_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
+
+        header = new StoreHouseHeader(getActivity().getApplicationContext());
+        header.initWithPointList(getPointList());
+
+        store_house_ptr_frame.setDurationToCloseHeader(3000);
+        store_house_ptr_frame.setHeaderView(header);
+        store_house_ptr_frame.addPtrUIHandler(header);
+        store_house_ptr_frame.setEnabledNextPtrAtOnce(true);
+
+        store_house_ptr_frame.setPtrHandler(new PtrHandler() {
             @Override
-            public void onRefresh() {
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, match_scroll, header);
+            }
 
-                match_swipe.setRefreshing(false);
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                //리프레시 시작 및 끝
+                Log.i("REFRESH", "ON REFRESH BEGIN");
+                //카메라 전송 등의 액션
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        store_house_ptr_frame.refreshComplete();
+                        getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
+                        getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
+                    }
+                }, 100);
 
-                getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
-                getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
-                Log.i("SWIPE ::", "235235253");
+                store_house_ptr_frame.refreshComplete();
+                //리프레시 완료
             }
         });
+
     }
+
 
     private void initView(){
 
@@ -213,8 +248,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         match_scroll.setOnScrollStoppedListener(new MyScrollView.OnScrollStoppedListener() {
             @Override
             public void onScrollStopped() {
-                if(!toolbar_visible){
-                show_toolbar();
+                if (!toolbar_visible) {
+                    show_toolbar();
                 }
             }
         });
@@ -226,14 +261,14 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 pre_y = current_y;
                 current_y = match_scroll.getScrollY();
 
-                if(toolbar_visible){
+                if (toolbar_visible) {
                     //툴바가 보여지고 있을때
                     scrolled_distance += current_y - pre_y;
-                        if(Math.abs(scrolled_distance) > HIDE_THRESHOLD){
-                            //이동시킨 스크롤 값이 문턱치 이상일때
-                            hide_toolbar();
-                            scrolled_distance = 0;
-                            //툴바를 숨기고 이동거리를 초기화. -> 툴바가 보여지는 부분은 stopListener
+                    if (Math.abs(scrolled_distance) > HIDE_THRESHOLD) {
+                        //이동시킨 스크롤 값이 문턱치 이상일때
+                        hide_toolbar();
+                        scrolled_distance = 0;
+                        //툴바를 숨기고 이동거리를 초기화. -> 툴바가 보여지는 부분은 stopListener
                     }
                 }
 
@@ -306,4 +341,82 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.test2);
         resize_Bitmap = Bitmap.createScaledBitmap(bitmap_image, view_width, view_width, true);
     }
+
+    private ArrayList<float[]> getPointList() {
+        // this point is taken from https://github.com/cloay/CRefreshLayout
+        List<Point> startPoints = new ArrayList<Point>();
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+
+        startPoints.add(new Point(320, 70));
+        startPoints.add(new Point(313, 80));
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+        startPoints.add(new Point(330, 80));
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+        startPoints.add(new Point(315, 110));
+        startPoints.add(new Point(240, 80));
+        startPoints.add(new Point(270, 80));
+        startPoints.add(new Point(363, 103));
+
+        startPoints.add(new Point(375, 80));
+        startPoints.add(new Point(375, 80));
+        startPoints.add(new Point(425, 80));
+        startPoints.add(new Point(380, 95));
+        startPoints.add(new Point(400, 63));
+
+        List<Point> endPoints = new ArrayList<Point>();
+        endPoints.add(new Point(270, 80));
+        endPoints.add(new Point(270, 110));
+        endPoints.add(new Point(270, 110));
+        endPoints.add(new Point(250, 110));
+        endPoints.add(new Point(275, 107));
+        endPoints.add(new Point(302, 80));
+        endPoints.add(new Point(302, 107));
+        endPoints.add(new Point(302, 107));
+
+        endPoints.add(new Point(340, 70));
+        endPoints.add(new Point(360, 80));
+        endPoints.add(new Point(330, 80));
+        endPoints.add(new Point(340, 87));
+        endPoints.add(new Point(315, 100));
+        endPoints.add(new Point(345, 98));
+        endPoints.add(new Point(330, 120));
+        endPoints.add(new Point(345, 108));
+        endPoints.add(new Point(360, 120));
+        endPoints.add(new Point(363, 75));
+        endPoints.add(new Point(345, 117));
+
+        endPoints.add(new Point(380, 95));
+        endPoints.add(new Point(425, 80));
+        endPoints.add(new Point(420, 95));
+        endPoints.add(new Point(420, 95));
+        endPoints.add(new Point(400, 120));
+        ArrayList<float[]> list = new ArrayList<float[]>();
+
+        int offsetX = Integer.MAX_VALUE;
+        int offsetY = Integer.MAX_VALUE;
+
+        for (int i = 0; i < startPoints.size(); i++) {
+            offsetX = Math.min(startPoints.get(i).x, offsetX);
+            offsetY = Math.min(startPoints.get(i).y, offsetY);
+        }
+        for (int i = 0; i < endPoints.size(); i++) {
+            float[] point = new float[4];
+            point[0] = startPoints.get(i).x - offsetX;
+            point[1] = startPoints.get(i).y - offsetY;
+            point[2] = endPoints.get(i).x - offsetX;
+            point[3] = endPoints.get(i).y - offsetY;
+            list.add(point);
+        }
+        return list;
+    }
+
 }
