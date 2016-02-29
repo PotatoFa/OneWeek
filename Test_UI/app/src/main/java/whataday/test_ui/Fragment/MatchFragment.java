@@ -34,7 +34,7 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
-import whataday.test_ui.CameraActivity;
+import whataday.test_ui.Camera.CameraActivity;
 import whataday.test_ui.MyScrollView;
 import whataday.test_ui.R;
 

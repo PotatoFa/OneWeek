@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import whataday.test_ui.Camera.CameraActivity;
+
 public class ScrollviewActivity extends AppCompatActivity {
 
     ScrollView content;
