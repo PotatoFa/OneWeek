@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -44,6 +47,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     PtrFrameLayout store_house_ptr_frame;
     StoreHouseHeader header;
 
+    Handler handler;
     View rootView;
 
     Button btn_camera;
@@ -62,6 +66,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     int scroll_max_y, current_y, pre_y;
     int linear_max, content_max;
     int focus_item;
+    int count = 0;
+
     Float min_alpha = new Float(0);
     Float max_alpha = new Float(0.6);
 
@@ -74,10 +80,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     TextView[] textView_Country = new TextView[3];
     TextView[] textView_City = new TextView[3];
+    TextView[] textView_time = new TextView[3];
+
     RelativeLayout[] content_layout = new RelativeLayout[3];
     LinearLayout.LayoutParams[] content_layout_param = new LinearLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] country_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] city_textview_param = new RelativeLayout.LayoutParams[3];
+    RelativeLayout.LayoutParams[] time_textview_param = new RelativeLayout.LayoutParams[3];
 
     Toolbar toolbar;
 
@@ -100,7 +109,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     }
 
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -112,6 +120,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         getResizeBitmap();
         initView();
 
+
+    }
+
+
+
+    private void initView(){
+
         store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
 
         header = new StoreHouseHeader(getActivity().getApplicationContext());
@@ -121,7 +136,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         store_house_ptr_frame.setHeaderView(header);
         store_house_ptr_frame.addPtrUIHandler(header);
         store_house_ptr_frame.setEnabledNextPtrAtOnce(true);
-
         store_house_ptr_frame.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -147,11 +161,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             }
         });
 
-    }
-
-
-    private void initView(){
-
         btn_camera = (Button)getActivity().findViewById(R.id.btn_camera);
 
         toolbar = (Toolbar)getActivity().findViewById(R.id.toolbar_main);
@@ -173,6 +182,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             country_textview_param[i] =
                     new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             city_textview_param[i] =
+                    new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            time_textview_param[i] =
                     new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             content_layout_param[i] = new LinearLayout.LayoutParams(view_width, content_height[i]);
             //Vertical로 선언된 LinearLayout에 들어갈 각 content(RelativeLayout)의 초기 Param설정(크기).
@@ -203,17 +214,31 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             //content에 country Add
 
             textView_City[i] = new TextView(getActivity());
-            textView_City[i].setText("CITY"+i);
+            textView_City[i].setText("CITY" + i);
             textView_City[i].setTextSize(30);
-            city_textview_param[i].addRule(RelativeLayout.BELOW, i+1);
+            textView_City[i].setId(i + 10);
+            city_textview_param[i].addRule(RelativeLayout.BELOW, i + 1);
             city_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
             textView_City[i].setLayoutParams(city_textview_param[i]);
             //Country 텍스트뷰 아래쪽에 위치하게끔 City텍스트뷰 Param을 설정
             content_layout[i].addView(textView_City[i]);
             //content에 city Add
 
+            textView_time[i] = new TextView(getActivity());
+            textView_time[i].setText("TIME" + i);
+            textView_time[i].setTextSize(20);
+            time_textview_param[i].addRule(RelativeLayout.BELOW, i + 10);
+            time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            //시간 변경 추가. 쓰레드 초단위로
+            textView_time[i].setLayoutParams(time_textview_param[i]);
+
+            content_layout[i].addView(textView_time[i]);
+
+
             match_vertical.addView(content_layout[i], content_layout_param[i]);
             //Linear에 content Add
+
+
         }
 
         match_vertical.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -327,6 +352,12 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     private void show_toolbar(){
         toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         toolbar_visible = true;
+    }
+
+    private void changeTimeTextView(int count){
+        for(int i = 0; i < 3; i++){
+            textView_time[i].setText(count);
+        }
     }
 
     int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
