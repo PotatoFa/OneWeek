@@ -112,7 +112,7 @@ public class EditSavePhotoFragment extends Fragment {
         btn_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
 
                 savePicture();
 

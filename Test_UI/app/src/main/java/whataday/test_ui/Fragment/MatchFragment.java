@@ -26,6 +26,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -238,8 +239,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             match_vertical.addView(content_layout[i], content_layout_param[i]);
             //Linear에 content Add
 
+            handler = new Handler();
+            handler.post(timer_text);
 
         }
+
+        hide_tiem_text(focus_item);
+
 
         match_vertical.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -338,10 +344,14 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
+                hide_tiem_text(focus_item);
+
             }
 
 
         });
+
+
 
     }
 
@@ -354,11 +364,28 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         toolbar_visible = true;
     }
 
-    private void changeTimeTextView(int count){
+    private void hide_tiem_text(int focus){
         for(int i = 0; i < 3; i++){
-            textView_time[i].setText(count);
+            if(focus != i){
+                textView_time[i].setVisibility(View.INVISIBLE);
+            }else{
+                textView_time[i].setVisibility(View.VISIBLE);
+            }
         }
     }
+    private Runnable timer_text = new Runnable() {
+        @Override
+        public void run() {
+            Calendar current = Calendar.getInstance();
+            for(int i = 0; i < 3; i++){
+                textView_time[i].setText(String.format("%02d:%02d:%02d",
+                                current.get(Calendar.HOUR_OF_DAY),
+                                current.get(Calendar.MINUTE),
+                                current.get(Calendar.SECOND)));
+            }
+            handler.postDelayed(timer_text, 1000);
+        }
+    };
 
     int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
         return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
@@ -448,6 +475,22 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             list.add(point);
         }
         return list;
+    }
+
+    @Override
+    public void onPause() {
+        if (handler != null)
+            handler.removeCallbacks(timer_text);
+
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (handler != null)
+            handler.post(timer_text);
     }
 
 }
