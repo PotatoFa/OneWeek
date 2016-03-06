@@ -35,6 +35,7 @@
         android:layout_height="50dp"
         android:text="Next"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btn_next"/>
 
 </RelativeLayout>

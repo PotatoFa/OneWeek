@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import whataday.oneweek.R;
 
@@ -26,7 +27,7 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout rootView = (LinearLayout)inflater.inflate(R.layout.login_fragment_name, container, false);
+        RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.login_fragment_name, container, false);
         this.rootView = rootView;
         return rootView;
     }
