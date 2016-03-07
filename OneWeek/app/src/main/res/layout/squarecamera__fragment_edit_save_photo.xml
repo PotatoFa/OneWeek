@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context="whataday.test_ui.Camera.EditSavePhotoFragment">
+    tools:context="whataday.oneweek.Camera.EditSavePhotoFragment">
 
     <View
         android:id="@+id/topView"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
-    <whataday.test_ui.Camera.SquareImageView
+    <whataday.oneweek.Camera.SquareImageView
         android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

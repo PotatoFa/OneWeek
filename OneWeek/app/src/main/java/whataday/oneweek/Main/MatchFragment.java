@@ -40,13 +40,11 @@ import whataday.oneweek.R;
  */
 public class MatchFragment extends android.support.v4.app.Fragment {
 
-    SwipeRefreshLayout match_swipe;
     PtrFrameLayout store_house_ptr_frame;
     StoreHouseHeader header;
 
     Handler handler;
     View rootView;
-
 
     MyScrollView match_scroll;
     LinearLayout match_vertical;

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
 public class AccountActivity extends AppCompatActivity implements
@@ -34,7 +36,11 @@ public class AccountActivity extends AppCompatActivity implements
     GoogleApiClient mGoogleApiClient;
     CallbackManager callbackManager;
 
-    Button btn_login_facebook, btn_login_google;
+    ViewAnimation viewAnimation;
+
+    Button btn_login_facebook, btn_login_google, btn_assign_exit, btn_assign_agree;
+    RelativeLayout box_assign, box_login_button;
+
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "ACCOUNT_LOG";
 
@@ -44,14 +50,33 @@ public class AccountActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        viewAnimation = new ViewAnimation();
+
+        box_assign = (RelativeLayout)findViewById(R.id.box_assign);
+        box_login_button = (RelativeLayout)findViewById(R.id.box_login_button);
 
         btn_login_facebook = (Button)findViewById(R.id.btn_login_facebook);
         btn_login_google = (Button)findViewById(R.id.btn_login_google);
+        btn_assign_exit = (Button)findViewById(R.id.btn_assign_exit);
+        btn_assign_agree = (Button)findViewById(R.id.btn_assign_agree);
 
+        btn_assign_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        setGoogle_Login();
-        setFacebook_login();
+        btn_assign_agree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewAnimation.slideToBottom(box_assign);
+                viewAnimation.alphaIn(box_login_button);
+                setFacebook_login();
+                setGoogle_Login();
 
+            }
+        });
     }
 
     private void setFacebook_login(){

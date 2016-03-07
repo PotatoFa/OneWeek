@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="whataday.test_ui.Camera.CameraFragment">
+    tools:context="whataday.oneweek.Camera.CameraFragment">
 
-    <whataday.test_ui.Camera.SquareCameraPreview
+    <whataday.oneweek.Camera.SquareCameraPreview
         android:id="@+id/camera_preview_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

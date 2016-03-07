@@ -43,6 +43,8 @@
 
         <activity android:name=".MainActivity" />
 
+        <activity android:name=".Camera.CameraActivity" />
+
         <activity
             android:name=".Login.JoinActivity"
             android:theme="@style/TestTheme" />
