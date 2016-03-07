@@ -1,4 +1,4 @@
-package whataday.oneweek.Gcm;
+package whataday.oneweek.Service;
 
 import android.app.IntentService;
 import android.app.NotificationManager;

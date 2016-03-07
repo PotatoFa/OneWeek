@@ -6,35 +6,46 @@
         android:name="com.example.gcm.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
+
+    <uses-feature android:name="android.hardware.camera2" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".ApplicationController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Login.AccountActivity" />
-        <activity android:name=".Login.JoinActivity" />
+
+        <activity android:name=".Main.MainPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <activity android:name=".MainActivity" />
+
+        <activity
+            android:name=".Login.JoinActivity"
+            android:theme="@style/TestTheme" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -46,9 +57,8 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-
         <receiver
-            android:name=".Gcm.GcmBroadcastReceiver"
+            android:name=".Service.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -57,7 +67,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".Gcm.GcmIntentService" />
+        <service android:name=".Service.GcmIntentService" />
 
 
     </application>

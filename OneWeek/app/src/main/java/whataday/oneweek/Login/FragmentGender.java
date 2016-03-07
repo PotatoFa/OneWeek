@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import whataday.oneweek.R;
 
@@ -36,15 +38,30 @@ public class FragmentGender extends android.support.v4.app.Fragment {
     }
 
     Button btn_next;
+    RadioGroup radio_group_gender;
+    String gender;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        radio_group_gender = (RadioGroup) rootView.findViewById(R.id.radio_group_gender);
+        radio_group_gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radio_man) {
+                    gender = "man";
+                } else if (checkedId == R.id.radio_woman) {
+                    gender = "woman";
+                }
+            }
+        });
+
         btn_next = (Button) rootView.findViewById(R.id.btn_next);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(), gender, Toast.LENGTH_SHORT).show();
                 ((JoinActivity) getActivity()).nextPage();
             }
         });

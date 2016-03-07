@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import whataday.oneweek.R;
 
@@ -32,23 +34,40 @@ public class FragmentAge extends android.support.v4.app.Fragment {
         this.rootView = rootView;
         return rootView;
 
-        //TODO Picker오류 해결
     }
 
     Button btn_next;
+    whataday.oneweek.CustomView.NumberPicker year_picker, month_picker;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         btn_next = (Button) rootView.findViewById(R.id.btn_next);
+        year_picker = (whataday.oneweek.CustomView.NumberPicker) rootView.findViewById(R.id.year_picker);
+        month_picker = (whataday.oneweek.CustomView.NumberPicker) rootView.findViewById(R.id.month_picker);
+
+        initPicker();
+
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(), year_picker.getValue()+"/"+month_picker.getValue(),Toast.LENGTH_SHORT).show();
                 ((JoinActivity) getActivity()).nextPage();
             }
         });
 
-
     }
+
+    private void initPicker(){
+        year_picker.setMinValue(1916);
+        year_picker.setMaxValue(2016);
+        year_picker.setValue(1992);
+        year_picker.setWrapSelectorWheel(false);
+        month_picker.setMinValue(1);
+        month_picker.setMaxValue(12);
+        month_picker.setValue(6);
+        month_picker.setWrapSelectorWheel(false);
+    }
+
 }
