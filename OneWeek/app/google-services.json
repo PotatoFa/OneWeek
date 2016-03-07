@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_id": "oneweek-1224",
+    "project_number": "675450889000",
+    "name": "OneWeek"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675450889000:android:5f0161e9a52b1648",
+        "client_id": "android:whataday.oneweek",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "whataday.oneweek",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675450889000-h9mudig2c22dagehv2atl0cbmqp8kfld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "whataday.oneweek",
+            "certificate_hash": "B5AE128BB2AFF020855408CF48C4B38A50B49D44"
+          }
+        },
+        {
+          "client_id": "675450889000-vi9l6d50795ng05la4ghjgq3vqm7rctq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
