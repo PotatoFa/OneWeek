@@ -36,7 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login.AccountActivity" />
+        <activity android:name=".Login.AccountActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity android:name=".Main.MainPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

@@ -7,10 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.R;
 
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends SetFontActivity {
 
     public static final String TAG = CameraActivity.class.getSimpleName();
 

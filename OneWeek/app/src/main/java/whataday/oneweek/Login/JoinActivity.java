@@ -1,13 +1,16 @@
 package whataday.oneweek.Login;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.tsengvn.typekit.TypekitContextWrapper;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.R;
 
-public class JoinActivity extends AppCompatActivity {
+public class JoinActivity extends SetFontActivity {
 
     CustomViewPager viewpager_join;
     CirclePageIndicator viewpager_indicator;
@@ -43,4 +46,5 @@ public class JoinActivity extends AppCompatActivity {
             prePage();
         }
     }
+
 }

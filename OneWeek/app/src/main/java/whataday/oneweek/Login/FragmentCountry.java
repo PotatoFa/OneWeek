@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import whataday.oneweek.ApplicationController;
@@ -38,7 +39,8 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
 
     }
 
-    Button btn_next, btn_country;
+    TextView text_country;
+    Button btn_next;
     GPSTracker gpsTracker;
 
     @Override
@@ -48,9 +50,9 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
         gpsTracker = ApplicationController.getGpsTracker();
 
         btn_next = (Button) rootView.findViewById(R.id.btn_next);
-        btn_country = (Button) rootView.findViewById(R.id.btn_country);
+        text_country = (TextView) rootView.findViewById(R.id.text_country);
 
-        btn_country.setOnClickListener(new View.OnClickListener() {
+        text_country.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

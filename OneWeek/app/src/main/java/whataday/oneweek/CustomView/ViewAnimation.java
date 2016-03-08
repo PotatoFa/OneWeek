@@ -36,6 +36,14 @@ public class ViewAnimation {
         view.setVisibility(View.GONE);
     }
 
+    public void slideInBottom(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,0,-view.getHeight(),0);
+        animate.setDuration(1000);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.VISIBLE);
+    }
+
     // To animate view slide out from bottom to top
     public void slideToTop(View view){
         TranslateAnimation animate = new TranslateAnimation(0,0,0,-view.getHeight());
@@ -50,6 +58,13 @@ public class ViewAnimation {
         animate.setDuration(1000);
         view.startAnimation(animate);
         view.setVisibility(View.VISIBLE);
+    }
+
+    public void alphaOut(View view){
+        Animation animate = new AlphaAnimation(1, 0);
+        animate.setDuration(300);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
     }
 
 

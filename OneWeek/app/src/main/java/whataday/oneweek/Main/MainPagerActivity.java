@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.R;
 
-public class MainPagerActivity extends AppCompatActivity {
+public class MainPagerActivity extends SetFontActivity {
 
     ViewPager viewPager_main;
     Toolbar toolbar_main;

@@ -1,10 +1,12 @@
 package whataday.oneweek;
 
 import android.app.Application;
+import android.graphics.Typeface;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
+import com.tsengvn.typekit.Typekit;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -29,6 +31,8 @@ public class ApplicationController extends Application {
         super.onCreate();
         ApplicationController.instance = this;
         ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
+        Typekit.getInstance()
+                .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Black.otf"));
     }
 
     private ServerInterface api;

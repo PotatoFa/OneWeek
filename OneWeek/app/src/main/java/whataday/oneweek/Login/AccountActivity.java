@@ -1,7 +1,6 @@
 package whataday.oneweek.Login;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,15 +21,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
-public class AccountActivity extends AppCompatActivity implements
+public class AccountActivity extends SetFontActivity implements
         GoogleApiClient.OnConnectionFailedListener{
 
     GoogleApiClient mGoogleApiClient;
@@ -60,6 +61,7 @@ public class AccountActivity extends AppCompatActivity implements
         btn_assign_exit = (Button)findViewById(R.id.btn_assign_exit);
         btn_assign_agree = (Button)findViewById(R.id.btn_assign_agree);
 
+
         btn_assign_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +79,8 @@ public class AccountActivity extends AppCompatActivity implements
 
             }
         });
+
+
     }
 
     private void setFacebook_login(){

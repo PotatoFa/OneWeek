@@ -13,21 +13,23 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
+import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
+import whataday.oneweek.Service.GPSTracker;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends SetFontActivity {
 
     private static final String TAG = "SPLASH_LOG";
 
     String SENDER_ID = "243787068094";
     GoogleCloudMessaging gcm;
     String regid, current_regid;
+    GPSTracker gpsTracker;
 
     Handler delay_handler;
     ImageView image_splash;
     int count = 0;
-    int image_resource[] = { R.drawable.splash1, R.drawable.splash2, R.drawable.splash3, R.drawable.splash4,
-            R.drawable.splash5, R.drawable.splash6, R.drawable.splash7, R.drawable.splash8, R.drawable.splash9 };
+    int image_resource[] = { R.drawable.splash1, R.drawable.splash2, R.drawable.splash3 };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         image_splash = (ImageView)findViewById(R.id.image_splash);
 
+        gpsTracker = ApplicationController.getGpsTracker();
         gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
         registerInBackground();
 

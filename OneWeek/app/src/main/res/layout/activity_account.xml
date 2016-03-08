@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#888888"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_account"
     tools:context="whataday.oneweek.Login.AccountActivity">
 
     <Space
@@ -17,8 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="#ffffff"
         android:text="meet the stranger\naround the world\n\nsee the daily life\nof other person "
         android:id="@+id/text_intro"
+        app:font="custom1"
         android:textSize="26dp"
         android:layout_alignBottom="@id/space_center"/>
 
@@ -27,11 +30,12 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="One Week"
-        android:textStyle="bold"
+        app:font="custom1"
+        android:textColor="#ffffff"
         android:id="@+id/text_oneweek"
         android:textSize="30dp"
         android:layout_above="@id/text_intro"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <RelativeLayout
         android:layout_below="@id/space_center"
@@ -55,7 +59,8 @@
             android:textSize="14dp"
             android:layout_alignBottom="@id/space_center_assign"
             android:id="@+id/text_asign"
-            android:text="By touching agree, you agree to the terms started in\nour Terms of Service and Privacy Policy"/>
+            android:text="By touching agree, you agree to the terms started in\nour Terms of Service and Privacy Policy"
+            app:font="custom1"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -80,6 +85,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_assign_exit"
                 android:text="Exit"
+                app:font="custom1"
                 android:textColor="#000000"
                 android:id="@+id/btn_assign_exit"/>
 
@@ -97,27 +103,32 @@
 
 
     <RelativeLayout
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:id="@+id/box_login_button"
         android:gravity="center">
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:id="@+id/btn_login_facebook"
+            android:id="@+id/btn_login_google"
             android:layout_alignParentBottom="true"
-            android:text="FACEBOOK"/>
+            android:background="@drawable/btn_login_google"
+            android:textColor="#ffffff"
+            android:text="SIGN in with GOOGLE"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:id="@+id/btn_login_google"
-            android:layout_above="@id/btn_login_facebook"
-            android:text="GOOGLE"/>
+            android:id="@+id/btn_login_facebook"
+            android:textColor="#ffffff"
+            android:background="@drawable/btn_login_facebook"
+            android:text="SIGN in with FACEBOOK"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
 /**
@@ -37,13 +39,29 @@ public class FragmentGender extends android.support.v4.app.Fragment {
         //TODO 남/여 스위치버튼
     }
 
+    ImageView image_shadow;
     Button btn_next;
     RadioGroup radio_group_gender;
     String gender;
+    ViewAnimation viewAnimation;
+    boolean checked_flag = false;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        viewAnimation = new ViewAnimation();
+        image_shadow = (ImageView) rootView.findViewById(R.id.image_shadow);
+
+
+        btn_next = (Button) rootView.findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), gender, Toast.LENGTH_SHORT).show();
+                ((JoinActivity) getActivity()).nextPage();
+            }
+        });
 
         radio_group_gender = (RadioGroup) rootView.findViewById(R.id.radio_group_gender);
         radio_group_gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -54,17 +72,14 @@ public class FragmentGender extends android.support.v4.app.Fragment {
                 } else if (checkedId == R.id.radio_woman) {
                     gender = "woman";
                 }
+
+                if (!checked_flag) {
+                    viewAnimation.alphaOut(image_shadow);
+                    checked_flag = true;
+                }
             }
         });
 
-        btn_next = (Button) rootView.findViewById(R.id.btn_next);
-        btn_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), gender, Toast.LENGTH_SHORT).show();
-                ((JoinActivity) getActivity()).nextPage();
-            }
-        });
 
     }
 }
