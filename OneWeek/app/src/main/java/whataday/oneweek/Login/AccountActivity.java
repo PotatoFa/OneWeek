@@ -1,11 +1,14 @@
 package whataday.oneweek.Login;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -41,7 +44,10 @@ public class AccountActivity extends SetFontActivity implements
 
     Button btn_login_facebook, btn_login_google, btn_assign_exit, btn_assign_agree;
     RelativeLayout box_assign, box_login_button;
+    ImageView backgorund_image;
 
+
+    TextView text_asign;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "ACCOUNT_LOG";
 
@@ -52,6 +58,11 @@ public class AccountActivity extends SetFontActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         viewAnimation = new ViewAnimation();
+
+
+        backgorund_image = (ImageView)findViewById(R.id.backgorund_image);
+
+        text_asign = (TextView)findViewById(R.id.text_asign);
 
         box_assign = (RelativeLayout)findViewById(R.id.box_assign);
         box_login_button = (RelativeLayout)findViewById(R.id.box_login_button);
@@ -74,6 +85,7 @@ public class AccountActivity extends SetFontActivity implements
             public void onClick(View v) {
                 viewAnimation.slideToBottom(box_assign);
                 viewAnimation.alphaIn(box_login_button);
+                viewAnimation.alphaOut(backgorund_image);
                 setFacebook_login();
                 setGoogle_Login();
 

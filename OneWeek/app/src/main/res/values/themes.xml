@@ -55,9 +55,10 @@
         <item name="virtualButtonPressedDrawable">@drawable/item_background_holo_light</item>
     </style>
 
-    <style name="TestTheme" parent="AppTheme">
+    <style name="TestTheme" parent="Theme.AppCompat.NoActionBar">
 
         <item name="numberPickerStyle">@style/NPWidget.Holo.NumberPicker</item>
+
 
     </style>
 

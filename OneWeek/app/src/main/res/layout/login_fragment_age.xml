@@ -2,31 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_age">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="What is your age?"
+        app:font="custom1"
+        android:layout_marginTop="195dp"
+        android:textColor="#ffffff"
         android:textSize="30dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="What is your age?"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="245dp"
+        android:layout_height="310dp"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="135dp"
             android:layout_height="180dp"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
             <whataday.oneweek.CustomView.NumberPicker
-                android:layout_margin="7dp"
                 android:layout_width="wrap_content"
                 android:layout_height="180dp"
                 android:scrollbarSize="36dp"
@@ -36,11 +37,14 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="#ffffff"
+                    app:font="custom1"
                     android:text="year"/>
             </RelativeLayout>
 
@@ -48,28 +52,28 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="180dp"
-            android:layout_weight="2"
             android:orientation="horizontal">
 
             <whataday.oneweek.CustomView.NumberPicker
-                android:layout_margin="7dp"
                 android:layout_width="wrap_content"
                 android:layout_height="180dp"
-                android:scrollbarSize="36dp"
-                android:layout_weight="2"
+                android:scrollbarSize="60dp"
                 android:id="@+id/month_picker"
                 android:descendantFocusability="blocksDescendants"
                 android:clickable="false"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:textColor="#ffffff"
+                    app:font="custom1"
                     android:text="month"/>
             </RelativeLayout>
 
@@ -79,9 +83,9 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="34dp"
+        android:layout_width="187dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="85dp"
         android:background="@drawable/btn_yellow"
         android:textColor="#000000"
         android:text="Next"

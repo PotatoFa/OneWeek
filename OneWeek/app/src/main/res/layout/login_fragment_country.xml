@@ -3,16 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/background_account"
-    android:padding="16dp">
+    android:background="@drawable/background_country">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:font="custom1"
-        android:text="Where are you living?"
+        android:layout_marginTop="195dp"
+        android:textColor="#ffffff"
         android:textSize="30dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="Where are you living?"/>
 
     <TextView
         android:layout_width="240dp"
@@ -23,21 +24,23 @@
         android:textSize="26dp"
         android:text="click here!"
         android:id="@+id/text_country"
+        app:font="custom1"
         android:layout_centerInParent="true"/>
 
     <View
         android:layout_centerHorizontal="true"
-        android:layout_width="240dp"
+        android:layout_width="236dp"
         android:layout_height="2dp"
         android:layout_alignBottom="@id/text_country"
         android:background="@drawable/btn_county_line"/>
 
 
     <Button
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="34dp"
-        android:background="@drawable/btn_yellow"
+        android:layout_width="187dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="85dp"
+        android:enabled="false"
+        android:background="@drawable/gray_to_yellow"
         android:textColor="#000000"
         android:text="Next"
         android:layout_alignParentBottom="true"

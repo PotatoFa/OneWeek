@@ -1,4 +1,4 @@
-package whataday.oneweek;
+package whataday.oneweek.Controller;
 
 import android.app.Application;
 import android.graphics.Typeface;
@@ -32,7 +32,11 @@ public class ApplicationController extends Application {
         ApplicationController.instance = this;
         ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
         Typekit.getInstance()
-                .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Black.otf"));
+                .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
+                .addCustom2(Typeface.createFromAsset(getAssets(), "Radnika-SemiBold.otf"))
+                .addCustom3(Typeface.createFromAsset(getAssets(), "Radnika-Bold.otf"))
+                .addCustom4(Typeface.createFromAsset(getAssets(), "digital.ttf"));
+
     }
 
     private ServerInterface api;

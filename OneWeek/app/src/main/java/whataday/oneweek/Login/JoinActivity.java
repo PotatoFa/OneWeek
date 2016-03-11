@@ -1,6 +1,7 @@
 package whataday.oneweek.Login;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -27,6 +28,11 @@ public class JoinActivity extends SetFontActivity {
         viewpager_indicator.setViewPager(viewpager_join);
         viewpager_join.setScrollEnabled(false);
         viewpager_join.setScrollDuration(700);
+        viewpager_indicator.setGap(17);
+        viewpager_indicator.setFillColor(Color.parseColor("#ffffff"));
+        viewpager_indicator.setPageColor(Color.parseColor("#28ffffff"));
+        viewpager_indicator.setStrokeWidth(0);
+        viewpager_indicator.setRadius(10);
 
 
     }

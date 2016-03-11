@@ -1,4 +1,4 @@
-package whataday.oneweek;
+package whataday.oneweek.Controller;
 
 /**
  * Created by hoon on 2016-03-07.

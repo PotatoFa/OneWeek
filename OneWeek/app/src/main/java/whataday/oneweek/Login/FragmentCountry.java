@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import whataday.oneweek.ApplicationController;
+import whataday.oneweek.Controller.ApplicationController;
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 import whataday.oneweek.Service.GPSTracker;
 
@@ -60,6 +60,8 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
                     //Location 정보 사용가능
                     Toast.makeText(getActivity(), gpsTracker.getLatitude()+"/"+gpsTracker.getLongitude(), Toast.LENGTH_SHORT).show();
                     //TODO getLocation 유효성 검사 및 서버에 위치요청
+                    ViewAnimation.grayToYellow(btn_next);
+                    btn_next.setEnabled(true);
                 }else{
                     Log.i("Fragment_Country", "can't Get Location");
                 }

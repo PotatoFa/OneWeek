@@ -10,6 +10,7 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
 /**
@@ -43,6 +44,7 @@ public class FragmentAge extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         btn_next = (Button) rootView.findViewById(R.id.btn_next);
         year_picker = (whataday.oneweek.CustomView.NumberPicker) rootView.findViewById(R.id.year_picker);
         month_picker = (whataday.oneweek.CustomView.NumberPicker) rootView.findViewById(R.id.month_picker);
@@ -52,10 +54,11 @@ public class FragmentAge extends android.support.v4.app.Fragment {
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), year_picker.getValue()+"/"+month_picker.getValue(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), year_picker.getValue() + "/" + month_picker.getValue(), Toast.LENGTH_SHORT).show();
                 ((JoinActivity) getActivity()).nextPage();
             }
         });
+
 
     }
 

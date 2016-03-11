@@ -698,6 +698,7 @@ public class NumberPicker extends LinearLayout {
                 new InputTextFilter()
         });
 
+        mInputText.setTextSize(28);
         mInputText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
         mInputText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -2663,4 +2664,5 @@ public class NumberPicker extends LinearLayout {
     static private String formatNumberWithLocale(int value) {
         return String.format(Locale.getDefault(), "%d", value);
     }
+
 }

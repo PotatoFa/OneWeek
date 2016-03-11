@@ -2,6 +2,8 @@ package whataday.oneweek.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.Main.MainPagerActivity;
 import whataday.oneweek.MainActivity;
 import whataday.oneweek.R;
@@ -40,6 +43,7 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
     Button btn_join;
     EditText edit_name;
+    Boolean check_empty;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class FragmentName extends android.support.v4.app.Fragment {
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEmpty(edit_name)){
+                if(check_empty){
                     Toast.makeText(getActivity(), "please typed your name", Toast.LENGTH_SHORT).show();
                 }else{
                     startActivity(new Intent(getActivity(), MainPagerActivity.class));
@@ -59,14 +63,36 @@ public class FragmentName extends android.support.v4.app.Fragment {
                 }
             }
         });
+
+        edit_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.toString().equals("")){
+                    btn_join.setBackgroundResource(R.drawable.yellow_to_gray);
+                    ViewAnimation.yellowToGray(btn_join);
+                    check_empty = true;
+                }else{
+                    btn_join.setBackgroundResource(R.drawable.gray_to_yellow);
+                    ViewAnimation.grayToYellow(btn_join);
+                    check_empty = false;
+                    btn_join.setEnabled(true);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
-    private boolean isEmpty(EditText check_item){
-        if( check_item.getText().length() == 0 ){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
 }

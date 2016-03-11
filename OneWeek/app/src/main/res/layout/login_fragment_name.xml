@@ -2,30 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@drawable/background_name"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="My name is"
+        app:font="custom1"
+        android:layout_marginTop="195dp"
+        android:textColor="#ffffff"
         android:textSize="30dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="My name is"/>
 
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:hint="type your username"
         android:layout_centerInParent="true"
         android:id="@+id/edit_name"
+        app:font="custom1"
+        android:textColorHint="#ffffff"
         android:gravity="center"/>
 
 
     <Button
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="34dp"
-        android:background="@drawable/btn_yellow"
+        android:layout_width="187dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="85dp"
+        android:enabled="false"
+        android:background="@drawable/gray_to_yellow"
         android:textColor="#000000"
         android:text="Let's go !"
         android:layout_alignParentBottom="true"

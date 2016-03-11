@@ -1,5 +1,7 @@
 package whataday.oneweek.CustomView;
 
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -65,6 +67,15 @@ public class ViewAnimation {
         animate.setDuration(300);
         view.startAnimation(animate);
         view.setVisibility(View.GONE);
+    }
+    public static void grayToYellow(View view){
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
+    }
+    public static void yellowToGray(View view){
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
+
     }
 
 

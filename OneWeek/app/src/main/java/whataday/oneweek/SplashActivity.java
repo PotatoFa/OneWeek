@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -13,6 +12,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
+import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
 import whataday.oneweek.Service.GPSTracker;

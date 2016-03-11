@@ -7,6 +7,12 @@
     android:background="@drawable/background_account"
     tools:context="whataday.oneweek.Login.AccountActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/backgorund_image"
+        android:background="#14000000"/>
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="20px"
@@ -30,7 +36,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="One Week"
-        app:font="custom1"
+        app:font="custom3"
         android:textColor="#ffffff"
         android:id="@+id/text_oneweek"
         android:textSize="30dp"
@@ -38,12 +44,21 @@
         android:layout_marginBottom="20dp"/>
 
     <RelativeLayout
-        android:layout_below="@id/space_center"
-        android:layout_marginTop="60dp"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="203dp"
         android:id="@+id/box_assign"
         android:background="#ddffffff">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Terms of use"
+            android:layout_marginTop="14dp"
+            app:font="custom2"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textColor="#000000"/>
 
         <Space
             android:layout_width="match_parent"
@@ -59,42 +74,37 @@
             android:textSize="14dp"
             android:layout_alignBottom="@id/space_center_assign"
             android:id="@+id/text_asign"
-            android:text="By touching agree, you agree to the terms started in\nour Terms of Service and Privacy Policy"
+            android:lineSpacingExtra="7dp"
+            android:text="@string/account_intro"
             app:font="custom1"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Terms of use"
-            android:textSize="24dp"
-            android:gravity="center"
-            android:layout_above="@id/text_asign"
-            android:layout_marginBottom="24dp"
-            android:textColor="#000000"/>
 
         <LinearLayout
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/space_center_assign"
+            android:layout_width="254dp"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
             <Button
-                android:layout_width="120dp"
+                android:layout_width="127dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_assign_exit"
                 android:text="Exit"
-                app:font="custom1"
+                app:font="custom2"
                 android:textColor="#000000"
+                android:textAllCaps="false"
                 android:id="@+id/btn_assign_exit"/>
 
             <Button
-                android:layout_width="120dp"
+                android:layout_width="127dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_assign_agree"
                 android:textColor="#000000"
+                app:font="custom2"
                 android:text="Agree"
+                android:textAllCaps="false"
                 android:id="@+id/btn_assign_agree"/>
 
         </LinearLayout>
@@ -104,29 +114,35 @@
 
     <RelativeLayout
         android:visibility="gone"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="254dp"
         android:layout_height="130dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/box_login_button"
         android:gravity="center">
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="46dp"
             android:id="@+id/btn_login_google"
             android:layout_alignParentBottom="true"
             android:background="@drawable/btn_login_google"
             android:textColor="#ffffff"
+            android:textAllCaps="false"
+            app:font="custom2"
             android:text="SIGN in with GOOGLE"/>
 
         <Button
+            android:layout_above="@id/btn_login_google"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="46dp"
             android:id="@+id/btn_login_facebook"
+            android:layout_marginBottom="25dp"
             android:textColor="#ffffff"
+            android:textAllCaps="false"
             android:background="@drawable/btn_login_facebook"
+            app:font="custom2"
             android:text="SIGN in with FACEBOOK"/>
 
     </RelativeLayout>
