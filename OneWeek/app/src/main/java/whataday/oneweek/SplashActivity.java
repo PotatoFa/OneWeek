@@ -12,9 +12,11 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
+import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
+import whataday.oneweek.Main.MainPagerActivity;
 import whataday.oneweek.Service.GPSTracker;
 
 public class SplashActivity extends SetFontActivity {
@@ -25,6 +27,7 @@ public class SplashActivity extends SetFontActivity {
     GoogleCloudMessaging gcm;
     String regid, current_regid;
     GPSTracker gpsTracker;
+
 
     Handler delay_handler;
     ImageView image_splash;
@@ -44,7 +47,6 @@ public class SplashActivity extends SetFontActivity {
         delay_handler = new Handler(Looper.getMainLooper());
         delay_handler.postDelayed(changeImage, 30);
 
-
     }
 
     Runnable changeImage = new Runnable() {
@@ -52,7 +54,7 @@ public class SplashActivity extends SetFontActivity {
         public void run() {
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
-                startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
                 finish();
             }else{
                 image_splash.setImageResource(image_resource[count++]);

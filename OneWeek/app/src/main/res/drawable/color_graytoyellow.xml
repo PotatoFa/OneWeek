@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transition xmlns:android="http://schemas.android.com/apk/res/android">
-
-
     <item>
 
         <shape
             android:shape="rectangle"
             xmlns:android="http://schemas.android.com/apk/res/android" >
 
-            <solid android:color="#F8DF64"/>
-            <stroke android:width="0dip" android:color="#F8DF64" />
+            <solid android:color="#5affffff"/>
             <corners
                 android:bottomLeftRadius="23dp"
                 android:topLeftRadius="23dp"
@@ -26,7 +23,8 @@
             android:shape="rectangle"
             xmlns:android="http://schemas.android.com/apk/res/android" >
 
-            <solid android:color="#5affffff"/>
+            <solid android:color="#F8DF64"/>
+            <stroke android:width="0dip" android:color="#FFF8DF64" />
             <corners
                 android:bottomLeftRadius="23dp"
                 android:topLeftRadius="23dp"

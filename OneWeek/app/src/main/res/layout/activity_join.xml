@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="whataday.oneweek.Login.JoinActivity">
 
+
     <whataday.oneweek.Login.CustomViewPager
         android:id="@+id/viewpager_join"
         android:layout_height="match_parent"

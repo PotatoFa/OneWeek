@@ -1,6 +1,7 @@
 package whataday.oneweek.Login;
 
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,13 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.Main.MainPagerActivity;
-import whataday.oneweek.MainActivity;
 import whataday.oneweek.R;
 
 /**
@@ -41,7 +40,7 @@ public class FragmentName extends android.support.v4.app.Fragment {
         return rootView;
     }
 
-    Button btn_join;
+    Button btn_join_name;
     EditText edit_name;
     Boolean check_empty;
 
@@ -49,15 +48,15 @@ public class FragmentName extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        btn_join = (Button) rootView.findViewById(R.id.btn_join);
+        btn_join_name = (Button) rootView.findViewById(R.id.btn_join_name);
         edit_name = (EditText) rootView.findViewById(R.id.edit_name);
 
-        btn_join.setOnClickListener(new View.OnClickListener() {
+        btn_join_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(check_empty){
+                if (check_empty) {
                     Toast.makeText(getActivity(), "please typed your name", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     startActivity(new Intent(getActivity(), MainPagerActivity.class));
                     getActivity().finish();
                 }
@@ -74,25 +73,32 @@ public class FragmentName extends android.support.v4.app.Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if(s.toString().equals("")){
-                    btn_join.setBackgroundResource(R.drawable.yellow_to_gray);
-                    ViewAnimation.yellowToGray(btn_join);
+                    btn_join_name.setBackgroundResource(R.drawable.btn_gray);
+                    //startTransition(btn_join_name);
                     check_empty = true;
                 }else{
-                    btn_join.setBackgroundResource(R.drawable.gray_to_yellow);
-                    ViewAnimation.grayToYellow(btn_join);
+                    btn_join_name.setBackgroundResource(R.drawable.color_graytoyellow);
+                    startTransition(btn_join_name);
                     check_empty = false;
-                    btn_join.setEnabled(true);
                 }
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+
             }
         });
 
+
     }
+
+
+    public void startTransition(View view){
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
+    }
+
 
 
 }

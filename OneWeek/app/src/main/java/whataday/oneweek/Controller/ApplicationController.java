@@ -11,6 +11,7 @@ import com.tsengvn.typekit.Typekit;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 
+import io.realm.Realm;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
@@ -25,12 +26,15 @@ public class ApplicationController extends Application {
     public static ApplicationController getInstance() {return instance;}
     private static GPSTracker gpsTracker;
     public static GPSTracker getGpsTracker() {return gpsTracker;}
+    private static Realm realm;
+    public static Realm getRealm() {return realm;}
 
     @Override
     public void onCreate() {
         super.onCreate();
         ApplicationController.instance = this;
         ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
+        ApplicationController.realm = Realm.getInstance(this);
         Typekit.getInstance()
                 .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
                 .addCustom2(Typeface.createFromAsset(getAssets(), "Radnika-SemiBold.otf"))

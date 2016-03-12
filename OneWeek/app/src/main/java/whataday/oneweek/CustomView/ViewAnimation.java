@@ -7,6 +7,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import whataday.oneweek.R;
+
 /**
  * Created by hoon on 2016-03-07.
  */
@@ -69,13 +71,21 @@ public class ViewAnimation {
         view.setVisibility(View.GONE);
     }
     public static void grayToYellow(View view){
-        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
-        transitionDrawable.startTransition(500);
-    }
-    public static void yellowToGray(View view){
+        view.setBackgroundResource(R.drawable.color_graytoyellow);
         TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
         transitionDrawable.startTransition(500);
 
+    }
+    public static void yellowToGray(View view){
+        view.setBackgroundResource(R.drawable.color_yellowtogray);
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
+
+    }
+
+    public static void startTransition(View view){
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
     }
 
 

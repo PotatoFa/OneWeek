@@ -1,5 +1,9 @@
 package whataday.oneweek.Login;
 
+import android.animation.ObjectAnimator;
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +36,13 @@ public class FragmentGender extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.login_fragment_gender, container, false);
         this.rootView = rootView;
+
         return rootView;
+
 
     }
 
-    Button btn_next;
+    Button btn_next_gender;
     RadioGroup radio_group_gender;
     String gender;
     boolean checked_flag = false;
@@ -45,8 +51,9 @@ public class FragmentGender extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        btn_next = (Button) rootView.findViewById(R.id.btn_next);
-        btn_next.setOnClickListener(new View.OnClickListener() {
+
+        btn_next_gender = (Button) rootView.findViewById(R.id.btn_next_gender);
+        btn_next_gender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), gender, Toast.LENGTH_SHORT).show();
@@ -55,6 +62,9 @@ public class FragmentGender extends android.support.v4.app.Fragment {
         });
 
         radio_group_gender = (RadioGroup) rootView.findViewById(R.id.radio_group_gender);
+
+
+
         radio_group_gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -63,18 +73,18 @@ public class FragmentGender extends android.support.v4.app.Fragment {
                 } else if (checkedId == R.id.radio_woman) {
                     gender = "woman";
                 }
-
-                if (!checked_flag) {
-
-                    checked_flag = true;
-                    ViewAnimation.grayToYellow(btn_next);
-
-
-
-                }
+                startTransition(btn_next_gender);
+                checked_flag = true;
             }
         });
 
 
     }
+
+
+    public void startTransition(View view){
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
+    }
+
 }

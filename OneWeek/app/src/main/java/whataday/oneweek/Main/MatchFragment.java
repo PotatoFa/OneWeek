@@ -195,7 +195,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             content_layout[i].addView(imageView_background_dark[i]);
 
             textView_Country[i] = new TextView(getActivity());
-            textView_Country[i].setText("Country"+i);
+            textView_Country[i].setText("Waiting for someone");
+            //textView_Country[i].setText("Country"+i);
             textView_Country[i].setTextSize(50);
             textView_Country[i].setId(i+1);
             country_textview_param[i].addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -387,7 +388,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     }
 
     public void getResizeBitmap(){
-        bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.test2);
+        bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.home_shadow);
         resize_Bitmap = Bitmap.createScaledBitmap(bitmap_image, view_width, view_width, true);
     }
 

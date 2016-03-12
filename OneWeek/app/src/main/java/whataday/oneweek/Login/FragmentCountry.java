@@ -1,5 +1,6 @@
 package whataday.oneweek.Login;
 
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +41,7 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
     }
 
     TextView text_country;
-    Button btn_next;
+    Button btn_next_country;
     GPSTracker gpsTracker;
 
     @Override
@@ -49,7 +50,7 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
 
         gpsTracker = ApplicationController.getGpsTracker();
 
-        btn_next = (Button) rootView.findViewById(R.id.btn_next);
+        btn_next_country = (Button) rootView.findViewById(R.id.btn_next_country);
         text_country = (TextView) rootView.findViewById(R.id.text_country);
 
         text_country.setOnClickListener(new View.OnClickListener() {
@@ -57,20 +58,23 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
             public void onClick(View v) {
 
                 if( gpsTracker.canGetLocation() ){
+                    btn_next_country.setEnabled(true);
+                    startTransition(btn_next_country);
                     //Location 정보 사용가능
                     Toast.makeText(getActivity(), gpsTracker.getLatitude()+"/"+gpsTracker.getLongitude(), Toast.LENGTH_SHORT).show();
                     //TODO getLocation 유효성 검사 및 서버에 위치요청
-                    ViewAnimation.grayToYellow(btn_next);
-                    btn_next.setEnabled(true);
+
+                    text_country.setText(gpsTracker.getLatitude()+"/"+gpsTracker.getLongitude());
                 }else{
                     Log.i("Fragment_Country", "can't Get Location");
                 }
+
 
             }
         });
 
 
-        btn_next.setOnClickListener(new View.OnClickListener() {
+        btn_next_country.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((JoinActivity) getActivity()).nextPage();
@@ -78,4 +82,10 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
         });
 
     }
+
+    public void startTransition(View view){
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.startTransition(500);
+    }
+
 }
