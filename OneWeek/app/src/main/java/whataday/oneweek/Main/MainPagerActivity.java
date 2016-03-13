@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.Data.ImageData;
 import whataday.oneweek.Data.MatchedUser;
 import whataday.oneweek.R;
 
@@ -23,6 +24,11 @@ public class MainPagerActivity extends SetFontActivity {
     ImageView toolbar_camera_icon;
 
     Realm realm;
+
+
+    String[] strings = {"Hello world", "Lucky day", "My job",
+            "Merry christmassdgsdgsdgs", "Wet tissue shitshitshit", "Good morning",
+            "Shtttttt", "Hello world", "LuckyLucky dayday", "My job"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +53,6 @@ public class MainPagerActivity extends SetFontActivity {
         setSupportActionBar(toolbar_main);
         setTitle("OneWeek");
         toolbar_main.setTitleTextColor(Color.WHITE);
-        toolbar_main.setBackgroundColor(Color.parseColor("#00ffffff"));
     }
 
     public void setVisibleCamera(boolean visible){
@@ -62,9 +67,10 @@ public class MainPagerActivity extends SetFontActivity {
     private void setTestData(){
         realm.beginTransaction();
         realm.clear(MatchedUser.class);
+        realm.clear(ImageData.class);
         for(int i = 0; i < 3; i++){
             MatchedUser matchedUser = realm.createObject(MatchedUser.class);
-            matchedUser.setId("korea");
+            matchedUser.setId("1");
             matchedUser.setCity("SEOUL");
             matchedUser.setCountry("South korea");
             if(i == 1){
@@ -74,9 +80,20 @@ public class MainPagerActivity extends SetFontActivity {
             }else if(i == 2){
                 matchedUser.setId("empty");
             }
+
+
+            for(int j = 0; j < 10; j++){
+                ImageData imageData = realm.createObject(ImageData.class);
+                imageData.setFromUserId(matchedUser.getId());
+                imageData.setText(strings[j]);
+            }
+
         }
+
         realm.commitTransaction();
         Log.i("REALM","CREATED TEST DATA");
+
     }
+
 
 }

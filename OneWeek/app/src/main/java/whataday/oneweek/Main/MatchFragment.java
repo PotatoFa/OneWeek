@@ -41,6 +41,7 @@ import whataday.oneweek.Camera.CameraActivity;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.MyScrollView;
 import whataday.oneweek.Data.MatchedUser;
+import whataday.oneweek.Match.DetailActivity;
 import whataday.oneweek.R;
 
 /**
@@ -235,7 +236,12 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     }
 
+    String set_matchid;
+    Intent intent;
+
     private void addMatchingView(int i){
+
+        set_matchid = matchedUsers.get(i).getId();
 
         textView_City[i] = new TextView(getActivity());
         textView_City[i].setText(matchedUsers.get(i).getCity());
@@ -412,8 +418,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 pre_y = current_y;
                 current_y = match_scroll.getScrollY();
 
-                if(current_y < 40){
-                }else{
+                if (current_y < 40) {
+                } else {
                 }
 
                 if (toolbar_visible) {
@@ -474,6 +480,35 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
         });
 
+        setClick();
+
+    }
+
+    private void setClick(){
+        content_layout[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("matchId", matched_id[0]);
+                getActivity().startActivity(intent);
+            }
+        });
+        content_layout[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("matchId", matched_id[1]);
+                getActivity().startActivity(intent);
+            }
+        });
+        content_layout[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("matchId", matched_id[2]);
+                getActivity().startActivity(intent);
+            }
+        });
     }
 
     private void hide_toolbar(){
@@ -487,12 +522,15 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     private void hide_tiem_text(int focus){
         for(int i = 0; i < 3; i++){
             if(focus != i){
+                content_layout[i].setEnabled(false);
                 textView_time[i].setVisibility(View.INVISIBLE);
             }else{
+                content_layout[i].setEnabled(true);
                 textView_time[i].setVisibility(View.VISIBLE);
             }
         }
     }
+
     private Runnable timer_text = new Runnable() {
         @Override
         public void run() {

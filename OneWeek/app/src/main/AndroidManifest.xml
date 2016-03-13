@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="whataday.oneweek" >
+    package="whataday.oneweek">
 
     <permission
         android:name="com.example.gcm.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-
     <uses-feature android:name="android.hardware.camera2" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -24,31 +22,32 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login.AccountActivity"
+        <activity
+            android:name=".Login.AccountActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <activity android:name=".Main.MainPagerActivity"
+        <activity
+            android:name=".Main.MainPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity android:name=".MainActivity" />
-
         <activity android:name=".Camera.CameraActivity" />
-
         <activity
             android:name=".Login.JoinActivity"
             android:theme="@style/TestTheme" />
+
+        <activity android:name=".Match.DetailActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -62,7 +61,7 @@
 
         <receiver
             android:name=".Service.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
@@ -71,7 +70,6 @@
         </receiver>
 
         <service android:name=".Service.GcmIntentService" />
-
 
     </application>
 

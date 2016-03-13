@@ -87,6 +87,8 @@ public class MatchFragment extends Fragment {
     private void initView(final View rootView){
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_match);
+
+
         manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new MatchAdapter();
