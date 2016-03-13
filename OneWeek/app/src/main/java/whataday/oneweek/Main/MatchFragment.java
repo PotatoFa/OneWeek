@@ -8,12 +8,10 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,7 +27,6 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -38,11 +36,9 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 import whataday.oneweek.Camera.CameraActivity;
 import whataday.oneweek.Controller.ApplicationController;
-import whataday.oneweek.CustomView.AutoResizeTextView;
 import whataday.oneweek.CustomView.MyScrollView;
 import whataday.oneweek.Data.MatchedUser;
 import whataday.oneweek.R;
@@ -74,7 +70,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     int focus_item;
     int count = 0;
 
-    Float min_alpha = new Float(0.05);
+    Float min_alpha = new Float(0.15);
     Float max_alpha = new Float(0.6);
 
     Bitmap bitmap_image;
@@ -149,14 +145,15 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         textView_Country[i].setTextSize(0);
         content_layout[i].addView(textView_Country[i]);
 
-        ImageView icon = new ImageView(getActivity());
-        icon.setBackgroundColor(Color.parseColor("#999999"));
+        Button icon = new Button(getActivity());
+        icon.setBackgroundResource(R.drawable.icon_empty);
 
         RelativeLayout.LayoutParams iconLayoutParam =
-                new RelativeLayout.LayoutParams(55, 55);
+                new RelativeLayout.LayoutParams((int) getActivity().getResources().getDimension(R.dimen.dp_52dp),
+                        (int) getActivity().getResources().getDimension(R.dimen.dp_52dp));
         iconLayoutParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         icon.setLayoutParams(iconLayoutParam);
-        icon.setId(i + 1);
+        icon.setId(i+1);
         content_layout[i].addView(icon);
 
         TextView textView_waiting = new TextView(getActivity());
@@ -178,7 +175,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         textView_time[i].setText("TIME" + i);
         textView_time[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
         textView_time[i].setTextSize(0);
-        time_textview_param[i].addRule(RelativeLayout.BELOW, i + 1);
         time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         //시간 변경 추가. 쓰레드 초단위로
         textView_time[i].setLayoutParams(time_textview_param[i]);
@@ -203,10 +199,10 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         icon.setBackgroundColor(Color.parseColor("#464646"));
 
         RelativeLayout.LayoutParams iconLayoutParam =
-                new RelativeLayout.LayoutParams(55, 55);
+                new RelativeLayout.LayoutParams((int) getActivity().getResources().getDimension(R.dimen.dp_52dp),
+                        (int) getActivity().getResources().getDimension(R.dimen.dp_52dp));
         iconLayoutParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         icon.setLayoutParams(iconLayoutParam);
-        icon.setId(i + 1);
         content_layout[i].addView(icon);
 
         TextView textView_waiting = new TextView(getActivity());
@@ -228,7 +224,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         textView_time[i].setText("TIME" + i);
         textView_time[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
         textView_time[i].setTextSize(0);
-        time_textview_param[i].addRule(RelativeLayout.BELOW, i + 1);
         time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         //시간 변경 추가. 쓰레드 초단위로
         textView_time[i].setLayoutParams(time_textview_param[i]);
@@ -273,7 +268,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         //textView_time[i].setGravity(Gravity.CENTER);
         time_textview_param[i].addRule(RelativeLayout.BELOW, textView_City[i].getId());
         time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        time_textview_param[i].topMargin = (int) getActivity().getResources().getDimension(R.dimen.margin_10dp);
+        time_textview_param[i].topMargin = (int) getActivity().getResources().getDimension(R.dimen.dp_10dp);
         //시간 변경 추가. 쓰레드 초단위로
         textView_time[i].setLayoutParams(time_textview_param[i]);
 
@@ -285,6 +280,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     }
 
     private void initView(){
+        ((MainPagerActivity) getActivity()).setVisibleCamera(true);
 
         store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
 
@@ -416,6 +412,10 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 pre_y = current_y;
                 current_y = match_scroll.getScrollY();
 
+                if(current_y < 40){
+                }else{
+                }
+
                 if (toolbar_visible) {
                     //툴바가 보여지고 있을때
                     scrolled_distance += current_y - pre_y;
@@ -465,8 +465,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     dark_alpha[i] = convert_float_map(content_height[i], view_width / 2, view_width, max_alpha, min_alpha);
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
 
-                    textView_Country[i].setLayoutParams(country_textview_param[i]);
-                    textView_City[i].setLayoutParams(city_textview_param[i]);
 
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
@@ -486,7 +484,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         toolbar_visible = true;
     }
-
     private void hide_tiem_text(int focus){
         for(int i = 0; i < 3; i++){
             if(focus != i){

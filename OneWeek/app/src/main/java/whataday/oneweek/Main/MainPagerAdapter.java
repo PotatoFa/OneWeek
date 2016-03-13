@@ -3,6 +3,7 @@ package whataday.oneweek.Main;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 /**
  * Created by hoon on 2016-03-07.

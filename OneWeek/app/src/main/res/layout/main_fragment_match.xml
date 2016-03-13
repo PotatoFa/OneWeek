@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background_home">
 
+
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/store_house_ptr_frame"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
@@ -16,6 +17,7 @@
         cube_ptr:ptr_pull_to_fresh="false"
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         cube_ptr:ptr_resistance="1.7">
+
 
         <whataday.oneweek.CustomView.MyScrollView
             android:layout_width="match_parent"
@@ -33,6 +35,8 @@
         </whataday.oneweek.CustomView.MyScrollView>
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+
 
 
 </RelativeLayout>

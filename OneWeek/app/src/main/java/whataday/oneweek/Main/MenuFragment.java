@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import whataday.oneweek.R;
 
@@ -37,4 +38,12 @@ public class MenuFragment extends android.support.v4.app.Fragment {
         super.onActivityCreated(savedInstanceState);
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        ((MainPagerActivity) getActivity()).setVisibleCamera(false);
+        super.onSaveInstanceState(outState);
+    }
+
 }
