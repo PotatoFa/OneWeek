@@ -5,15 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,31 +23,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import io.realm.Realm;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 import whataday.oneweek.Camera.CameraActivity;
-import whataday.oneweek.Controller.ApplicationController;
-import whataday.oneweek.CustomView.AutoResizeTextView;
 import whataday.oneweek.CustomView.MyScrollView;
-import whataday.oneweek.Data.MatchedUser;
 import whataday.oneweek.R;
 
 /**
  * Created by hoon on 2016-02-23.
  */
-public class MatchFragment extends android.support.v4.app.Fragment {
+public class HomeFragment extends android.support.v4.app.Fragment {
 
     PtrFrameLayout store_house_ptr_frame;
     StoreHouseHeader header;
@@ -74,11 +63,11 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     int focus_item;
     int count = 0;
 
-    Float min_alpha = new Float(0.05);
+    Float min_alpha = new Float(0);
     Float max_alpha = new Float(0.6);
 
     Bitmap bitmap_image;
-    Bitmap[] resize_background = new Bitmap[3];
+    Bitmap resize_Bitmap;
 
     ImageView[] imageView_background = new ImageView[3];
     ImageView[] imageView_background_dark = new ImageView[3];
@@ -89,7 +78,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     TextView[] textView_time = new TextView[3];
 
     RelativeLayout[] content_layout = new RelativeLayout[3];
-
     LinearLayout.LayoutParams[] content_layout_param = new LinearLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] country_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] city_textview_param = new RelativeLayout.LayoutParams[3];
@@ -97,16 +85,17 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     Toolbar toolbar;
 
-    Realm realm;
 
-    public static MatchFragment newInstance() {
-        MatchFragment matchFragment = new MatchFragment();
-        return matchFragment;
+    public static HomeFragment newInstance() {
+        HomeFragment homeFragment = new HomeFragment();
+        return homeFragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.main_fragment_match, container, false);
@@ -114,10 +103,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         return rootView;
     }
 
-
-    String[] matched_id = new String[3];
-    String TAG = "MATCHTEST";
-    RealmResults<MatchedUser> matchedUsers;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -127,162 +112,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         view_width = dm.widthPixels;
         view_height = dm.heightPixels;
 
-        realm = ApplicationController.getRealm();
-
-        matchedUsers = realm.where(MatchedUser.class).findAll();
-        for(int i = 0; i < 3; i++){
-            matched_id[i] = matchedUsers.get(i).getId();
-            Log.i(TAG, " append "+i+" / "+matched_id[i]);
-        }
         getResizeBitmap();
         initView();
 
-    }
-
-    private void addEmptyView(int i){
-
-        textView_City[i] = new TextView(getActivity());
-        textView_City[i].setTextSize(0);
-        content_layout[i].addView(textView_City[i]);
-
-        textView_Country[i] = new TextView(getActivity());
-        textView_Country[i].setTextSize(0);
-        content_layout[i].addView(textView_Country[i]);
-
-        ImageView icon = new ImageView(getActivity());
-        icon.setBackgroundColor(Color.parseColor("#999999"));
-
-        RelativeLayout.LayoutParams iconLayoutParam =
-                new RelativeLayout.LayoutParams(55, 55);
-        iconLayoutParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        icon.setLayoutParams(iconLayoutParam);
-        icon.setId(i + 1);
-        content_layout[i].addView(icon);
-
-        TextView textView_waiting = new TextView(getActivity());
-        textView_waiting.setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
-        textView_waiting.setText(R.string.string_empty);
-        textView_waiting.setTextColor(Color.parseColor("#ffffff"));
-        textView_waiting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-        textView_waiting.setSingleLine(true);
-
-        RelativeLayout.LayoutParams textLayoutParam =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textLayoutParam.addRule(RelativeLayout.BELOW, icon.getId());
-        textLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        textView_waiting.setLayoutParams(textLayoutParam);
-
-        content_layout[i].addView(textView_waiting);
-
-        textView_time[i] = new TextView(getActivity());
-        textView_time[i].setText("TIME" + i);
-        textView_time[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
-        textView_time[i].setTextSize(0);
-        time_textview_param[i].addRule(RelativeLayout.BELOW, i + 1);
-        time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        //시간 변경 추가. 쓰레드 초단위로
-        textView_time[i].setLayoutParams(time_textview_param[i]);
-
-        content_layout[i].addView(textView_time[i]);
-
-        match_vertical.addView(content_layout[i], content_layout_param[i]);
-        //Linear에 content Add
-    }
-
-    private void addWaitingView(int i){
-
-        textView_City[i] = new TextView(getActivity());
-        textView_City[i].setTextSize(0);
-        content_layout[i].addView(textView_City[i]);
-
-        textView_Country[i] = new TextView(getActivity());
-        textView_Country[i].setTextSize(0);
-        content_layout[i].addView(textView_Country[i]);
-
-        ImageView icon = new ImageView(getActivity());
-        icon.setBackgroundColor(Color.parseColor("#464646"));
-
-        RelativeLayout.LayoutParams iconLayoutParam =
-                new RelativeLayout.LayoutParams(55, 55);
-        iconLayoutParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        icon.setLayoutParams(iconLayoutParam);
-        icon.setId(i + 1);
-        content_layout[i].addView(icon);
-
-        TextView textView_waiting = new TextView(getActivity());
-        textView_waiting.setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
-        textView_waiting.setText(R.string.string_search);
-        textView_waiting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-        textView_waiting.setTextColor(Color.parseColor("#ffffff"));
-        textView_waiting.setSingleLine(true);
-
-        RelativeLayout.LayoutParams textLayoutParam =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textLayoutParam.addRule(RelativeLayout.BELOW, icon.getId());
-        textLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        textView_waiting.setLayoutParams(textLayoutParam);
-
-        content_layout[i].addView(textView_waiting);
-
-        textView_time[i] = new TextView(getActivity());
-        textView_time[i].setText("TIME" + i);
-        textView_time[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
-        textView_time[i].setTextSize(0);
-        time_textview_param[i].addRule(RelativeLayout.BELOW, i + 1);
-        time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        //시간 변경 추가. 쓰레드 초단위로
-        textView_time[i].setLayoutParams(time_textview_param[i]);
-
-        content_layout[i].addView(textView_time[i]);
-
-        match_vertical.addView(content_layout[i], content_layout_param[i]);
-        //Linear에 content Add
 
     }
 
-    private void addMatchingView(int i){
 
-        textView_City[i] = new TextView(getActivity());
-        textView_City[i].setText(matchedUsers.get(i).getCity());
-        textView_City[i].setTextSize(27);
-        textView_City[i].setId(i + 1);
-        textView_City[i].setTextColor(Color.parseColor("#ffffff"));
-        textView_City[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-Light.otf"));
-        city_textview_param[i].addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        textView_City[i].setLayoutParams(city_textview_param[i]);
-        //Country 텍스트뷰 아래쪽에 위치하게끔 City텍스트뷰 Param을 설정
-        content_layout[i].addView(textView_City[i]);
-
-        textView_Country[i] = new TextView(getActivity());
-        textView_Country[i].setText(matchedUsers.get(i).getCountry());
-        textView_Country[i].setTextColor(Color.parseColor("#ffffff"));
-        textView_Country[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-Bold.otf"));
-        textView_Country[i].setTextSize(40);
-        country_textview_param[i].addRule(RelativeLayout.ABOVE, textView_City[i].getId());
-        country_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        textView_Country[i].setLayoutParams(country_textview_param[i]);
-
-        content_layout[i].addView(textView_Country[i]);
-        //content에 country Add
-
-        textView_time[i] = new TextView(getActivity());
-        textView_time[i].setText("TIME" + i);
-        textView_time[i].setTextColor(Color.parseColor("#ffffff"));
-        textView_time[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
-        textView_time[i].setTextSize(16);
-        //textView_time[i].setGravity(Gravity.CENTER);
-        time_textview_param[i].addRule(RelativeLayout.BELOW, textView_City[i].getId());
-        time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        time_textview_param[i].topMargin = (int) getActivity().getResources().getDimension(R.dimen.margin_10dp);
-        //시간 변경 추가. 쓰레드 초단위로
-        textView_time[i].setLayoutParams(time_textview_param[i]);
-
-        content_layout[i].addView(textView_time[i]);
-
-        match_vertical.addView(content_layout[i], content_layout_param[i]);
-        //Linear에 content Add
-
-    }
 
     private void initView(){
 
@@ -347,7 +183,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
             content_layout[i] = new RelativeLayout(getActivity());
             imageView_background[i] = new ImageView(getActivity());
-            imageView_background[i].setImageBitmap(resize_background[i]);
+            imageView_background[i].setImageBitmap(resize_Bitmap);
             //사진설정
             imageView_background[i].setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView_background[i].setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -359,19 +195,50 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             imageView_background_dark[i].setAlpha(dark_alpha[i]);
             content_layout[i].addView(imageView_background_dark[i]);
 
-            if(matched_id[i].equals("empty")){
-                addEmptyView(i);
-            }else if(matched_id[i].equals("search")){
-                addWaitingView(i);
-            }else{
-                addMatchingView(i);
-            }
+            textView_Country[i] = new TextView(getActivity());
+            textView_Country[i].setText("Waiting for someone");
+            //textView_Country[i].setText("Country"+i);
+            textView_Country[i].setTextSize(50);
+            textView_Country[i].setId(i+1);
+            country_textview_param[i].addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            textView_Country[i].setLayoutParams(country_textview_param[i]);
+            //content의 중앙에 위치하게끔 Country Param을 설정.
+            //Country텍스트뷰에 설정한 Param을 설정.
+            content_layout[i].addView(textView_Country[i]);
+            //content에 country Add
+
+            textView_City[i] = new TextView(getActivity());
+            textView_City[i].setText("CITY" + i);
+            textView_City[i].setTextSize(30);
+            textView_City[i].setId(i + 10);
+            city_textview_param[i].addRule(RelativeLayout.BELOW, i + 1);
+            city_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            textView_City[i].setLayoutParams(city_textview_param[i]);
+            //Country 텍스트뷰 아래쪽에 위치하게끔 City텍스트뷰 Param을 설정
+            content_layout[i].addView(textView_City[i]);
+            //content에 city Add
+
+            textView_time[i] = new TextView(getActivity());
+            textView_time[i].setText("TIME" + i);
+            textView_time[i].setTextSize(20);
+            time_textview_param[i].addRule(RelativeLayout.BELOW, i + 10);
+            time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+            //시간 변경 추가. 쓰레드 초단위로
+            textView_time[i].setLayoutParams(time_textview_param[i]);
+
+            content_layout[i].addView(textView_time[i]);
+
+
+            match_vertical.addView(content_layout[i], content_layout_param[i]);
+            //Linear에 content Add
+
+            handler = new Handler();
+            handler.post(timer_text);
+
         }
 
-        handler = new Handler();
-        handler.post(timer_text);
-
         hide_tiem_text(focus_item);
+
 
         match_vertical.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -388,6 +255,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 Log.i("content ::", String.valueOf(content_max));
                 scroll_max_y = linear_max + content_max;
                 Log.i("scroll ::", String.valueOf(scroll_max_y));
+
+
             }
         });
         match_scroll.setOnTouchListener(new View.OnTouchListener() {
@@ -427,6 +296,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     }
                 }
 
+
                 if (current_y < scroll_max_y / 2) {
                     //첫번째_decrease / 두번째_increase / 세번째 고정
                     //첫번째 = width~width/2 : 0~scroll_max_y/2
@@ -457,6 +327,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     } else {
                         focus_item = 1;
                     }
+                    // Log.i("Two :", String.valueOf(content_height[0])+"/"+String.valueOf(content_height[1])+"/"+String.valueOf(content_height[2]));
                 }
 
                 for (int i = 0; i < 3; i++) {
@@ -464,17 +335,16 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     content_layout[i].setLayoutParams(content_layout_param[i]);
                     dark_alpha[i] = convert_float_map(content_height[i], view_width / 2, view_width, max_alpha, min_alpha);
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
-
-                    textView_Country[i].setLayoutParams(country_textview_param[i]);
-                    textView_City[i].setLayoutParams(city_textview_param[i]);
-
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
                 hide_tiem_text(focus_item);
 
             }
 
+
         });
+
+
 
     }
 
@@ -499,16 +369,12 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     private Runnable timer_text = new Runnable() {
         @Override
         public void run() {
-
-            Date now = new Date();
-            SimpleDateFormat time_format = new SimpleDateFormat("a HH:mm:ss", Locale.UK);
-            SimpleDateFormat date_format = new SimpleDateFormat("MMM.dd.yyyy", Locale.UK);
-
-            String string_time_date = time_format.format(now)+"\n"+date_format.format(now);
-
+            Calendar current = Calendar.getInstance();
             for(int i = 0; i < 3; i++){
-                textView_time[i].setText(string_time_date.toUpperCase());
-
+                textView_time[i].setText(String.format("%02d:%02d:%02d",
+                        current.get(Calendar.HOUR_OF_DAY),
+                        current.get(Calendar.MINUTE),
+                        current.get(Calendar.SECOND)));
             }
             handler.postDelayed(timer_text, 1000);
         }
@@ -523,35 +389,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     }
 
     public void getResizeBitmap(){
-        //MatchUser 검색 후 백그라운드 이미지 리사이징
-
-        for(int i=0; i < matched_id.length; i++){
-            if(matchedUsers.get(i).getId().equals("empty") || matchedUsers.get(i).getId().equals("search")){
-                bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.home_shadow);
-            }else if(matchedUsers.get(i).getCountry().equals("Japan")){
-                bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.city_japan);
-            }else if(matchedUsers.get(i).getCountry().equals("South korea")) {
-                bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.city_korea);
-            }
-            resize_background[i] = Bitmap.createScaledBitmap(bitmap_image, view_width, view_width, true);
-
-        }
-    }
-
-    @Override
-    public void onPause() {
-        if (handler != null)
-            handler.removeCallbacks(timer_text);
-
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (handler != null)
-            handler.post(timer_text);
+        bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.home_shadow);
+        resize_Bitmap = Bitmap.createScaledBitmap(bitmap_image, view_width, view_width, true);
     }
 
     private ArrayList<float[]> getPointList() {
@@ -629,6 +468,22 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             list.add(point);
         }
         return list;
+    }
+
+    @Override
+    public void onPause() {
+        if (handler != null)
+            handler.removeCallbacks(timer_text);
+
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (handler != null)
+            handler.post(timer_text);
     }
 
 }

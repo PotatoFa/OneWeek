@@ -43,7 +43,7 @@ public class MainPagerActivity extends SetFontActivity {
         setSupportActionBar(toolbar_main);
         setTitle("OneWeek");
         toolbar_main.setTitleTextColor(Color.WHITE);
-        toolbar_main.setBackgroundColor(Color.parseColor("#33000000"));
+        toolbar_main.setBackgroundColor(Color.parseColor("#00ffffff"));
     }
 
     private void setTestData(){
@@ -51,7 +51,16 @@ public class MainPagerActivity extends SetFontActivity {
         realm.clear(MatchedUser.class);
         for(int i = 0; i < 3; i++){
             MatchedUser matchedUser = realm.createObject(MatchedUser.class);
-            matchedUser.setId("empty");
+            matchedUser.setId("korea");
+            matchedUser.setCity("SEOUL");
+            matchedUser.setCountry("South korea");
+            if(i == 1){
+                matchedUser.setId("2");
+                matchedUser.setCity("Osaka");
+                matchedUser.setCountry("Japan");
+            }else if(i == 2){
+                matchedUser.setId("empty");
+            }
         }
         realm.commitTransaction();
         Log.i("REALM","CREATED TEST DATA");

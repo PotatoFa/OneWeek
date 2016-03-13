@@ -3,6 +3,8 @@
     <string name="facebook_app_id">1690226521233832</string>
     <string name="account_intro">By touching agree, you agree to the terms started in\nour <u>Terms of Service and Privacy Policy</u></string>
 
+    <string name="string_search">Waiting for someone</string>
+    <string name="string_empty">Run into someone</string>
 
     <string name="squarecamera__app_name">SquareCamera</string>
     <string name="squarecamera__action_settings">Settings</string>
