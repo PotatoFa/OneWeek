@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/backgorund_image"
+        android:id="@+id/background_image"
         android:background="#14000000"/>
 
     <Space

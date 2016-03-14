@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/backgorund_image"
+        android:id="@+id/background_image"
         android:background="#14000000"/>
 
     <TextView
@@ -30,20 +30,21 @@
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/text_gender_question"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:id="@+id/radio_group_gender">
 
         <RadioButton
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="113dp"
+            android:layout_height="113dp"
             android:button="@drawable/radio_gender_man"
             android:id="@+id/radio_man"/>
 
         <RadioButton
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:button="@drawable/radio_gender_man"
+            android:layout_width="113dp"
+            android:layout_height="113dp"
+            android:layout_marginLeft="20dp"
+            android:button="@drawable/radio_gender_woman"
             android:id="@+id/radio_woman"/>
 
     </RadioGroup>
@@ -58,6 +59,7 @@
         android:textAllCaps="false"
         android:layout_centerHorizontal="true"
         android:background="@drawable/color_graytoyellow"
+        android:enabled="false"
         android:id="@+id/btn_next_gender"/>
 
 </RelativeLayout>

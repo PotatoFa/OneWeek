@@ -8,9 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -74,21 +76,27 @@ public class DetailActivity extends SetFontActivity {
     }
 
     TextView text_location;
-    Button btn_back;
 
 
     private void setToolbar(){
         toolbar_detail = (Toolbar)findViewById(R.id.toolbar_detail);
         text_location = (TextView)findViewById(R.id.text_location);
-        btn_back = (Button)findViewById(R.id.btn_back);
         setSupportActionBar(toolbar_detail);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_back);
         text_location.setText(matchedUser.getCity() + ", " + matchedUser.getCountry());
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return false;
+    }
+
 }

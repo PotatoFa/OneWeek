@@ -74,11 +74,10 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
                 if(s.toString().equals("")){
                     btn_join_name.setBackgroundResource(R.drawable.btn_gray);
-                    //startTransition(btn_join_name);
                     check_empty = true;
                 }else{
                     btn_join_name.setBackgroundResource(R.drawable.color_graytoyellow);
-                    startTransition(btn_join_name);
+                    ViewAnimation.grayToYellow(btn_join_name);
                     check_empty = false;
                 }
             }
@@ -92,13 +91,6 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
 
     }
-
-
-    public void startTransition(View view){
-        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
-        transitionDrawable.startTransition(500);
-    }
-
 
 
 }

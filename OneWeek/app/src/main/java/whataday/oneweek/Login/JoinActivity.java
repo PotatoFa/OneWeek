@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -16,11 +19,25 @@ public class JoinActivity extends SetFontActivity {
     CustomViewPager viewpager_join;
     CirclePageIndicator viewpager_indicator;
     JoinPagerAdapter joinPagerAdapter;
+    Toolbar toolbar_join;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+        setIndicator();
+
+        toolbar_join = (Toolbar)findViewById(R.id.toolbar_join);
+        setSupportActionBar(toolbar_join);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_back);
+
+
+    }
+
+    private void setIndicator(){
+
         viewpager_join = (CustomViewPager) findViewById(R.id.viewpager_join);
         viewpager_indicator = (CirclePageIndicator) findViewById(R.id.viewpager_indicator);
         joinPagerAdapter = new JoinPagerAdapter(getSupportFragmentManager());
@@ -33,8 +50,6 @@ public class JoinActivity extends SetFontActivity {
         viewpager_indicator.setPageColor(Color.parseColor("#28ffffff"));
         viewpager_indicator.setStrokeWidth(0);
         viewpager_indicator.setRadius(10);
-
-
     }
 
     public void nextPage(){
@@ -52,5 +67,22 @@ public class JoinActivity extends SetFontActivity {
             prePage();
         }
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(viewpager_join.getCurrentItem() != 0){
+                    viewpager_join.setCurrentItem(viewpager_join.getCurrentItem()-1, true);
+                }else{
+                    Toast.makeText(getApplicationContext(), "not enabled", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+        return false;
+    }
+
 
 }

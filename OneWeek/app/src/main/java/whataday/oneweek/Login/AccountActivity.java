@@ -44,7 +44,7 @@ public class AccountActivity extends SetFontActivity implements
 
     Button btn_login_facebook, btn_login_google, btn_assign_exit, btn_assign_agree;
     RelativeLayout box_assign, box_login_button;
-    ImageView backgorund_image;
+    ImageView background_image;
 
 
     TextView text_asign;
@@ -60,7 +60,7 @@ public class AccountActivity extends SetFontActivity implements
         viewAnimation = new ViewAnimation();
 
 
-        backgorund_image = (ImageView)findViewById(R.id.backgorund_image);
+        background_image = (ImageView)findViewById(R.id.background_image);
 
         text_asign = (TextView)findViewById(R.id.text_asign);
 
@@ -85,7 +85,7 @@ public class AccountActivity extends SetFontActivity implements
             public void onClick(View v) {
                 viewAnimation.slideToBottom(box_assign);
                 viewAnimation.alphaIn(box_login_button);
-                viewAnimation.alphaOut(backgorund_image);
+                viewAnimation.alphaOut(background_image);
                 setFacebook_login();
                 setGoogle_Login();
 

@@ -1,8 +1,5 @@
 package whataday.oneweek.Login;
 
-import android.animation.ObjectAnimator;
-import android.graphics.Color;
-import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -73,18 +70,16 @@ public class FragmentGender extends android.support.v4.app.Fragment {
                 } else if (checkedId == R.id.radio_woman) {
                     gender = "woman";
                 }
-                startTransition(btn_next_gender);
+                if(!checked_flag){
+                    ViewAnimation.grayToYellow(btn_next_gender);
+                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image));
+                }
                 checked_flag = true;
+
             }
         });
 
 
-    }
-
-
-    public void startTransition(View view){
-        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
-        transitionDrawable.startTransition(500);
     }
 
 }

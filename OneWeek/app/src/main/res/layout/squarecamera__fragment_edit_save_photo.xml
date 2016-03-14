@@ -21,22 +21,26 @@
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@drawable/squarecamera__cancel_drawable"
-        android:background="@android:color/transparent"
+        android:layout_marginLeft="19dp"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/icon_cancel"
         android:onClick="onCancel"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="T"
-        android:id="@+id/button_editfocus"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="19dp"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/icon_text"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button_select"
         android:text="Next"
+        android:background="@drawable/icon_camera_next"
+        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 

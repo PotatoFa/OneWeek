@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="whataday.oneweek.Main.MainPagerActivity">
 
     <android.support.v4.view.ViewPager
@@ -15,16 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#00000000"
+        app:navigationIcon="@drawable/icon_menu"
         android:clipToPadding="false">
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="25dp"
+                android:layout_height="26dp"
                 android:background="@drawable/icon_camera"
                 android:layout_gravity="center"
-                android:scaleType="center"
-                android:visibility="gone"
-                android:layout_centerInParent="true"
                 android:id="@+id/toolbar_camera_icon"/>
 
     </android.support.v7.widget.Toolbar>

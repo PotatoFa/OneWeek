@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class EditSavePhotoFragment extends Fragment {
     public static final String IMAGE_INFO = "image_info";
 
     private File photoFile;
-    private Button btn_editFocus, btn_select;
+    private ImageButton btn_editFocus, btn_select;
     boolean keyboard_status = false;
     private InputMethodManager inputMethodManager;
     private String file_path;
@@ -99,7 +100,7 @@ public class EditSavePhotoFragment extends Fragment {
 
 
     private void initView(){
-        btn_select = (Button) getActivity().findViewById(R.id.button_select);
+        btn_select = (ImageButton) getActivity().findViewById(R.id.button_select);
 
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Display display = getActivity().getWindowManager().getDefaultDisplay();

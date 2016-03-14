@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
@@ -53,6 +55,8 @@ public class MainPagerActivity extends SetFontActivity {
         setSupportActionBar(toolbar_main);
         setTitle("OneWeek");
         toolbar_main.setTitleTextColor(Color.WHITE);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void setVisibleCamera(boolean visible){
@@ -95,5 +99,16 @@ public class MainPagerActivity extends SetFontActivity {
 
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                viewPager_main.setCurrentItem(0, true);
+
+                break;
+        }
+        return false;
+    }
 
 }

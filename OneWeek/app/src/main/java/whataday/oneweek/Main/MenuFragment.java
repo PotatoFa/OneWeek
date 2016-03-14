@@ -37,12 +37,13 @@ public class MenuFragment extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ((MainPagerActivity) getActivity()).setVisibleCamera(false);
+
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        ((MainPagerActivity) getActivity()).setVisibleCamera(false);
         super.onSaveInstanceState(outState);
     }
 

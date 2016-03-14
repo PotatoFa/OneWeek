@@ -57,14 +57,14 @@ public class ViewAnimation {
         view.setVisibility(View.GONE);
     }
 
-    public void alphaIn(View view){
+    public static void alphaIn(View view){
         Animation animate = new AlphaAnimation(0, 1);
         animate.setDuration(1000);
         view.startAnimation(animate);
         view.setVisibility(View.VISIBLE);
     }
 
-    public void alphaOut(View view){
+    public static void alphaOut(View view){
         Animation animate = new AlphaAnimation(1, 0);
         animate.setDuration(300);
         view.startAnimation(animate);
@@ -74,12 +74,14 @@ public class ViewAnimation {
         view.setBackgroundResource(R.drawable.color_graytoyellow);
         TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
         transitionDrawable.startTransition(500);
+        view.setEnabled(true);
 
     }
     public static void yellowToGray(View view){
         view.setBackgroundResource(R.drawable.color_yellowtogray);
         TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
         transitionDrawable.startTransition(500);
+        view.setEnabled(false);
 
     }
 
