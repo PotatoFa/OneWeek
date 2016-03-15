@@ -7,7 +7,18 @@ import io.realm.RealmObject;
  */
 public class MatchedUser extends RealmObject {
     private String id;
-    private String city, country;
+    private String city;
+    private String country;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    private String test;
 
     public String getCity() {
         return city;

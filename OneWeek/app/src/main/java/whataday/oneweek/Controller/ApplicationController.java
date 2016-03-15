@@ -11,10 +11,15 @@ import com.tsengvn.typekit.Typekit;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 
+import io.realm.DynamicRealm;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
+import io.realm.exceptions.RealmMigrationNeededException;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+import whataday.oneweek.MainActivity;
 import whataday.oneweek.Service.GPSTracker;
 
 /**
@@ -34,12 +39,25 @@ public class ApplicationController extends Application {
         super.onCreate();
         ApplicationController.instance = this;
         ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
-        ApplicationController.realm = Realm.getInstance(this);
+        createRealm();
+
         Typekit.getInstance()
                 .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
                 .addCustom2(Typeface.createFromAsset(getAssets(), "Radnika-SemiBold.otf"))
                 .addCustom3(Typeface.createFromAsset(getAssets(), "Radnika-Bold.otf"))
                 .addCustom4(Typeface.createFromAsset(getAssets(), "digital.ttf"));
+
+    }
+
+    private void createRealm(){
+
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+                .name("oneweek.realm")
+                .schemaVersion(3)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        ApplicationController.realm = Realm.getInstance(realmConfiguration);
 
     }
 

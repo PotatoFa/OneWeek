@@ -66,7 +66,7 @@ public class SplashActivity extends SetFontActivity {
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
                 //startActivity(intent);
-                startActivity(new Intent(getApplicationContext(), JoinActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
 
                 finish();
             }else{
