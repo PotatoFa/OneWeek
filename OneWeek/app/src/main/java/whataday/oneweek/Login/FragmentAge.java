@@ -55,6 +55,9 @@ public class FragmentAge extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), year_picker.getValue() + "/" + month_picker.getValue(), Toast.LENGTH_SHORT).show();
+
+                ((JoinActivity) getActivity()).editor.putInt("age", year_picker.getValue());
+                ((JoinActivity) getActivity()).editor.commit();
                 ((JoinActivity) getActivity()).nextPage();
             }
         });

@@ -28,7 +28,7 @@ public class MenuFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout rootView = (LinearLayout)inflater.inflate(R.layout.main_fragment_menu, container, false);
+        RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.main_fragment_menu, container, false);
         this.rootView = rootView;
         return rootView;
     }

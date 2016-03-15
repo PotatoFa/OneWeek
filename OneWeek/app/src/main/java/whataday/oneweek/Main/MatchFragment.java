@@ -100,7 +100,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     RelativeLayout.LayoutParams[] box_text_param = new RelativeLayout.LayoutParams[3];
 
 
-    Toolbar toolbar;
+    RelativeLayout toolbar_match;
 
     Realm realm;
 
@@ -146,6 +146,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     String set_matchid;
     Intent intent;
+    ImageView toolbar_camera_icon;
 
 
     private void addEmptyView(int i){
@@ -317,6 +318,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     private void initView(){
 
         store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
+        toolbar_camera_icon = (ImageView) rootView.findViewById(R.id.toolbar_camera_icon);
 
         header = new StoreHouseHeader(getActivity().getApplicationContext());
         header.initWithPointList(getPointList());
@@ -350,7 +352,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        toolbar = (Toolbar)getActivity().findViewById(R.id.toolbar_main);
+        toolbar_match = (RelativeLayout)rootView.findViewById(R.id.toolbar_match);
         match_scroll = (MyScrollView)rootView.findViewById(R.id.match_scroll);
         match_vertical = (LinearLayout)rootView.findViewById(R.id.match_vertical);
         focus_item = 0;
@@ -452,7 +454,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 current_y = match_scroll.getScrollY();
 
                 if (current_y < 40) {
-                } else {
+                    if(!(toolbar_camera_icon.getVisibility() == View.VISIBLE)){
+                        ViewAnimation.alphaIn(toolbar_camera_icon, 300);
+                    }
+                }else {
+                    if(toolbar_camera_icon.getVisibility() == View.VISIBLE){
+                        ViewAnimation.alphaOut(toolbar_camera_icon, 300);
+                    }
                 }
 
                 if (toolbar_visible) {
@@ -546,11 +554,11 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         });
     }
     private void hide_toolbar(){
-        toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        toolbar_match.animate().translationY(-toolbar_match.getHeight()).setInterpolator(new AccelerateInterpolator(2));
         toolbar_visible = false;
     }
     private void show_toolbar(){
-        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        toolbar_match.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
         toolbar_visible = true;
     }
     private void hide_tiem_text(int focus){

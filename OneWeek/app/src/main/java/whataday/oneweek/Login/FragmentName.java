@@ -57,6 +57,10 @@ public class FragmentName extends android.support.v4.app.Fragment {
                 if (check_empty) {
                     Toast.makeText(getActivity(), "please typed your name", Toast.LENGTH_SHORT).show();
                 } else {
+                    ((JoinActivity) getActivity()).editor.putString("nick", edit_name.getText().toString());
+
+                    //TODO pref저장 / 서버가입포스트요청
+
                     startActivity(new Intent(getActivity(), MainPagerActivity.class));
                     getActivity().finish();
                 }

@@ -43,7 +43,7 @@ public class MainPagerActivity extends SetFontActivity {
         realm = ApplicationController.getRealm();
         setTestData();
 
-        setToolbar();
+        //setToolbar();
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager_main.setAdapter(mainPagerAdapter);
         viewPager_main.setCurrentItem(1);
@@ -52,7 +52,7 @@ public class MainPagerActivity extends SetFontActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 Log.i("pagechange ", "scrolled "+position);
-                changeToolbar(position);
+                //changeToolbar(position);
             }
             @Override
             public void onPageSelected(int position) {
@@ -65,38 +65,8 @@ public class MainPagerActivity extends SetFontActivity {
             }
         });
     }
-    private void changeToolbar(int i){
-        if(i == 0){
-            if(toolbar_camera_icon.getVisibility() == View.VISIBLE){
-                ViewAnimation.alphaInvisible(toolbar_camera_icon, 300);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                ViewAnimation.alphaIn(toolbar_menu_back, 300);
-            }
-        }else{
-            if(toolbar_camera_icon.getVisibility() == View.INVISIBLE){
-                ViewAnimation.alphaOut(toolbar_menu_back, 100);
-                ViewAnimation.alphaIn(toolbar_camera_icon, 300);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            }
-        }
-
-    }
 
     ImageButton toolbar_menu_back;
-
-    private void setToolbar(){
-        toolbar_main = (Toolbar)findViewById(R.id.toolbar_main);
-        toolbar_camera_icon = (ImageView)findViewById(R.id.toolbar_camera_icon);
-        toolbar_menu_back = (ImageButton)findViewById(R.id.toolbar_menu_back);
-        toolbar_menu_back.setVisibility(View.GONE);
-        setSupportActionBar(toolbar_main);
-        setTitle("OneWeek");
-        toolbar_main.setTitleTextColor(Color.WHITE);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
 
 
     private void setTestData(){
@@ -129,19 +99,6 @@ public class MainPagerActivity extends SetFontActivity {
         Log.i("REALM","CREATED TEST DATA");
 
     }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                viewPager_main.setCurrentItem(0, true);
-
-                break;
-        }
-        return false;
-    }
-
 
 
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_home">
+
+
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/store_house_ptr_frame"
@@ -35,7 +36,27 @@
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
+    <RelativeLayout
+        android:id="@+id/toolbar_match"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#00000000">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/icon_menu"
+            android:layout_marginLeft="15dp"/>
+
+        <ImageView
+            android:layout_width="23dp"
+            android:layout_height="26dp"
+            android:background="@drawable/icon_camera"
+            android:layout_centerInParent="true"
+            android:id="@+id/toolbar_camera_icon" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

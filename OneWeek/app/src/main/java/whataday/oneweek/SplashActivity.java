@@ -1,6 +1,7 @@
 package whataday.oneweek;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
+import whataday.oneweek.Login.JoinActivity;
 import whataday.oneweek.Main.MainPagerActivity;
 import whataday.oneweek.Service.GPSTracker;
 
@@ -27,7 +29,11 @@ public class SplashActivity extends SetFontActivity {
     GoogleCloudMessaging gcm;
     String regid, current_regid;
     GPSTracker gpsTracker;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
+
+    Intent intent;
 
     Handler delay_handler;
     ImageView image_splash;
@@ -39,6 +45,11 @@ public class SplashActivity extends SetFontActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         image_splash = (ImageView)findViewById(R.id.image_splash);
+
+        pref = getSharedPreferences("user", MODE_PRIVATE);
+        current_regid = pref.getString("gcm_token", null);
+        editor = pref.edit();
+
 
         gpsTracker = ApplicationController.getGpsTracker();
         gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
@@ -54,7 +65,9 @@ public class SplashActivity extends SetFontActivity {
         public void run() {
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
-                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
+                //startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), JoinActivity.class));
+
                 finish();
             }else{
                 image_splash.setImageResource(image_resource[count++]);
@@ -84,15 +97,27 @@ public class SplashActivity extends SetFontActivity {
     }
 
     private void sendRegistrationIdToBackend(String regid) {
-        if(regid.equals(current_regid)){
-            //등록받은 token값이 일치할 경우.
+
+        if(pref.getBoolean("login_flag", false)){
+            //로그인 했던 사람
+            if(!current_regid.equals(regid)){
+                //로그인 했던사람인데 token바꼈을때
+                //TODO 서버, pref에 변경요청
+                editor.putString("gcm_token", regid);
+                editor.commit();
+            }
+            //MainPagerActivity로 보내야함
+            intent = new Intent(getApplicationContext(), MainPagerActivity.class);
+
         }else{
-            //등록받은 token값이 일치하지 않는 경우. pref/서버에 갱신 요청.
-            //TODO 이슈. 가끔 바뀌는 경우가 있음. 기존 유저의 경우 서버에 변경요청 해야함.
+            //로그인 경험 없는 사람
+            editor.putString("gcm_token", regid);
+            editor.commit();
+            intent = new Intent(getApplicationContext(), JoinActivity.class);
+
         }
-        //TODO 이전 로그인 기록 검사 후 Main 또는 Login 화면 전환.
-        //이전 로그인 기록 검사를 서버에 실시간으로 해야하는지??
-        //pref - user - history 필드 사용
 
     }
+
+
 }

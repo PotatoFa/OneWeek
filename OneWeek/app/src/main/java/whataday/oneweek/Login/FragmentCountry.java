@@ -77,6 +77,16 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
         btn_next_country.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ((JoinActivity) getActivity()).editor
+                        .putFloat("latitude", Float.parseFloat(String.valueOf(gpsTracker.getLatitude())));
+
+                ((JoinActivity) getActivity()).editor
+                        .putFloat("longitude", Float.parseFloat(String.valueOf(gpsTracker.getLongitude())));
+
+                //TODO 나라/도시 추가해야함 서버요청
+
+                ((JoinActivity) getActivity()).editor.commit();
                 ((JoinActivity) getActivity()).nextPage();
             }
         });

@@ -38,6 +38,7 @@
             android:layout_width="113dp"
             android:layout_height="113dp"
             android:button="@drawable/radio_gender_man"
+            android:background="@drawable/radio_anim_man"
             android:id="@+id/radio_man"/>
 
         <RadioButton
@@ -45,6 +46,7 @@
             android:layout_height="113dp"
             android:layout_marginLeft="20dp"
             android:button="@drawable/radio_gender_woman"
+            android:background="@drawable/radio_anim_woman"
             android:id="@+id/radio_woman"/>
 
     </RadioGroup>

@@ -1,6 +1,7 @@
 package whataday.oneweek.Login;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import com.tsengvn.typekit.TypekitContextWrapper;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.Data.UserInfo;
 import whataday.oneweek.R;
 
 public class JoinActivity extends SetFontActivity {
@@ -20,11 +22,16 @@ public class JoinActivity extends SetFontActivity {
     CirclePageIndicator viewpager_indicator;
     JoinPagerAdapter joinPagerAdapter;
     Toolbar toolbar_join;
+    public SharedPreferences pref;
+    public SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+        pref = getSharedPreferences("user", MODE_PRIVATE);
+        editor = pref.edit();
+
         setIndicator();
 
         toolbar_join = (Toolbar)findViewById(R.id.toolbar_join);
@@ -68,7 +75,6 @@ public class JoinActivity extends SetFontActivity {
         }
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -83,6 +89,7 @@ public class JoinActivity extends SetFontActivity {
         }
         return false;
     }
+
 
 
 }

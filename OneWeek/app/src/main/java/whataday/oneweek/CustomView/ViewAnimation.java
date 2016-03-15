@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.RadioButton;
 
 import whataday.oneweek.R;
 
@@ -94,9 +95,16 @@ public class ViewAnimation {
 
     }
 
-    public static void startTransition(View view){
+    public static void startTransition(View view, int duration) {
         TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
         transitionDrawable.startTransition(500);
+
+    }
+
+    public static void reverseTransition(View view, int duration) {
+        TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
+        transitionDrawable.reverseTransition(500);
+
     }
 
 
