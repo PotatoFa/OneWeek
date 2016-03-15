@@ -42,7 +42,7 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
     Button btn_join_name;
     EditText edit_name;
-    Boolean check_empty;
+    Boolean check_empty = true;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -71,7 +71,6 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 if(s.toString().equals("")){
                     btn_join_name.setBackgroundResource(R.drawable.btn_gray);
                     check_empty = true;
@@ -84,7 +83,6 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
 
             }
         });

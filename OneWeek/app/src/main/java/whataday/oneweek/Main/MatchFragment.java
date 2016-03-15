@@ -90,11 +90,15 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     TextView[] textView_time = new TextView[3];
 
     RelativeLayout[] content_layout = new RelativeLayout[3];
+    RelativeLayout[] box_text = new RelativeLayout[3];
+
 
     LinearLayout.LayoutParams[] content_layout_param = new LinearLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] country_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] city_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] time_textview_param = new RelativeLayout.LayoutParams[3];
+    RelativeLayout.LayoutParams[] box_text_param = new RelativeLayout.LayoutParams[3];
+
 
     Toolbar toolbar;
 
@@ -143,7 +147,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     String set_matchid;
     Intent intent;
 
+
     private void addEmptyView(int i){
+
+
+        box_text[i] = new RelativeLayout(getActivity());
+        box_text[i].setGravity(Gravity.CENTER);
+        box_text[i].setLayoutParams(box_text_param[i]);
 
         textView_City[i] = new TextView(getActivity());
         textView_City[i].setTextSize(0);
@@ -193,6 +203,11 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         //Linear에 content Add
     }
     private void addWaitingView(int i){
+
+
+        box_text[i] = new RelativeLayout(getActivity());
+        box_text[i].setGravity(Gravity.CENTER);
+        box_text[i].setLayoutParams(box_text_param[i]);
 
         textView_City[i] = new TextView(getActivity());
         textView_City[i].setTextSize(0);
@@ -245,16 +260,28 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
         set_matchid = matchedUsers.get(i).getId();
 
+
+        box_text[i] = new RelativeLayout(getActivity());
+        box_text[i].setGravity(Gravity.CENTER);
+        box_text[i].setLayoutParams(box_text_param[i]);
+        content_layout[i].addView(box_text[i]);
+
         textView_City[i] = new TextView(getActivity());
         textView_City[i].setText(matchedUsers.get(i).getCity());
         textView_City[i].setTextSize(27);
-        textView_City[i].setId(i + 1);
+        if(i==0){
+            textView_City[i].setId(R.id.match_city0);
+        }else if(i==1){
+            textView_City[i].setId(R.id.match_city1);
+        }else if(i==2){
+            textView_City[i].setId(R.id.match_city2);
+        }
         textView_City[i].setTextColor(Color.parseColor("#ffffff"));
         textView_City[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-Light.otf"));
         city_textview_param[i].addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         textView_City[i].setLayoutParams(city_textview_param[i]);
         //Country 텍스트뷰 아래쪽에 위치하게끔 City텍스트뷰 Param을 설정
-        content_layout[i].addView(textView_City[i]);
+        box_text[i].addView(textView_City[i]);
 
         textView_Country[i] = new TextView(getActivity());
         textView_Country[i].setText(matchedUsers.get(i).getCountry());
@@ -265,7 +292,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         country_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
         textView_Country[i].setLayoutParams(country_textview_param[i]);
 
-        content_layout[i].addView(textView_Country[i]);
+        box_text[i].addView(textView_Country[i]);
         //content에 country Add
 
         textView_time[i] = new TextView(getActivity());
@@ -279,7 +306,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         time_textview_param[i].topMargin = (int) getActivity().getResources().getDimension(R.dimen.dp_10dp);
         //시간 변경 추가. 쓰레드 초단위로
         textView_time[i].setLayoutParams(time_textview_param[i]);
-        content_layout[i].addView(textView_time[i]);
+        box_text[i].addView(textView_time[i]);
         match_vertical.addView(content_layout[i], content_layout_param[i]);
         //Linear에 content Add
 
@@ -288,7 +315,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     }
 
     private void initView(){
-        ((MainPagerActivity) getActivity()).setVisibleCamera(true);
 
         store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
 
@@ -340,13 +366,16 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
         for(int i=0; i<3; i++){
 
+            box_text_param[i] =
+                    new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             country_textview_param[i] =
                     new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             city_textview_param[i] =
                     new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             time_textview_param[i] =
                     new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            content_layout_param[i] = new LinearLayout.LayoutParams(view_width, content_height[i]);
+            content_layout_param[i] =
+                    new LinearLayout.LayoutParams(view_width, content_height[i]);
             //Vertical로 선언된 LinearLayout에 들어갈 각 content(RelativeLayout)의 초기 Param설정(크기).
 
             content_layout[i] = new RelativeLayout(getActivity());
@@ -362,6 +391,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             imageView_background_dark[i].setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             imageView_background_dark[i].setAlpha(dark_alpha[i]);
             content_layout[i].addView(imageView_background_dark[i]);
+
 
             if(matched_id[i].equals("empty")){
                 addEmptyView(i);
@@ -473,9 +503,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     content_layout[i].setLayoutParams(content_layout_param[i]);
                     dark_alpha[i] = convert_float_map(content_height[i], view_width / 2, view_width, max_alpha, min_alpha);
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
-                    centerMargin[i] = convert_int_map(content_height[i], view_width, view_width / 2, 1, 100);
-                    city_textview_param[i].topMargin = centerMargin[i];
-                    textView_City[i].setLayoutParams(city_textview_param[i]);
 
 
                 }
@@ -527,15 +554,22 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         toolbar_visible = true;
     }
     private void hide_tiem_text(int focus){
+
         for(int i = 0; i < 3; i++){
+
+            centerMargin[i] = convert_int_map(content_height[i], view_width / 2, view_width, 56, 1);
+
+            box_text_param[i].topMargin = centerMargin[i];
+            box_text[i].setLayoutParams(box_text_param[i]);
+
             if(focus != i){
                 content_layout[i].setEnabled(false);
                 if(textView_time[i].getVisibility() == View.VISIBLE){
-                    ViewAnimation.alphaOut(textView_time[i], 300);
+                    ViewAnimation.alphaInvisible(textView_time[i], 300);
                 }
             }else{
                 content_layout[i].setEnabled(true);
-                if(textView_time[i].getVisibility() == View.GONE){
+                if(textView_time[i].getVisibility() == View.INVISIBLE){
                     ViewAnimation.alphaIn(textView_time[i], 300);
                 }
             }

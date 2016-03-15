@@ -26,6 +26,14 @@
                 android:layout_gravity="center"
                 android:id="@+id/toolbar_camera_icon"/>
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:id="@+id/toolbar_menu_back"
+            android:background="@drawable/icon_menu_back"/>
+
     </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>

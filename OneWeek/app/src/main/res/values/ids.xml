@@ -5,4 +5,8 @@
     <item name="np__increment" type="id" />
     <item name="np__decrement" type="id" />
 
+    <item name="match_city0" type="id" />
+    <item name="match_city1" type="id" />
+    <item name="match_city2" type="id" />
+
 </resources>

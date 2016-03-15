@@ -8,12 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.Data.ImageData;
 import whataday.oneweek.Data.MatchedUser;
 import whataday.oneweek.R;
@@ -46,12 +48,48 @@ public class MainPagerActivity extends SetFontActivity {
         viewPager_main.setAdapter(mainPagerAdapter);
         viewPager_main.setCurrentItem(1);
 
+        viewPager_main.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i("pagechange ", "scrolled "+position);
+                changeToolbar(position);
+            }
+            @Override
+            public void onPageSelected(int position) {
+                Log.i("pagechange ", "selected "+position);
+
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.i("pagechange ", "state "+state);
+            }
+        });
+    }
+    private void changeToolbar(int i){
+        if(i == 0){
+            if(toolbar_camera_icon.getVisibility() == View.VISIBLE){
+                ViewAnimation.alphaInvisible(toolbar_camera_icon, 300);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                ViewAnimation.alphaIn(toolbar_menu_back, 300);
+            }
+        }else{
+            if(toolbar_camera_icon.getVisibility() == View.INVISIBLE){
+                ViewAnimation.alphaOut(toolbar_menu_back, 100);
+                ViewAnimation.alphaIn(toolbar_camera_icon, 300);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            }
+        }
+
     }
 
+    ImageButton toolbar_menu_back;
 
     private void setToolbar(){
         toolbar_main = (Toolbar)findViewById(R.id.toolbar_main);
         toolbar_camera_icon = (ImageView)findViewById(R.id.toolbar_camera_icon);
+        toolbar_menu_back = (ImageButton)findViewById(R.id.toolbar_menu_back);
+        toolbar_menu_back.setVisibility(View.GONE);
         setSupportActionBar(toolbar_main);
         setTitle("OneWeek");
         toolbar_main.setTitleTextColor(Color.WHITE);
@@ -59,13 +97,6 @@ public class MainPagerActivity extends SetFontActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void setVisibleCamera(boolean visible){
-        if(visible){
-            toolbar_camera_icon.setVisibility(View.VISIBLE);
-        }else{
-            toolbar_camera_icon.setVisibility(View.INVISIBLE);
-        }
-    }
 
 
     private void setTestData(){
@@ -110,5 +141,7 @@ public class MainPagerActivity extends SetFontActivity {
         }
         return false;
     }
+
+
 
 }

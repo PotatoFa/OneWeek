@@ -70,6 +70,15 @@ public class ViewAnimation {
         view.startAnimation(animate);
         view.setVisibility(View.GONE);
     }
+
+
+    public static void alphaInvisible(View view, int duration){
+        Animation animate = new AlphaAnimation(1, 0);
+        animate.setDuration(duration);
+        view.startAnimation(animate);
+        view.setVisibility(View.INVISIBLE);
+    }
+
     public static void grayToYellow(View view){
         view.setBackgroundResource(R.drawable.color_graytoyellow);
         TransitionDrawable transitionDrawable = (TransitionDrawable) view.getBackground();
