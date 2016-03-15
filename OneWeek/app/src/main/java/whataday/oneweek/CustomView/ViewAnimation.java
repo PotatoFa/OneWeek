@@ -57,16 +57,16 @@ public class ViewAnimation {
         view.setVisibility(View.GONE);
     }
 
-    public static void alphaIn(View view){
+    public static void alphaIn(View view, int duration){
         Animation animate = new AlphaAnimation(0, 1);
-        animate.setDuration(1000);
+        animate.setDuration(duration);
         view.startAnimation(animate);
         view.setVisibility(View.VISIBLE);
     }
 
-    public static void alphaOut(View view){
+    public static void alphaOut(View view, int duration){
         Animation animate = new AlphaAnimation(1, 0);
-        animate.setDuration(300);
+        animate.setDuration(duration);
         view.startAnimation(animate);
         view.setVisibility(View.GONE);
     }

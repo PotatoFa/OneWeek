@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +41,7 @@ import io.realm.RealmResults;
 import whataday.oneweek.Camera.CameraActivity;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.MyScrollView;
+import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.Data.MatchedUser;
 import whataday.oneweek.Match.DetailActivity;
 import whataday.oneweek.R;
@@ -73,6 +75,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     Float min_alpha = new Float(0.15);
     Float max_alpha = new Float(0.6);
+    int max_time_text;
 
     Bitmap bitmap_image;
     Bitmap[] resize_background = new Bitmap[3];
@@ -80,6 +83,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     ImageView[] imageView_background = new ImageView[3];
     ImageView[] imageView_background_dark = new ImageView[3];
     float[] dark_alpha = new float[3];
+    int[] centerMargin = new int[3];
 
     TextView[] textView_Country = new TextView[3];
     TextView[] textView_City = new TextView[3];
@@ -136,6 +140,9 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     }
 
+    String set_matchid;
+    Intent intent;
+
     private void addEmptyView(int i){
 
         textView_City[i] = new TextView(getActivity());
@@ -185,7 +192,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         match_vertical.addView(content_layout[i], content_layout_param[i]);
         //Linear에 content Add
     }
-
     private void addWaitingView(int i){
 
         textView_City[i] = new TextView(getActivity());
@@ -235,10 +241,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         //Linear에 content Add
 
     }
-
-    String set_matchid;
-    Intent intent;
-
     private void addMatchingView(int i){
 
         set_matchid = matchedUsers.get(i).getId();
@@ -277,11 +279,11 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         time_textview_param[i].topMargin = (int) getActivity().getResources().getDimension(R.dimen.dp_10dp);
         //시간 변경 추가. 쓰레드 초단위로
         textView_time[i].setLayoutParams(time_textview_param[i]);
-
         content_layout[i].addView(textView_time[i]);
-
         match_vertical.addView(content_layout[i], content_layout_param[i]);
         //Linear에 content Add
+
+        max_time_text = textView_time[i].getHeight();
 
     }
 
@@ -407,6 +409,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             public void onScrollStopped() {
                 if (!toolbar_visible) {
                     show_toolbar();
+
                 }
             }
         });
@@ -470,11 +473,15 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     content_layout[i].setLayoutParams(content_layout_param[i]);
                     dark_alpha[i] = convert_float_map(content_height[i], view_width / 2, view_width, max_alpha, min_alpha);
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
+                    centerMargin[i] = convert_int_map(content_height[i], view_width, view_width / 2, 1, 100);
+                    city_textview_param[i].topMargin = centerMargin[i];
+                    textView_City[i].setLayoutParams(city_textview_param[i]);
 
 
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
                 hide_tiem_text(focus_item);
+
 
             }
 
@@ -483,6 +490,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         setClick();
 
     }
+
 
     private void setClick(){
         content_layout[0].setOnClickListener(new View.OnClickListener() {
@@ -510,7 +518,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             }
         });
     }
-
     private void hide_toolbar(){
         toolbar.animate().translationY(-toolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
         toolbar_visible = false;
@@ -523,10 +530,14 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         for(int i = 0; i < 3; i++){
             if(focus != i){
                 content_layout[i].setEnabled(false);
-                textView_time[i].setVisibility(View.INVISIBLE);
+                if(textView_time[i].getVisibility() == View.VISIBLE){
+                    ViewAnimation.alphaOut(textView_time[i], 300);
+                }
             }else{
                 content_layout[i].setEnabled(true);
-                textView_time[i].setVisibility(View.VISIBLE);
+                if(textView_time[i].getVisibility() == View.GONE){
+                    ViewAnimation.alphaIn(textView_time[i], 300);
+                }
             }
         }
     }
@@ -552,14 +563,11 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
         return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
     }
-
     float convert_float_map(int input, int input_min, int input_max, float convert_min, float convert_max){
         return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
     }
-
     public void getResizeBitmap(){
         //MatchUser 검색 후 백그라운드 이미지 리사이징
-
         for(int i=0; i < matched_id.length; i++){
             if(matchedUsers.get(i).getId().equals("empty") || matchedUsers.get(i).getId().equals("search")){
                 bitmap_image = BitmapFactory.decodeResource(getResources(), R.drawable.home_shadow);
@@ -580,7 +588,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
         super.onPause();
     }
-
     @Override
     public void onResume() {
         super.onResume();

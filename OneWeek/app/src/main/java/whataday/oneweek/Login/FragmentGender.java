@@ -72,7 +72,7 @@ public class FragmentGender extends android.support.v4.app.Fragment {
                 }
                 if(!checked_flag){
                     ViewAnimation.grayToYellow(btn_next_gender);
-                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image));
+                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);
                 }
                 checked_flag = true;
 

@@ -84,8 +84,8 @@ public class AccountActivity extends SetFontActivity implements
             @Override
             public void onClick(View v) {
                 viewAnimation.slideToBottom(box_assign);
-                viewAnimation.alphaIn(box_login_button);
-                viewAnimation.alphaOut(background_image);
+                viewAnimation.alphaIn(box_login_button, 1000);
+                viewAnimation.alphaOut(background_image, 500);
                 setFacebook_login();
                 setGoogle_Login();
 

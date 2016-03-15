@@ -59,7 +59,7 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
 
                 if( gpsTracker.canGetLocation() ){
                     ViewAnimation.grayToYellow(btn_next_country);
-                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image));
+                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);
                     //Location 정보 사용가능
                     Toast.makeText(getActivity(), gpsTracker.getLatitude()+"/"+gpsTracker.getLongitude(), Toast.LENGTH_SHORT).show();
                     //TODO getLocation 유효성 검사 및 서버에 위치요청
