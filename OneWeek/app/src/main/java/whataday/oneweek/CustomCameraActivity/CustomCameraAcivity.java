@@ -1,12 +1,22 @@
 package whataday.oneweek.CustomCameraActivity;
 
+import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.PersistableBundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -18,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import whataday.oneweek.R;
 
@@ -37,6 +48,15 @@ public class CustomCameraAcivity extends AppCompatActivity {
     RelativeLayout.LayoutParams bottom_param;
 
     String Dir_path = Environment.getExternalStorageDirectory().toString()+"/OneWeek";
+
+    private OrientationEventListener mOrientationEventListener;
+    private int mOrientation =  -1;
+
+    private static final int ORIENTATION_PORTRAIT_NORMAL =  1;
+    private static final int ORIENTATION_PORTRAIT_INVERTED =  2;
+    private static final int ORIENTATION_LANDSCAPE_NORMAL =  3;
+    private static final int ORIENTATION_LANDSCAPE_INVERTED =  4;
+
 
 
 
@@ -126,12 +146,13 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-            super.onPause();
-            if (mCamera != null) {
-                mCamera.setPreviewCallback(null);
-                mCameraView.getHolder().removeCallback(mCameraView);
-                mCamera.release();
-            }
+        super.onPause();
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mCameraView.getHolder().removeCallback(mCameraView);
+            mCamera.release();
+        }
+        mOrientationEventListener.disable();
     }
 
     @Override
@@ -139,7 +160,77 @@ public class CustomCameraAcivity extends AppCompatActivity {
         super.onResume();
         mCamera = null;
         setCamera();
+
+        if(mOrientationEventListener == null){
+            mOrientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+                @Override
+                public void onOrientationChanged(int orientation) {
+
+                    // determine our orientation based on sensor response
+                    int lastOrientation = mOrientation;
+
+                    if (orientation >= 315 || orientation < 45) {
+                        if (mOrientation != ORIENTATION_PORTRAIT_NORMAL) {
+                            mOrientation = ORIENTATION_PORTRAIT_NORMAL;
+                        }
+                    }
+                    else if (orientation < 315 && orientation >= 225) {
+                        if (mOrientation != ORIENTATION_LANDSCAPE_NORMAL) {
+                            mOrientation = ORIENTATION_LANDSCAPE_NORMAL;
+                        }
+                    }
+                    else if (orientation < 225 && orientation >= 135) {
+                        if (mOrientation != ORIENTATION_PORTRAIT_INVERTED) {
+                            mOrientation = ORIENTATION_PORTRAIT_INVERTED;
+                        }
+                    }
+                    else { // orientation <135 && orientation > 45
+                        if (mOrientation != ORIENTATION_LANDSCAPE_INVERTED) {
+                            mOrientation = ORIENTATION_LANDSCAPE_INVERTED;
+                        }
+                    }
+
+                    if (lastOrientation != mOrientation) {
+                        changeRotation(mOrientation, lastOrientation);
+                    }
+                }
+            };
+        }
+
+        if (mOrientationEventListener.canDetectOrientation()) {
+            mOrientationEventListener.enable();
+        }
     }
+
+
+    private Drawable getRotatedImage(int drawableId, int degrees) {
+        Bitmap original = BitmapFactory.decodeResource(getResources(), drawableId);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+
+        Bitmap rotated = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), matrix, true);
+        return new BitmapDrawable(rotated);
+    }
+
+    private void changeRotation(int orientation, int lastOrientation) {
+        switch (orientation) {
+            case ORIENTATION_PORTRAIT_NORMAL:
+                //TODO set button  rotation 270, 0, 90, 180
+                //mSnapButton.setImageDrawable(getRotatedImage(android.R.drawable.ic_menu_camera, 270));
+                Log.v("CameraActivity", "Orientation = 90");
+                break;
+            case ORIENTATION_LANDSCAPE_NORMAL:
+                Log.v("CameraActivity", "Orientation = 0");
+                break;
+            case ORIENTATION_PORTRAIT_INVERTED:
+                Log.v("CameraActivity", "Orientation = 270");
+                break;
+            case ORIENTATION_LANDSCAPE_INVERTED:
+                Log.v("CameraActivity", "Orientation = 180");
+                break;
+        }
+    }
+
 
 
 
@@ -159,6 +250,65 @@ public class CustomCameraAcivity extends AppCompatActivity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
+            try {
+                // Populate image metadata
+
+                ContentValues image = new ContentValues();
+                // additional picture metadata
+                image.put(MediaStore.Images.Media.DISPLAY_NAME, String.format(
+                        "/%d.jpg", System.currentTimeMillis()));
+                image.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+                image.put(MediaStore.Images.Media.TITLE, "OneWeek");
+
+                // do not rotate image, just put rotation info in
+                switch (mOrientation) {
+                    case ORIENTATION_PORTRAIT_NORMAL:
+                        image.put(MediaStore.Images.Media.ORIENTATION, 90);
+                        break;
+                    case ORIENTATION_LANDSCAPE_NORMAL:
+                        image.put(MediaStore.Images.Media.ORIENTATION, 0);
+                        break;
+                    case ORIENTATION_PORTRAIT_INVERTED:
+                        image.put(MediaStore.Images.Media.ORIENTATION, 270);
+                        break;
+                    case ORIENTATION_LANDSCAPE_INVERTED:
+                        image.put(MediaStore.Images.Media.ORIENTATION, 180);
+                        break;
+                }
+
+                // store the picture
+                Uri uri = getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, image);
+
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
+                            data.length);
+                    OutputStream out = getContentResolver().openOutputStream(
+                            uri);
+                    boolean success = bitmap.compress(
+                            Bitmap.CompressFormat.JPEG, 75, out);
+                    out.close();
+                    Log.d("Create Image ", "path:" + uri.getPath());
+
+                    if (!success) {
+                        Log.d("Create Image ", "Fail");
+
+                        //finish(); // image output failed without any error,
+                        // silently finish
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // handle exceptions
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            //finish();
+
+            /*
             File path = new File(Dir_path);
             if(!path.exists()){
                 path.mkdir();
@@ -184,6 +334,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
                 }
                 Log.d("Log", "onPictureTaken - jpeg");
             }
+            */
 
         }
     };
