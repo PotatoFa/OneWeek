@@ -41,7 +41,7 @@ public class DetailRecyclerAdapter extends RecyclerView.Adapter {
         this.targetActivity = mActivity;
         this.imageDatas.clear();
         this.imageDatas.addAll(imageDatas);
-        this.layoutParams = new RelativeLayout.LayoutParams(width, width);
+        this.layoutParams = new RelativeLayout.LayoutParams(width, width*4/3);
 
         this.notifyDataSetChanged();
     }
@@ -126,7 +126,7 @@ class ViewHolder extends RecyclerView.ViewHolder {
 
     public void set(final ImageData imageData, RelativeLayout.LayoutParams layoutParams, SpannableString string_time_date) {
 
-        detail_background.setBackgroundResource(R.drawable.image);
+        detail_background.setBackgroundResource(R.drawable.image1);
         detail_background.setLayoutParams(layoutParams);
         detail_textbox.setLayoutParams(layoutParams);
         detail_text.setText(imageData.getText());

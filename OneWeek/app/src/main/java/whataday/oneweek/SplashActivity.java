@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
+import whataday.oneweek.CustomCameraActivity.CustomCameraAcivity;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
 import whataday.oneweek.Login.JoinActivity;
@@ -66,7 +67,8 @@ public class SplashActivity extends SetFontActivity {
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
                 //startActivity(intent);
-                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
+                //startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
 
                 finish();
             }else{
