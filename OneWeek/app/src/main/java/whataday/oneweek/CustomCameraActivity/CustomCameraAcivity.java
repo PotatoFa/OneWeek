@@ -39,7 +39,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
     String TAG = "CAMERA TEST : ";
 
-    int view_width;
+    int view_width, view_height;
 
     private Camera mCamera = null;
     private CameraView mCameraView = null;
@@ -70,6 +70,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         view_width = dm.widthPixels;
+        view_height = dm.heightPixels;
         camera_height = view_width * 4/3;
         top_height = (int)getResources().getDimension(R.dimen.dp_56dp);
         bottom_height = (int)getResources().getDimension(R.dimen.dp_300dp);
@@ -110,17 +111,19 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
         if(current_height < change_height){
             int value = change_height-current_height;
-            for(int i=1; i < value; i++){
+            for(int i=0; i < value; i++){
                 bottom_param.height ++;
                 bottom_cover.setLayoutParams(bottom_param);
             }
         }else if(current_height > change_height){
             int value = current_height-change_height;
-            for(int i=1; i < value; i++){
+            for(int i=0; i < value; i++){
                 bottom_param.height --;
                 bottom_cover.setLayoutParams(bottom_param);
             }
         }
+        Log.d("Bottom :",String.valueOf(bottom_param.height));
+
 
 
 
@@ -211,6 +214,12 @@ public class CustomCameraAcivity extends AppCompatActivity {
         Bitmap rotated = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), matrix, true);
         return new BitmapDrawable(rotated);
     }
+    public Matrix rotate_matrix;
+
+    private void setRotate_matrix(int rotate){
+        rotate_matrix = new Matrix();
+        rotate_matrix.postRotate(rotate);
+    }
 
     private void changeRotation(int orientation, int lastOrientation) {
         switch (orientation) {
@@ -218,15 +227,19 @@ public class CustomCameraAcivity extends AppCompatActivity {
                 //TODO set button  rotation 270, 0, 90, 180
                 //mSnapButton.setImageDrawable(getRotatedImage(android.R.drawable.ic_menu_camera, 270));
                 Log.v("CameraActivity", "Orientation = 90");
+                setRotate_matrix(90);
                 break;
             case ORIENTATION_LANDSCAPE_NORMAL:
                 Log.v("CameraActivity", "Orientation = 0");
+                setRotate_matrix(0);
                 break;
             case ORIENTATION_PORTRAIT_INVERTED:
                 Log.v("CameraActivity", "Orientation = 270");
+                setRotate_matrix(270);
                 break;
             case ORIENTATION_LANDSCAPE_INVERTED:
                 Log.v("CameraActivity", "Orientation = 180");
+                setRotate_matrix(180);
                 break;
         }
     }
@@ -283,10 +296,37 @@ public class CustomCameraAcivity extends AppCompatActivity {
                 try {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
                             data.length);
+                    Log.i("bitmap width", String.valueOf(bitmap.getWidth()));
+                    Log.i("bitmap heigh", String.valueOf(bitmap.getHeight()));
+
+                    Log.i("bitmap top_height", String.valueOf(top_height));
+                    Log.i("bitmap view_height", String.valueOf(view_height));
+                    Log.i("bitmap bottom_param", String.valueOf(bottom_param.height));
+                    Log.i("bitmap view_width", String.valueOf(view_width));
+
+
+                    Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                            top_height, 0,
+                            view_height-(top_height+bottom_param.height), view_width
+                            ,rotate_matrix, true);
+
+                    /*
+                    Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                            top_height, 0,
+                            view_height-bottom_param.height, view_width,
+                            rotate_matrix, true);
+                    Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                            0, top_height,
+                            view_width, view_height-bottom_param.height,
+                            rotate_matrix, true);
+                    */
+                    Log.i("bitmap width", String.valueOf(bitmap_resize.getWidth()));
+                    Log.i("bitmap heigh", String.valueOf(bitmap_resize.getHeight()));
+
                     OutputStream out = getContentResolver().openOutputStream(
                             uri);
-                    boolean success = bitmap.compress(
-                            Bitmap.CompressFormat.JPEG, 75, out);
+                    boolean success = bitmap_resize.compress(
+                            Bitmap.CompressFormat.JPEG, 100, out);
                     out.close();
                     Log.d("Create Image ", "path:" + uri.getPath());
 
@@ -304,8 +344,6 @@ public class CustomCameraAcivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
             //finish();
 
             /*
