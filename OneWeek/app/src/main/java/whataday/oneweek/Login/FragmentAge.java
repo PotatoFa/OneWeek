@@ -65,6 +65,7 @@ public class FragmentAge extends android.support.v4.app.Fragment {
 
     }
 
+
     private void initPicker(){
         year_picker.setMinValue(1916);
         year_picker.setMaxValue(2016);

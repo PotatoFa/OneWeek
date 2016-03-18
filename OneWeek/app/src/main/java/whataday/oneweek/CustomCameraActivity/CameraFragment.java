@@ -1,7 +1,5 @@
 package whataday.oneweek.CustomCameraActivity;
 
-import android.content.ContentValues;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -9,31 +7,26 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.PersistableBundle;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
+import whataday.oneweek.Camera.EditSavePhotoFragment;
 import whataday.oneweek.R;
 
-public class CustomCameraAcivity extends AppCompatActivity {
+/**
+ * Created by jaehun on 16. 3. 18..
+ */
+public class CameraFragment extends android.support.v4.app.Fragment {
+    View rootView;
 
     RelativeLayout top_cover, bottom_cover;
     ImageView capture_image_button;
@@ -61,21 +54,28 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
 
 
+    public static CameraFragment newInstance() {
+        CameraFragment cameraFragment = new CameraFragment();
+        return cameraFragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.squarecamera__CameraFullScreenTheme);
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+    }
 
-        /*
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.camera_fragment_camera, container, false);
+        this.rootView = rootView;
+        return rootView;
 
-            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
-                    top_height, 0,
-                    view_height-(top_height+bottom_param.height), view_width
-                    ,rotate_matrix, true);
-         */
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
 
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         view_width = dm.widthPixels;
@@ -84,15 +84,14 @@ public class CustomCameraAcivity extends AppCompatActivity {
         top_height = (int)getResources().getDimension(R.dimen.dp_56dp);
         bottom_height = (int)getResources().getDimension(R.dimen.dp_300dp);
 
-        Log.i(TAG, "size " + view_width + "/" + camera_height+ "/" + top_height+ "/" + bottom_height);
+        Log.i(TAG, "size " + view_width + "/" + camera_height + "/" + top_height + "/" + bottom_height);
 
         change_height = dm.heightPixels - (camera_height + top_height);
 
-        setContentView(R.layout.activity_custom_camera_acivity);
 
-        top_cover = (RelativeLayout) findViewById(R.id.top_cover);
-        bottom_cover = (RelativeLayout) findViewById(R.id.bottom_cover);
-        capture_image_button = (ImageView) findViewById(R.id.capture_image_button);
+        top_cover = (RelativeLayout) rootView.findViewById(R.id.top_cover);
+        bottom_cover = (RelativeLayout) rootView.findViewById(R.id.bottom_cover);
+        capture_image_button = (ImageView) rootView.findViewById(R.id.capture_image_button);
 
         capture_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,9 +100,8 @@ public class CustomCameraAcivity extends AppCompatActivity {
             }
         });
 
-        //setCamera();
-
         resizeBottomCover(bottom_height);
+
 
     }
 
@@ -147,8 +145,8 @@ public class CustomCameraAcivity extends AppCompatActivity {
         }
 
         if(mCamera != null) {
-            mCameraView = new CameraView(this, mCamera);//create a SurfaceView to show camera data
-            FrameLayout camera_view = (FrameLayout)findViewById(R.id.camera_view);
+            mCameraView = new CameraView(getActivity(), mCamera);//create a SurfaceView to show camera data
+            FrameLayout camera_view = (FrameLayout)rootView.findViewById(R.id.camera_view);
             camera_view.addView(mCameraView);//add the SurfaceView to the layout
 
         }
@@ -157,7 +155,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         if (mCamera != null) {
             mCamera.setPreviewCallback(null);
@@ -174,7 +172,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
         setCamera();
 
         if(mOrientationEventListener == null){
-            mOrientationEventListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+            mOrientationEventListener = new OrientationEventListener(getActivity(), SensorManager.SENSOR_DELAY_NORMAL) {
                 @Override
                 public void onOrientationChanged(int orientation) {
 
@@ -287,6 +285,8 @@ public class CustomCameraAcivity extends AppCompatActivity {
             Log.i("bitmap view_width", String.valueOf(view_width));
 
 
+
+
             int bitmap_top_cover =
                     convert_int_map(top_height, 0, view_height, 0, bitmap.getWidth());
 
@@ -322,36 +322,15 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
             Log.i("resize height :", String.valueOf(bitmap_resize.getHeight()));
 
-            /*
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(
+                            R.id.custom_fragment_container,
+                            EditSaveFragment.newInstance(bitmap_resize, bottom_param.height,
+                                    view_width, view_height-(top_height+bottom_param.height)))
+                    .addToBackStack(null)
+                    .commit();
 
-            File path = new File(Dir_path);
-            if(!path.exists()){
-                path.mkdir();
-                Log.i("DIR", "CREATE");
-                Log.i("DIR PATH", Dir_path);
-                //저장경로 폴더가 존재하지 않으면 생성.
-            }
-
-            File image_file = new File(Dir_path+String.format(
-                    "/%d.jpg", System.currentTimeMillis()));
-
-            if(!image_file.exists()){
-                try {
-                    FileOutputStream outStream = new FileOutputStream(image_file);
-                    bitmap_resize.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                    Log.d("Image path : ", image_file.getPath());
-
-                    outStream.close();
-                    Log.d("Log", "onPictureTaken - wrote bytes: " + data.length);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                }
-                Log.d("Log", "onPictureTaken - jpeg");
-            }
-*/
         }
     };
 
@@ -359,4 +338,6 @@ public class CustomCameraAcivity extends AppCompatActivity {
     int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
         return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
     }
+
+
 }

@@ -14,7 +14,9 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.io.IOException;
 
 import io.realm.Realm;
+import whataday.oneweek.Camera.CameraActivity;
 import whataday.oneweek.Controller.ApplicationController;
+import whataday.oneweek.CustomCameraActivity.CameraFragmentActivity;
 import whataday.oneweek.CustomCameraActivity.CustomCameraAcivity;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
@@ -68,7 +70,9 @@ public class SplashActivity extends SetFontActivity {
                 delay_handler.removeCallbacks(changeImage);
                 //startActivity(intent);
                 //startActivity(new Intent(getApplicationContext(), AccountActivity.class));
-                startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
+                //startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
+                //startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+                startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
 
                 finish();
             }else{

@@ -464,7 +464,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     public void onPictureTaken(byte[] data, Camera camera) {
         int rotation = getPhotoRotation();
 //        Log.d(TAG, "normal orientation: " + orientation);
-//        Log.d(TAG, "Rotate Picture by: " + rotation);
+        Log.d(TAG, "data :::: " + data.length);
         getFragmentManager()
                 .beginTransaction()
                 .replace(
