@@ -40,6 +40,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import whataday.oneweek.Camera.CameraActivity;
 import whataday.oneweek.Controller.ApplicationController;
+import whataday.oneweek.CustomCameraActivity.CustomCameraAcivity;
 import whataday.oneweek.CustomView.MyScrollView;
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.Data.MatchedUser;
@@ -301,6 +302,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         textView_time[i].setTextColor(Color.parseColor("#ffffff"));
         textView_time[i].setTypeface(Typeface.createFromAsset((getActivity().getAssets()), "Radnika-SemiBold.otf"));
         textView_time[i].setTextSize(16);
+        textView_time[i].setVisibility(View.INVISIBLE);
         //textView_time[i].setGravity(Gravity.CENTER);
         time_textview_param[i].addRule(RelativeLayout.BELOW, textView_City[i].getId());
         time_textview_param[i].addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
@@ -342,7 +344,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     @Override
                     public void run() {
                         store_house_ptr_frame.refreshComplete();
-                        getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), CustomCameraAcivity.class));
                         getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
                     }
                 }, 100);

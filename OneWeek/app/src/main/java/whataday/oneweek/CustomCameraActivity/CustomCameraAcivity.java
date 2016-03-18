@@ -269,7 +269,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
                 ContentValues image = new ContentValues();
                 // additional picture metadata
                 image.put(MediaStore.Images.Media.DISPLAY_NAME, String.format(
-                        "/%d.jpg", System.currentTimeMillis()));
+                        "/Oneweek/%d.jpg", System.currentTimeMillis()));
                 image.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
                 image.put(MediaStore.Images.Media.TITLE, "OneWeek");
 

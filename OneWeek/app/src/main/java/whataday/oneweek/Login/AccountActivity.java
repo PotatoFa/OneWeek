@@ -181,6 +181,9 @@ public class AccountActivity extends SetFontActivity implements
             finish();
 
         } else {
+
+            startActivity(new Intent(getApplicationContext(), JoinActivity.class));
+            finish();
             Log.d(TAG, "handleSignInResult: FALSE action");
         }
     }
