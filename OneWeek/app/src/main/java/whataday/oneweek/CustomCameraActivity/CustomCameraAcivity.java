@@ -68,6 +68,14 @@ public class CustomCameraAcivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        /*
+
+            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                    top_height, 0,
+                    view_height-(top_height+bottom_param.height), view_width
+                    ,rotate_matrix, true);
+         */
+
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         view_width = dm.widthPixels;
         view_height = dm.heightPixels;
@@ -263,6 +271,96 @@ public class CustomCameraAcivity extends AppCompatActivity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
+                    data.length);
+
+
+            Log.i("bitmap width", String.valueOf(bitmap.getWidth()));
+            Log.i("bitmap heigh", String.valueOf(bitmap.getHeight()));
+
+
+            Log.i("bitmap top_height", String.valueOf(top_height));
+            Log.i("bitmap view_height", String.valueOf(view_height));
+            Log.i("bitmap bottom_param", String.valueOf(bottom_param.height));
+            Log.i("bitmap view_width", String.valueOf(view_width));
+
+
+            int bitmap_top_cover =
+                    convert_int_map(top_height, 0, view_height, 0, bitmap.getWidth());
+
+            Log.i("bitmap top cover :", String.valueOf(bitmap_top_cover));
+
+
+            int bitmap_bottom_cover =
+                    convert_int_map(bottom_param.height, 0, view_height, 0, bitmap.getWidth());
+
+            Log.i("bitmap bottom cover :", String.valueOf(bitmap_bottom_cover));
+
+            int bitmap_resize_width =
+                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover);
+
+            int bitmap_resize_height =
+                    bitmap_resize_width * 3 / 4;
+
+            int crop_height = bitmap.getHeight() - bitmap_resize_height;
+            int crop_start_height = crop_height/2;
+            int crop_stop_height = bitmap.getHeight() - crop_start_height;
+            Log.i("crop_start_height :", String.valueOf(crop_start_height)+ " / "+ String.valueOf(crop_stop_height));
+
+
+            Log.i("resize size :", String.valueOf(bitmap_resize_width) + "/" + String.valueOf(bitmap_resize_height));
+
+
+            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                    bitmap_top_cover, crop_height/2,
+                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover), bitmap_resize_height
+                    , rotate_matrix, true);
+
+            Log.i("resize width :", String.valueOf(bitmap_resize.getWidth()));
+
+            Log.i("resize height :", String.valueOf(bitmap_resize.getHeight()));
+
+            /*
+            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                    top_height, 0,
+                    view_height-(top_height+bottom_param.height), view_width
+                    ,rotate_matrix, true);
+             */
+
+
+            File path = new File(Dir_path);
+            if(!path.exists()){
+                path.mkdir();
+                Log.i("DIR", "CREATE");
+                Log.i("DIR PATH", Dir_path);
+                //저장경로 폴더가 존재하지 않으면 생성.
+            }
+
+            File image_file = new File(Dir_path+String.format(
+                    "/%d.jpg", System.currentTimeMillis()));
+
+            if(!image_file.exists()){
+                try {
+                    FileOutputStream outStream = new FileOutputStream(image_file);
+                    bitmap_resize.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+                    Log.d("Image path : ", image_file.getPath());
+
+                    outStream.close();
+                    Log.d("Log", "onPictureTaken - wrote bytes: " + data.length);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                }
+                Log.d("Log", "onPictureTaken - jpeg");
+            }
+
+
+
+            /*
+
             try {
                 // Populate image metadata
 
@@ -319,7 +417,7 @@ public class CustomCameraAcivity extends AppCompatActivity {
                             0, top_height,
                             view_width, view_height-bottom_param.height,
                             rotate_matrix, true);
-                    */
+
                     Log.i("bitmap width", String.valueOf(bitmap_resize.getWidth()));
                     Log.i("bitmap heigh", String.valueOf(bitmap_resize.getHeight()));
 
@@ -378,4 +476,10 @@ public class CustomCameraAcivity extends AppCompatActivity {
     };
 
 
+    int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
+        return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
+    }
+    float convert_float_map(int input, int input_min, int input_max, float convert_min, float convert_max){
+        return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
+    }
 }
