@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import whataday.oneweek.CustomView.AutoResizeEditText;
 import whataday.oneweek.R;
 
 /**
@@ -49,30 +51,75 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     }
 
     RelativeLayout bottom_cover, top_cover;
-    RelativeLayout.LayoutParams image_save_param, bottom_cover_param;
+    RelativeLayout.LayoutParams bottom_cover_param;
     ImageView image_save;
+    AutoResizeEditText edit_save_text;
+    ImageButton btn_save_send, btn_save_text, btn_save_cancel;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //initView > setViewSize > setEvent
+        initView();
+
+    }
+
+    private void initView(){
 
         top_cover = (RelativeLayout)rootView.findViewById(R.id.top_cover);
         bottom_cover = (RelativeLayout)rootView.findViewById(R.id.bottom_cover);
         image_save = (ImageView)rootView.findViewById(R.id.image_save);
+        edit_save_text = (AutoResizeEditText)rootView.findViewById(R.id.edit_save_text);
+
+        btn_save_send = (ImageButton)rootView.findViewById(R.id.btn_save_send);
+        btn_save_text = (ImageButton)rootView.findViewById(R.id.btn_save_text);
+        btn_save_cancel = (ImageButton)rootView.findViewById(R.id.btn_save_cancel);
+
+        setViewSize();
+
+
+    }
+
+    private void setViewSize(){
 
         bottom_cover_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, bottom_cover_height);
         bottom_cover_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         bottom_cover.setLayoutParams(bottom_cover_param);
 
-        image_save_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, image_height);
-        image_save_param.addRule(RelativeLayout.BELOW, R.id.top_cover);
-        image_save_param.addRule(RelativeLayout.ABOVE, R.id.bottom_cover);
-        image_save.setLayoutParams(image_save_param);
-
         image_save.setImageBitmap(getBitmap);
         Log.i("EDITSAVE : ", String.valueOf(getBitmap.getByteCount()));
 
+        setEvent();
+    }
 
+    private void setEvent(){
+        btn_save_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //에디트텍스트 포커싱 / 키보드
+            }
+        });
+        btn_save_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //캔슬버튼 백스택프래그먼트
+
+            }
+        });
+        btn_save_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //bitmap객체 전달해서 센드 프래그먼트로 이동
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(
+                                R.id.custom_fragment_container,
+                                SendFragment.newInstance(getBitmap))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
     }
 
@@ -84,10 +131,6 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
         super.onResume();
     }
 
-
-    int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
-        return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
-    }
 
 
 }

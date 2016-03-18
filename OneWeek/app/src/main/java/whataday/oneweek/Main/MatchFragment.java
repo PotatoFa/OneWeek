@@ -40,6 +40,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import whataday.oneweek.Camera.CameraActivity;
 import whataday.oneweek.Controller.ApplicationController;
+import whataday.oneweek.CustomCameraActivity.CameraFragmentActivity;
 import whataday.oneweek.CustomCameraActivity.CustomCameraAcivity;
 import whataday.oneweek.CustomView.MyScrollView;
 import whataday.oneweek.CustomView.ViewAnimation;
@@ -344,7 +345,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     @Override
                     public void run() {
                         store_house_ptr_frame.refreshComplete();
-                        getActivity().startActivity(new Intent(getActivity(), CustomCameraAcivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), CameraFragmentActivity.class));
                         getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
                     }
                 }, 100);

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,7 +11,7 @@
         android:id="@+id/top_cover">
 
         <ImageButton
-            android:id="@+id/cancel"
+            android:id="@+id/btn_save_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="19dp"
@@ -19,6 +20,7 @@
             android:onClick="onCancel"/>
 
         <ImageButton
+            android:id="@+id/btn_save_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -30,18 +32,36 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_cover"
+        android:layout_above="@id/bottom_cover"
+        android:id="@+id/image_box">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:id="@+id/image_save"/>
 
+        <whataday.oneweek.CustomView.AutoResizeEditText
+            android:id="@+id/edit_save_text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="input Message"
+            android:textSize="50dp"
+            android:layout_centerInParent="true"
+            android:background="#00000000"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:textCursorDrawable="@drawable/edit_cursor"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:font="custom1"
+            />
 
     </RelativeLayout>
-
-
 
 
     <RelativeLayout
@@ -50,12 +70,12 @@
         android:background="#000000"
         android:id="@+id/bottom_cover"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/image_save">
+        android:layout_below="@id/image_box">
 
         <ImageButton
+            android:id="@+id/btn_save_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_select"
             android:text="Next"
             android:background="@drawable/icon_camera_next"
             android:layout_centerInParent="true"/>
