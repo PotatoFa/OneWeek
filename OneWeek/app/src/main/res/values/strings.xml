@@ -4,6 +4,9 @@
     <string name="facebook_app_id2">1690226521233832</string>
 
 
+    <string name="google_auth_key">AIzaSyAymt5o-ihX_T054YWzXATtpJnAatlmMww</string>
+
+
     <string name="account_intro">By touching agree, you agree to the terms started in\nour <u>Terms of Service and Privacy Policy</u></string>
 
     <string name="string_search">Waiting for someone</string>
