@@ -44,6 +44,8 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
     Button btn_next_country;
     GPSTracker gpsTracker;
 
+    boolean btn_check = false;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -58,8 +60,11 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
             public void onClick(View v) {
 
                 if( gpsTracker.canGetLocation() ){
-                    ViewAnimation.grayToYellow(btn_next_country);
-                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);
+                    if(!btn_check){
+                        ViewAnimation.grayToYellow(btn_next_country);
+                        ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);
+                        btn_check = true;
+                    }
                     //Location 정보 사용가능
                     Toast.makeText(getActivity(), gpsTracker.getLatitude()+"/"+gpsTracker.getLongitude(), Toast.LENGTH_SHORT).show();
                     //TODO getLocation 유효성 검사 및 서버에 위치요청

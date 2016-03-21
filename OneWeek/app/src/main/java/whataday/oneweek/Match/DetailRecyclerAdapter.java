@@ -84,7 +84,7 @@ public class DetailRecyclerAdapter extends RecyclerView.Adapter {
 
         String string_time_date = to_time.format(now)+" "+for_time.format(now);
         SpannableString spannableString = new SpannableString(string_time_date);
-        spannableString.setSpan(new ForegroundColorSpan(Color.RED),0,7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#EF4A3D")),0,7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new ForegroundColorSpan(Color.WHITE),7,spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 

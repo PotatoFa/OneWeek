@@ -149,6 +149,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     String set_matchid;
     Intent intent;
     ImageView toolbar_camera_icon;
+    RelativeLayout btn_match_menu;
 
 
     private void addEmptyView(int i){
@@ -322,6 +323,14 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
         store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
         toolbar_camera_icon = (ImageView) rootView.findViewById(R.id.toolbar_camera_icon);
+        btn_match_menu = (RelativeLayout) rootView.findViewById(R.id.btn_match_menu);
+
+        btn_match_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainPagerActivity)getActivity()).changeViewPager(0);
+            }
+        });
 
         header = new StoreHouseHeader(getActivity().getApplicationContext());
         header.initWithPointList(getPointList());
@@ -358,6 +367,9 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         toolbar_match = (RelativeLayout)rootView.findViewById(R.id.toolbar_match);
         match_scroll = (MyScrollView)rootView.findViewById(R.id.match_scroll);
         match_vertical = (LinearLayout)rootView.findViewById(R.id.match_vertical);
+
+
+
         focus_item = 0;
 
         content_height[0] = view_width;
@@ -433,6 +445,14 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if(!toolbar_visible){
+                        show_toolbar();
+                    }
+                    match_scroll.startScrollerTask();
+                }else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if(toolbar_visible){
+                        hide_toolbar();
+                    }
                     match_scroll.startScrollerTask();
                 }
                 return false;
@@ -443,7 +463,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             @Override
             public void onScrollStopped() {
                 if (!toolbar_visible) {
-                    show_toolbar();
+                    //show_toolbar();
 
                 }
             }
@@ -471,7 +491,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     scrolled_distance += current_y - pre_y;
                     if (Math.abs(scrolled_distance) > HIDE_THRESHOLD) {
                         //이동시킨 스크롤 값이 문턱치 이상일때
-                        hide_toolbar();
+                        //hide_toolbar();
                         scrolled_distance = 0;
                         //툴바를 숨기고 이동거리를 초기화. -> 툴바가 보여지는 부분은 stopListener
                     }
@@ -519,10 +539,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 }
                 Log.i("FOCUS :", String.valueOf(current_y));
                 hide_tiem_text(focus_item);
-
-
             }
-
         });
 
         setClick();

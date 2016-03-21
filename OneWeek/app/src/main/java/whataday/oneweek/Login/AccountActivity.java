@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -40,8 +42,6 @@ public class AccountActivity extends SetFontActivity implements
     GoogleApiClient mGoogleApiClient;
     CallbackManager callbackManager;
 
-    ViewAnimation viewAnimation;
-
     Button btn_login_facebook, btn_login_google, btn_assign_exit, btn_assign_agree;
     RelativeLayout box_assign, box_login_button;
     ImageView background_image;
@@ -57,8 +57,28 @@ public class AccountActivity extends SetFontActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        viewAnimation = new ViewAnimation();
 
+        initView();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.i(TAG, "access token, complete");
+                        Log.i(TAG, "response :"+response);
+                        Log.i(TAG, "object :"+object);
+
+                    }
+                });
+        request.executeAsync();
+
+
+    }
+
+    private void initView(){
 
         background_image = (ImageView)findViewById(R.id.background_image);
 
@@ -73,6 +93,17 @@ public class AccountActivity extends SetFontActivity implements
         btn_assign_agree = (Button)findViewById(R.id.btn_assign_agree);
 
 
+
+        text_asign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), TermsActivity.class));
+                overridePendingTransition(R.anim.down_top, R.anim.top_down);
+
+            }
+        });
+
+
         btn_assign_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,22 +114,18 @@ public class AccountActivity extends SetFontActivity implements
         btn_assign_agree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewAnimation.slideToBottom(box_assign);
-                viewAnimation.alphaIn(box_login_button, 1000);
-                viewAnimation.alphaOut(background_image, 500);
+                ViewAnimation.slideToBottom(box_assign);
+                ViewAnimation.alphaIn(box_login_button, 1000);
+                ViewAnimation.alphaOut(background_image, 500);
                 setFacebook_login();
                 setGoogle_Login();
 
             }
         });
-
-
     }
 
     private void setFacebook_login(){
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
 
         btn_login_facebook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,9 +209,8 @@ public class AccountActivity extends SetFontActivity implements
 
         } else {
 
-            startActivity(new Intent(getApplicationContext(), JoinActivity.class));
-            finish();
-            Log.d(TAG, "handleSignInResult: FALSE action");
+            Toast.makeText(getApplicationContext(), "Failed login, checked network", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, result.toString());
         }
     }
 

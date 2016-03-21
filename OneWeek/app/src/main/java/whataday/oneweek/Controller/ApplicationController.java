@@ -43,9 +43,13 @@ public class ApplicationController extends Application {
 
         Typekit.getInstance()
                 .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
-                .addCustom2(Typeface.createFromAsset(getAssets(), "Radnika-SemiBold.otf"))
-                .addCustom3(Typeface.createFromAsset(getAssets(), "Radnika-Bold.otf"))
-                .addCustom4(Typeface.createFromAsset(getAssets(), "digital.ttf"));
+                .addCustom2(Typeface.createFromAsset(getAssets(), "Radnika-Regular.otf"))
+                .addCustom3(Typeface.createFromAsset(getAssets(), "Radnika-Medium.otf"))
+                .addCustom4(Typeface.createFromAsset(getAssets(), "Radnika-Bold.otf"))
+                .addCustom5(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
+                .addCustom6(Typeface.createFromAsset(getAssets(), "Radnika-SemiBold.otf"))
+                .addCustom7(Typeface.createFromAsset(getAssets(), "digital.ttf"))
+                .addCustom8(Typeface.createFromAsset(getAssets(), "digital_mono.ttf"));
 
     }
 

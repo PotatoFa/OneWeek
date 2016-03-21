@@ -76,7 +76,9 @@
         <service android:name=".Service.GcmIntentService" />
 
         <activity android:name=".CustomCameraActivity.CustomCameraAcivity" />
-        <activity android:name=".CustomCameraActivity.CameraFragmentActivity"></activity>
+        <activity android:name=".CustomCameraActivity.CameraFragmentActivity" />
+        <activity android:name=".Login.TermsActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

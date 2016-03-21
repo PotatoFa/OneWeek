@@ -26,16 +26,26 @@ public class MenuFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.main_fragment_menu, container, false);
         this.rootView = rootView;
         return rootView;
     }
+    RelativeLayout btn_menu_back;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        btn_menu_back = (RelativeLayout)rootView.findViewById(R.id.btn_menu_back);
+        btn_menu_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainPagerActivity)getActivity()).changeViewPager(1);
+            }
+        });
+
 
 
     }

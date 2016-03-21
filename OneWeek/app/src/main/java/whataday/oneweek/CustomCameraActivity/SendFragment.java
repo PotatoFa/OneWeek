@@ -113,7 +113,7 @@ public class SendFragment extends android.support.v4.app.Fragment {
         btn_send_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ((CameraFragmentActivity)getActivity()).onCancel(v);
             }
         });
 

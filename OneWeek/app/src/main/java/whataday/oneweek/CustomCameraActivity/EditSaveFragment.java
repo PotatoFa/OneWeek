@@ -50,8 +50,8 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
 
     }
 
-    RelativeLayout bottom_cover, top_cover;
-    RelativeLayout.LayoutParams bottom_cover_param;
+    RelativeLayout bottom_cover, top_cover, image_box;
+    RelativeLayout.LayoutParams bottom_cover_param, image_box_param;
     ImageView image_save;
     AutoResizeEditText edit_save_text;
     ImageButton btn_save_send, btn_save_text, btn_save_cancel;
@@ -69,6 +69,8 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
 
         top_cover = (RelativeLayout)rootView.findViewById(R.id.top_cover);
         bottom_cover = (RelativeLayout)rootView.findViewById(R.id.bottom_cover);
+
+        image_box = (RelativeLayout)rootView.findViewById(R.id.image_box);
         image_save = (ImageView)rootView.findViewById(R.id.image_save);
         edit_save_text = (AutoResizeEditText)rootView.findViewById(R.id.edit_save_text);
 
@@ -83,11 +85,44 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
 
     private void setViewSize(){
 
-        bottom_cover_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, bottom_cover_height);
-        bottom_cover_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        bottom_cover.setLayoutParams(bottom_cover_param);
+        if(getBitmap.getHeight() > getBitmap.getWidth()){
+            //세로 이미지
+            image_box_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getBitmap.getHeight());
+            image_box_param.addRule(RelativeLayout.BELOW, top_cover.getId());
+            image_box.setLayoutParams(image_box_param);
+            image_save.setImageBitmap(getBitmap);
 
-        image_save.setImageBitmap(getBitmap);
+
+            /*
+            bottom_cover_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            bottom_cover_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            bottom_cover_param.addRule(RelativeLayout.BELOW, image_save.getId());
+            bottom_cover.setLayoutParams(bottom_cover_param);
+*/
+        }else{
+            //가로 이미지
+
+
+            float scale = (float) getBitmap.getHeight() / getBitmap.getWidth();
+
+            Log.i("Change scale", String.valueOf(scale));
+
+            int change_height = (int) (getBitmap.getHeight() * scale);
+
+            Log.i("Change HEIGHT", String.valueOf(change_height));
+
+
+
+            image_box_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, change_height);
+            image_box_param.addRule(RelativeLayout.BELOW, top_cover.getId());
+            image_box.setLayoutParams(image_box_param);
+            image_save.setImageBitmap(getBitmap);
+
+        }
+
+
+        Log.i("BITMAP width: ", String.valueOf(getBitmap.getWidth()));
+        Log.i("BITMAP height: ", String.valueOf(getBitmap.getHeight()));
         Log.i("EDITSAVE : ", String.valueOf(getBitmap.getByteCount()));
 
         setEvent();
@@ -103,6 +138,8 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
         btn_save_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ((CameraFragmentActivity)getActivity()).onCancel(v);
                 //캔슬버튼 백스택프래그먼트
 
             }
@@ -113,6 +150,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
                 //bitmap객체 전달해서 센드 프래그먼트로 이동
                 getFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
                         .replace(
                                 R.id.custom_fragment_container,
                                 SendFragment.newInstance(getBitmap))

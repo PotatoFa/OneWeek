@@ -6,31 +6,59 @@
     android:background="#ee000000"
     tools:context="whataday.oneweek.Match.DetailActivity">
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recyclerview_detail"/>
-
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_detail"
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/detail_refresh"
+        xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#000000"
-        android:clipToPadding="false">
+        android:layout_height="match_parent"
+        cube_ptr:ptr_duration_to_close="300"
+        cube_ptr:ptr_duration_to_close_header="2000"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="true"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        cube_ptr:ptr_resistance="1.7">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerview_detail"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_detail"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#000000"
+                android:clipToPadding="false">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Country/city"
-            android:textColor="#ffffff"
-            android:textSize="18dp"
-            android:id="@+id/text_location"
-            android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/text_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Country/city"
+                    android:textColor="#ffffff"
+                    android:textSize="18dp"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:id="@+id/detail_toolbar_camera_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icon_camera"
+                    android:visibility="gone"
+                    android:layout_gravity="center"/>
 
 
-    </android.support.v7.widget.Toolbar>
-    
+            </android.support.v7.widget.Toolbar>
+
+        </RelativeLayout>
+
+
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
 
 </RelativeLayout>

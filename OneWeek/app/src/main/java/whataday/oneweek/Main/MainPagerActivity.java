@@ -18,11 +18,12 @@ import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.Data.ImageData;
 import whataday.oneweek.Data.MatchedUser;
+import whataday.oneweek.Login.CustomViewPager;
 import whataday.oneweek.R;
 
 public class MainPagerActivity extends SetFontActivity {
 
-    ViewPager viewPager_main;
+    CustomViewPager viewPager_main;
     Toolbar toolbar_main;
     MainPagerAdapter mainPagerAdapter;
     ImageView toolbar_camera_icon;
@@ -38,7 +39,7 @@ public class MainPagerActivity extends SetFontActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_pager);
-        viewPager_main = (ViewPager)findViewById(R.id.viewpager_main);
+        viewPager_main = (CustomViewPager)findViewById(R.id.viewpager_main);
 
         realm = ApplicationController.getRealm();
         setTestData();
@@ -46,6 +47,7 @@ public class MainPagerActivity extends SetFontActivity {
         //setToolbar();
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager_main.setAdapter(mainPagerAdapter);
+        viewPager_main.setScrollDuration(500);
         viewPager_main.setCurrentItem(1);
 
         viewPager_main.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -66,7 +68,10 @@ public class MainPagerActivity extends SetFontActivity {
         });
     }
 
-    ImageButton toolbar_menu_back;
+
+    public void changeViewPager(int i){
+        viewPager_main.setCurrentItem(i);
+    }
 
 
     private void setTestData(){

@@ -16,6 +16,7 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -92,6 +93,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
         top_cover = (RelativeLayout) rootView.findViewById(R.id.top_cover);
         bottom_cover = (RelativeLayout) rootView.findViewById(R.id.bottom_cover);
         capture_image_button = (ImageView) rootView.findViewById(R.id.capture_image_button);
+
 
         capture_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -322,12 +324,14 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
             Log.i("resize height :", String.valueOf(bitmap_resize.getHeight()));
 
+
             getFragmentManager()
                     .beginTransaction()
+                    .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
                     .replace(
                             R.id.custom_fragment_container,
                             EditSaveFragment.newInstance(bitmap_resize, bottom_param.height,
-                                    view_width, view_height-(top_height+bottom_param.height)))
+                                    view_width, view_height - (top_height + bottom_param.height)))
                     .addToBackStack(null)
                     .commit();
 

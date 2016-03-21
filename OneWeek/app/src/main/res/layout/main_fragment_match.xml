@@ -18,45 +18,61 @@
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         cube_ptr:ptr_resistance="1.7">
 
-
-        <whataday.oneweek.CustomView.MyScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/match_scroll">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <whataday.oneweek.CustomView.MyScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/match_vertical"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:id="@+id/match_scroll">
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/match_vertical"
+                    android:orientation="vertical">
 
-        </whataday.oneweek.CustomView.MyScrollView>
+                </LinearLayout>
+
+            </whataday.oneweek.CustomView.MyScrollView>
+
+
+            <RelativeLayout
+                android:id="@+id/toolbar_match"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#00000000">
+
+                <RelativeLayout
+                    android:id="@+id/btn_match_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/icon_menu"
+                        android:layout_marginLeft="15dp"/>
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/icon_camera"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/toolbar_camera_icon" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
-    <RelativeLayout
-        android:id="@+id/toolbar_match"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#00000000">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:background="@drawable/icon_menu"
-            android:layout_marginLeft="15dp"/>
-
-        <ImageView
-            android:layout_width="23dp"
-            android:layout_height="26dp"
-            android:background="@drawable/icon_camera"
-            android:layout_centerInParent="true"
-            android:id="@+id/toolbar_camera_icon" />
-
-    </RelativeLayout>
 
 
 </RelativeLayout>
