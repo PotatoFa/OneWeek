@@ -78,10 +78,11 @@ public class SplashActivity extends SetFontActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        delay_handler = new Handler(Looper.getMainLooper());
+        delay_handler.postDelayed(changeImage, 30);
 
 
 
-        registerInBackground();
 
 
     }
@@ -95,9 +96,7 @@ public class SplashActivity extends SetFontActivity implements
                 //startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
                 //startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
-
-                startActivity(intent);
-                finish();
+                registerInBackground();
 
             }else{
                 image_splash.setImageResource(image_resource[count++]);
@@ -109,7 +108,6 @@ public class SplashActivity extends SetFontActivity implements
 
     private void registerInBackground() {
 
-        delay_handler = new Handler(Looper.getMainLooper());
 
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -117,7 +115,6 @@ public class SplashActivity extends SetFontActivity implements
                 checkLogin();
                 try {
                     regid = gcm.register(SENDER_ID);
-                    sendRegistrationIdToBackend(regid);
                 } catch (IOException ex) {
                 }
                 return "Registed GCM: " + regid;
@@ -126,7 +123,9 @@ public class SplashActivity extends SetFontActivity implements
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(TAG, msg);
-                delay_handler.postDelayed(changeImage, 30);
+
+                sendRegistrationIdToBackend(regid);
+
             }
         }.execute(null, null, null);
     }
@@ -149,8 +148,11 @@ public class SplashActivity extends SetFontActivity implements
             editor.putString("gcm_token", regid);
             editor.commit();
             intent = new Intent(getApplicationContext(), AccountActivity.class);
-
         }
+
+
+        startActivity(intent);
+        finish();
 
     }
 

@@ -26,7 +26,8 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     static int image_height;
 
 
-    public static EditSaveFragment newInstance(Bitmap bitmap, int bottom_cover, int img_width, int img_height) {
+    public static EditSaveFragment newInstance(Bitmap bitmap, int bottom_cover, int img_width, int img_height,
+                                               int view_width) {
         EditSaveFragment editSaveFragment = new EditSaveFragment();
         getBitmap = bitmap;
         bottom_cover_height = bottom_cover;
@@ -98,7 +99,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
             bottom_cover_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
             bottom_cover_param.addRule(RelativeLayout.BELOW, image_save.getId());
             bottom_cover.setLayoutParams(bottom_cover_param);
-*/
+            */
         }else{
             //가로 이미지
 

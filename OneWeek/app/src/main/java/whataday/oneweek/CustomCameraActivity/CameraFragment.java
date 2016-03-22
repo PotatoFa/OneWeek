@@ -331,7 +331,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                     .replace(
                             R.id.custom_fragment_container,
                             EditSaveFragment.newInstance(bitmap_resize, bottom_param.height,
-                                    view_width, view_height - (top_height + bottom_param.height)))
+                                    view_width, view_height - (top_height + bottom_param.height), view_width))
                     .addToBackStack(null)
                     .commit();
 
