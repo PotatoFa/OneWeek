@@ -78,11 +78,9 @@ public class AccountActivity extends SetFontActivity implements
                 .build();
         //기본 프로필을 이메일주소를 통해 가져오겠다는 GSO객체 생성.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this) //param1 = 로그인액티비티 생성할 부모액티비티, param2 = 연결실패리스너
+                .enableAutoManage(this, this)//param1 = 로그인액티비티 생성할 부모액티비티, param2 = 연결실패리스너
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-
 
         getIsServerLogin();
 
@@ -213,26 +211,6 @@ public class AccountActivity extends SetFontActivity implements
 
 
 
-    private void checkedLogin(){
-        Log.i(TAG, "Check Login");
-        Log.i(TAG, "facebook" + String.valueOf(isLogin_facebook));
-        Log.i(TAG, "google" + String.valueOf(isLogin_google));
-
-
-        if(isLogin_google && isLogin_facebook){
-
-            LoginManager.getInstance().logOut();
-            Log.i(TAG, "LOGOUT");
-            //둘다 로그인 되어 있을경우.
-            //둘의 로그인 정보를 초기화
-
-
-        }else if(isLogin_google || isLogin_facebook){
-            //둘중 하나 로그인 되어있을때
-        }else if(!isLogin_google && !isLogin_facebook){
-            //둘다 로그인 안되어 있을때.
-        }
-    }
 
     private boolean getIsServerLogin(){
         isLogin_server = true;
@@ -253,83 +231,17 @@ public class AccountActivity extends SetFontActivity implements
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
         if(opr.isDone()){
+            Log.i(TAG, "GOOGLE is DOne");
 
             GoogleSignInResult result = opr.get();
 
             handleSignInResult(result);
 
+        }else{
+            Log.i(TAG, "GOOGLE is Don t");
+
         }
-/*
-        opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-            @Override
-            public void onResult(GoogleSignInResult googleSignInResult) {
-                if (googleSignInResult.isSuccess()) {
-                    Log.i(TAG, "isSuccess True");
-                    handleSignInResult(googleSignInResult);
-
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                            new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(Status status) {
-
-                                }
-                            });
-
-
-                } else {
-                    Log.i(TAG, "isSuccess False");
-                }
-
-
-            }
-        });
-        */
-
-
-        /*
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.i("isLogin : ", "Google true");
-            GoogleSignInResult result = opr.get();
-
-            isLogin_google = true;
-
-            //handleSignInResult(result);
-
-            return true;
-
-            //handleSignInResult(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    Log.d(TAG, "DON't");
-                    //handleSignInResult(googleSignInResult);
-                }
-            });
-
-            Log.i("isLogin : ", "Google false");
-
-            isLogin_google = false;
-
-
-            return false;
-        }
-        */
     }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-
 
 
     private void signIn() {

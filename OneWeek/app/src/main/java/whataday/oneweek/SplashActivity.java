@@ -9,31 +9,42 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
-import io.realm.Realm;
-import whataday.oneweek.Camera.CameraActivity;
-import whataday.oneweek.Controller.ApplicationController;
-import whataday.oneweek.CustomCameraActivity.CameraFragmentActivity;
-import whataday.oneweek.CustomCameraActivity.CustomCameraAcivity;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
-import whataday.oneweek.Login.JoinActivity;
 import whataday.oneweek.Main.MainPagerActivity;
-import whataday.oneweek.Service.GPSTracker;
 
-public class SplashActivity extends SetFontActivity {
+public class SplashActivity extends SetFontActivity implements
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = "SPLASH_LOG";
 
     String SENDER_ID = "243787068094";
     GoogleCloudMessaging gcm;
     String regid, current_regid;
-    GPSTracker gpsTracker;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+
+
+    private boolean isLogin_google;
+    private boolean isLogin_facebook;
+    private boolean isLogin_server;
 
 
     Intent intent;
@@ -43,6 +54,8 @@ public class SplashActivity extends SetFontActivity {
     int count = 0;
     int image_resource[] = { R.drawable.splash1, R.drawable.splash2, R.drawable.splash3 };
 
+    GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,16 +63,26 @@ public class SplashActivity extends SetFontActivity {
         image_splash = (ImageView)findViewById(R.id.image_splash);
 
         pref = getSharedPreferences("user", MODE_PRIVATE);
-        current_regid = pref.getString("gcm_token", null);
         editor = pref.edit();
+        current_regid = pref.getString("gcm_token", null);
 
-
-        gpsTracker = ApplicationController.getGpsTracker();
         gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        //기본 프로필을 이메일주소를 통해 가져오겠다는 GSO객체 생성.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)//param1 = 로그인액티비티 생성할 부모액티비티, param2 = 연결실패리스너
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
+
+
         registerInBackground();
 
-        delay_handler = new Handler(Looper.getMainLooper());
-        delay_handler.postDelayed(changeImage, 30);
 
     }
 
@@ -68,13 +91,14 @@ public class SplashActivity extends SetFontActivity {
         public void run() {
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
-                //startActivity(intent);
-                startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                //startActivity(new Intent(getApplicationContext(), AccountActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
                 //startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
 
+                startActivity(intent);
                 finish();
+
             }else{
                 image_splash.setImageResource(image_resource[count++]);
                 delay_handler.postDelayed(changeImage, 30);
@@ -84,9 +108,13 @@ public class SplashActivity extends SetFontActivity {
 
 
     private void registerInBackground() {
+
+        delay_handler = new Handler(Looper.getMainLooper());
+
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+                checkLogin();
                 try {
                     regid = gcm.register(SENDER_ID);
                     sendRegistrationIdToBackend(regid);
@@ -98,6 +126,7 @@ public class SplashActivity extends SetFontActivity {
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(TAG, msg);
+                delay_handler.postDelayed(changeImage, 30);
             }
         }.execute(null, null, null);
     }
@@ -119,11 +148,83 @@ public class SplashActivity extends SetFontActivity {
             //로그인 경험 없는 사람
             editor.putString("gcm_token", regid);
             editor.commit();
-            intent = new Intent(getApplicationContext(), JoinActivity.class);
+            intent = new Intent(getApplicationContext(), AccountActivity.class);
 
         }
 
     }
 
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+
+
+    private void checkLogin(){
+
+        if( AccessToken.getCurrentAccessToken() != null ){
+            Log.i("isLogin : ", "Facebook login");
+            isLogin_facebook = true;
+        }else{
+            Log.i("isLogin : ", "Facebook not login");
+            isLogin_facebook = false;
+        }
+
+
+        final OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+
+        opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+            @Override
+            public void onResult(GoogleSignInResult googleSignInResult) {
+
+                if (opr.isDone()) {
+                    Log.i(TAG, "GOOGLE is DOne");
+                    isLogin_google = true;
+
+                } else {
+                    Log.i(TAG, "GOOGLE is Don t");
+                    isLogin_google = false;
+                }
+
+                checkedLogin();
+            }
+        });
+
+
+    }
+
+    private void checkedLogin(){
+        Log.i(TAG, "Check Login");
+        Log.i(TAG, "facebook" + String.valueOf(isLogin_facebook));
+        Log.i(TAG, "google" + String.valueOf(isLogin_google));
+
+
+        if(isLogin_google && isLogin_facebook){
+
+            LoginManager.getInstance().logOut();
+
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            Log.i("TEET", status.toString());
+                        }
+                    });
+
+            Log.i(TAG, "facebook logout");
+            //둘다 로그인 되어 있을경우.
+            //둘의 로그인 정보를 초기화
+
+
+        }else if(isLogin_google || isLogin_facebook){
+            //둘중 하나 로그인 되어있을때
+        }else if(!isLogin_google && !isLogin_facebook){
+            //둘다 로그인 안되어 있을때.
+        }
+    }
 
 }
