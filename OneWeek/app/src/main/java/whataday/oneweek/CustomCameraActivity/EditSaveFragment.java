@@ -24,15 +24,17 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     static int bottom_cover_height;
     static int image_width;
     static int image_height;
+    static int view_width;
 
 
     public static EditSaveFragment newInstance(Bitmap bitmap, int bottom_cover, int img_width, int img_height,
-                                               int view_width) {
+                                               int dv_width) {
         EditSaveFragment editSaveFragment = new EditSaveFragment();
         getBitmap = bitmap;
         bottom_cover_height = bottom_cover;
         image_width = img_width;
         image_height = img_height;
+        view_width = dv_width;
 
         return editSaveFragment;
     }
@@ -86,9 +88,13 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
 
     private void setViewSize(){
 
+        int width, height;
+
         if(getBitmap.getHeight() > getBitmap.getWidth()){
             //세로 이미지
-            image_box_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getBitmap.getHeight());
+            width = view_width;
+            height = view_width * 4/3;
+            image_box_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             image_box_param.addRule(RelativeLayout.BELOW, top_cover.getId());
             image_box.setLayoutParams(image_box_param);
             image_save.setImageBitmap(getBitmap);
@@ -102,6 +108,8 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
             */
         }else{
             //가로 이미지
+            width = view_width;
+            height = view_width * 3/4;
 
 
             float scale = (float) getBitmap.getHeight() / getBitmap.getWidth();
@@ -114,7 +122,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
 
 
 
-            image_box_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, change_height);
+            image_box_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             image_box_param.addRule(RelativeLayout.BELOW, top_cover.getId());
             image_box.setLayoutParams(image_box_param);
             image_save.setImageBitmap(getBitmap);
