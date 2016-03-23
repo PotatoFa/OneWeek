@@ -35,11 +35,13 @@ public class SplashActivity extends SetFontActivity implements
     private static final String TAG = "SPLASH_LOG";
 
     String SENDER_ID = "243787068094";
-    GoogleCloudMessaging gcm;
     String regid, current_regid;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+
+    GoogleCloudMessaging gcm;
+    GoogleApiClient mGoogleApiClient;
 
 
     private boolean isLogin_google;
@@ -54,7 +56,6 @@ public class SplashActivity extends SetFontActivity implements
     int count = 0;
     int image_resource[] = { R.drawable.splash1, R.drawable.splash2, R.drawable.splash3 };
 
-    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,9 @@ public class SplashActivity extends SetFontActivity implements
         current_regid = pref.getString("gcm_token", null);
 
         gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+
         FacebookSdk.sdkInitialize(getApplicationContext());
+
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -161,6 +164,7 @@ public class SplashActivity extends SetFontActivity implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
+
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
@@ -169,7 +173,10 @@ public class SplashActivity extends SetFontActivity implements
     private void checkLogin(){
 
         if( AccessToken.getCurrentAccessToken() != null ){
+            AccessToken.getCurrentAccessToken().getUserId();
             Log.i("isLogin : ", "Facebook login");
+            Log.i("isLogin : ", AccessToken.getCurrentAccessToken().getUserId());
+
             isLogin_facebook = true;
         }else{
             Log.i("isLogin : ", "Facebook not login");

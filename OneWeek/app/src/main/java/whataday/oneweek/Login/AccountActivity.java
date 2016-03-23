@@ -128,13 +128,7 @@ public class AccountActivity extends SetFontActivity implements
         btn_assign_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                Log.i("TEET", status.toString());
-                            }
-                        });
+                finish();
             }
         });
 
@@ -190,6 +184,7 @@ public class AccountActivity extends SetFontActivity implements
                     @Override
                     public void onError(FacebookException error) {
 
+
                         Log.i(TAG, "Facebook Error :" + error.toString());
                     }
                 });
@@ -216,6 +211,7 @@ public class AccountActivity extends SetFontActivity implements
         isLogin_server = true;
         return true;
     }
+
     private void setIsFacebookLogin(){
         if( AccessToken.getCurrentAccessToken() != null ){
             Log.i("isLogin : ", "Facebook true");
