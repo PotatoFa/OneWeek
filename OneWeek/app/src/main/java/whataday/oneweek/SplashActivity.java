@@ -207,33 +207,47 @@ public class SplashActivity extends SetFontActivity implements
     }
 
     private void checkedLogin(){
-        Log.i(TAG, "Check Login");
         Log.i(TAG, "facebook" + String.valueOf(isLogin_facebook));
         Log.i(TAG, "google" + String.valueOf(isLogin_google));
 
 
         if(isLogin_google && isLogin_facebook){
 
-            LoginManager.getInstance().logOut();
+            Google_logout();
+            Facebook_logout();
 
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            Log.i("TEET", status.toString());
-                        }
-                    });
-
-            Log.i(TAG, "facebook logout");
+            Log.i(TAG, "Google, Facebook logout");
             //둘다 로그인 되어 있을경우.
             //둘의 로그인 정보를 초기화
 
 
         }else if(isLogin_google || isLogin_facebook){
+            if(isLogin_google){
+                Google_logout();
+                Log.i("Sign out", "Google sign out");
+
+            }else if(isLogin_facebook){
+                Facebook_logout();
+                Log.i("Sign out", "Facebook logOUT");
+            }
             //둘중 하나 로그인 되어있을때
         }else if(!isLogin_google && !isLogin_facebook){
             //둘다 로그인 안되어 있을때.
         }
+    }
+
+    private void Google_logout(){
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        Log.i("Sign out", status.toString());
+
+                    }
+                });
+    }
+    private void Facebook_logout(){
+        LoginManager.getInstance().logOut();
     }
 
 }

@@ -31,15 +31,12 @@ public class ApplicationController extends Application {
     public static ApplicationController getInstance() {return instance;}
     private static GPSTracker gpsTracker;
     public static GPSTracker getGpsTracker() {return gpsTracker;}
-    private static Realm realm;
-    public static Realm getRealm() {return realm;}
 
     @Override
     public void onCreate() {
         super.onCreate();
         ApplicationController.instance = this;
         ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
-        createRealm();
 
         Typekit.getInstance()
                 .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
@@ -53,15 +50,16 @@ public class ApplicationController extends Application {
 
     }
 
-    private void createRealm(){
+    private void setDefaultRealm(String file_name){
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
-                .name("oneweek.realm")
+                .name(file_name)
                 .schemaVersion(3)
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
-        ApplicationController.realm = Realm.getInstance(realmConfiguration);
+        Realm.setDefaultConfiguration(realmConfiguration);
+
 
     }
 

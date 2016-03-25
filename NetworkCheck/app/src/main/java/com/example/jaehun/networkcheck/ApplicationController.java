@@ -5,6 +5,9 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by jaehun on 16. 3. 22..
  */
@@ -15,11 +18,16 @@ public class ApplicationController extends Application {
     public static ApplicationController getInstance() {return applicationController;}
     IntentFilter intentFilter;
 
+    Realm realm;
+
     @Override
     public void onCreate() {
         super.onCreate();
         this.applicationController = this;
         networkChangeReceiver = null;
+
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this).build();
+
 
         intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 

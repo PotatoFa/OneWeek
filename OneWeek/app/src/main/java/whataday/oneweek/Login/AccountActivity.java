@@ -82,15 +82,7 @@ public class AccountActivity extends SetFontActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        getIsServerLogin();
-
-
         initView();
-
-
-        //TODO 로그인 과정에서 분기
-
-
 
 
     }
@@ -142,6 +134,8 @@ public class AccountActivity extends SetFontActivity implements
         });
 
     }
+
+
 
     private void setFacebook_login(){
 
@@ -198,19 +192,12 @@ public class AccountActivity extends SetFontActivity implements
             @Override
             public void onClick(View v) {
                 signIn();
+                //signIn -> activityResult -> handlesignIn
             }
         });
-
-        setIsGoogleLogin();
     }
 
 
-
-
-    private boolean getIsServerLogin(){
-        isLogin_server = true;
-        return true;
-    }
 
     private void setIsFacebookLogin(){
         if( AccessToken.getCurrentAccessToken() != null ){
@@ -222,22 +209,6 @@ public class AccountActivity extends SetFontActivity implements
         }
     }
 
-    private void setIsGoogleLogin(){
-
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-
-        if(opr.isDone()){
-            Log.i(TAG, "GOOGLE is DOne");
-
-            GoogleSignInResult result = opr.get();
-
-            handleSignInResult(result);
-
-        }else{
-            Log.i(TAG, "GOOGLE is Don t");
-
-        }
-    }
 
 
     private void signIn() {
@@ -257,8 +228,8 @@ public class AccountActivity extends SetFontActivity implements
             Log.d(TAG, "ACCT TOKEN : " + acct.getIdToken());
             Log.d(TAG, "ACCT DISP : " + acct.getDisplayName());
 
-            //startActivity(new Intent(getApplicationContext(), JoinActivity.class));
-            //finish();
+            startActivity(new Intent(getApplicationContext(), JoinActivity.class));
+            finish();
 
         } else {
 
