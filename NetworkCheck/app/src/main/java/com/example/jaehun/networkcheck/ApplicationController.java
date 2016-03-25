@@ -28,7 +28,6 @@ public class ApplicationController extends Application {
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this).build();
 
-
         intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
 

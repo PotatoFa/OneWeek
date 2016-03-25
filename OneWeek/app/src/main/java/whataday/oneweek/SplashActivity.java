@@ -8,11 +8,11 @@ import android.os.Looper;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -28,6 +28,7 @@ import java.io.IOException;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Login.AccountActivity;
 import whataday.oneweek.Main.MainPagerActivity;
+import whataday.oneweek.Service.NetworkUtil;
 
 public class SplashActivity extends SetFontActivity implements
         GoogleApiClient.OnConnectionFailedListener{
@@ -111,23 +112,41 @@ public class SplashActivity extends SetFontActivity implements
 
     private void registerInBackground() {
 
-
-        new AsyncTask<Void, Void, String>() {
+        AsyncTask registerGCM = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 checkLogin();
-                try {
-                    regid = gcm.register(SENDER_ID);
-                } catch (IOException ex) {
-                }
-                return "Registed GCM: " + regid;
-            }
+                Log.i("NETWORK : ", String.valueOf(NetworkUtil.getConnectivityStatus(getApplicationContext())));
 
+                if(NetworkUtil.getConnectivityStatus(getApplicationContext()) == 0){
+                    //네트워크 없음. 연결유도
+                    Log.i("NETWORK : ", "not connected Network");
+
+                    return null;
+
+                }else{
+                    try {
+                        regid = gcm.register(SENDER_ID);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    return "Registed GCM: " + regid;
+
+                }
+            }
             @Override
             protected void onPostExecute(String msg) {
-                Log.i(TAG, msg);
+                if(msg == null){
+                    //gcm이 null값일때
+                    Toast.makeText(getApplicationContext(), "don't regist gcmService", Toast.LENGTH_SHORT).show();
+                    //다시시도 유도
 
-                sendRegistrationIdToBackend(regid);
+                }else{
+                    Log.i(TAG, msg);
+                    sendRegistrationIdToBackend(regid);
+
+                }
+
 
             }
         }.execute(null, null, null);
@@ -167,8 +186,6 @@ public class SplashActivity extends SetFontActivity implements
 
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
-
-
 
     private void checkLogin(){
 
@@ -246,6 +263,7 @@ public class SplashActivity extends SetFontActivity implements
                     }
                 });
     }
+
     private void Facebook_logout(){
         LoginManager.getInstance().logOut();
     }

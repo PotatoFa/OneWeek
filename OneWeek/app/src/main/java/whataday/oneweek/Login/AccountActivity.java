@@ -2,6 +2,7 @@ package whataday.oneweek.Login;
 
 import android.accounts.Account;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,12 +39,21 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import whataday.oneweek.Controller.ApplicationController;
+import whataday.oneweek.Controller.ServerInterface;
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
 public class AccountActivity extends SetFontActivity implements
         GoogleApiClient.OnConnectionFailedListener{
+
+    ServerInterface api;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
     GoogleApiClient mGoogleApiClient;
     CallbackManager callbackManager;
@@ -68,6 +78,8 @@ public class AccountActivity extends SetFontActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
+        api = ApplicationController.getServerInterface();
+        pref = getSharedPreferences("user", MODE_PRIVATE);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -221,15 +233,32 @@ public class AccountActivity extends SetFontActivity implements
         if (result.isSuccess()) {
             Log.d(TAG, "sign in SUCCESS");
             // 요청 및 응답이 성공적으로 이루어졌을때. DB저장/UI업데이트 등
-            GoogleSignInAccount acct = result.getSignInAccount();
+            final GoogleSignInAccount acct = result.getSignInAccount();
             Log.d(TAG, "ACCT ID TOKEN : " + acct.getIdToken());
             Log.d(TAG, "ACCT ID : " + acct.getId());
             Log.d(TAG, "ACCT MAIL : " + acct.getEmail());
             Log.d(TAG, "ACCT TOKEN : " + acct.getIdToken());
             Log.d(TAG, "ACCT DISP : " + acct.getDisplayName());
 
-            startActivity(new Intent(getApplicationContext(), JoinActivity.class));
-            finish();
+            api.getLogin(acct.getId(), pref.getString("gcm_token", null), new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    Log.i("GET login status :", String.valueOf(response.getStatus()));
+                    Log.i("GET login response :", response.getBody().toString());
+
+                    editor.putString("id", acct.getId());
+                    editor.commit();
+
+                    startActivity(new Intent(getApplicationContext(), JoinActivity.class));
+                    finish();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                }
+            });
+
 
         } else {
 

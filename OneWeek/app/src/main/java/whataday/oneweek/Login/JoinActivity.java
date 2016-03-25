@@ -14,6 +14,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import whataday.oneweek.CustomView.SetFontActivity;
 import whataday.oneweek.Data.UserInfo;
+import whataday.oneweek.NetworkObject.User;
 import whataday.oneweek.R;
 
 public class JoinActivity extends SetFontActivity {
@@ -25,12 +26,17 @@ public class JoinActivity extends SetFontActivity {
     public SharedPreferences pref;
     public SharedPreferences.Editor editor;
 
+    public User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
         pref = getSharedPreferences("user", MODE_PRIVATE);
         editor = pref.edit();
+        user = new User();
+        user.setId(pref.getString("id", null));
+        user.setToken(pref.getString("gcm_token", null));
 
         setIndicator();
 

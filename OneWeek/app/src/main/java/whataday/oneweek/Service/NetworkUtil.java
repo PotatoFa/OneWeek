@@ -1,14 +1,13 @@
-package com.example.jaehun.networkcheck;
+package whataday.oneweek.Service;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by jaehun on 16. 3. 22..
+ * Created by jaehun on 16. 3. 25..
  */
 public class NetworkUtil {
-
 
 
     public static int TYPE_WIFI = 1;
@@ -74,4 +73,3 @@ public class NetworkUtil {
     }
 
 }
-

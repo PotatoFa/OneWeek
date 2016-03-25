@@ -2,6 +2,7 @@ package whataday.oneweek.Controller;
 
 import android.app.Application;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +21,7 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import whataday.oneweek.MainActivity;
+import whataday.oneweek.R;
 import whataday.oneweek.Service.GPSTracker;
 
 /**
@@ -31,12 +33,19 @@ public class ApplicationController extends Application {
     public static ApplicationController getInstance() {return instance;}
     private static GPSTracker gpsTracker;
     public static GPSTracker getGpsTracker() {return gpsTracker;}
+    private static Realm realm;
+    public static Realm getRealm() {return realm;}
+    private static ServerInterface api;
+    public static ServerInterface getServerInterface() {return api;}
 
     @Override
     public void onCreate() {
         super.onCreate();
         ApplicationController.instance = this;
         ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
+        buildServerInterface(getResources().getString(R.string.server_path));
+
+        createRealm();
 
         Typekit.getInstance()
                 .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
@@ -50,24 +59,35 @@ public class ApplicationController extends Application {
 
     }
 
-    private void setDefaultRealm(String file_name){
+    private void createRealm(){
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
-                .name(file_name)
+                .name("test.realm")
+                .schemaVersion(3)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        ApplicationController.realm = Realm.getInstance(realmConfiguration);
+
+    }
+
+    public static void setDefaultRealm(String file_name){
+
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(getInstance())
+                .name(file_name + ".realm")
                 .schemaVersion(3)
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm.setDefaultConfiguration(realmConfiguration);
+        Log.i("Realm setDefault", "success");
 
 
     }
 
-    private ServerInterface api;
-
-    public ServerInterface getServerInterface() {return api;}
 
     public void buildServerInterface(String ip) {
+        Log.i("Build IP :", ip);
         if (api != null)
             return;
 

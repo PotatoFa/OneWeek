@@ -64,6 +64,8 @@ public class FragmentGender extends android.support.v4.app.Fragment {
                 ((JoinActivity) getActivity()).editor.putString("gender", gender);
                 ((JoinActivity) getActivity()).editor.commit();
 
+                ((JoinActivity) getActivity()).user.setGender(gender);
+
                 ((JoinActivity) getActivity()).nextPage();
             }
         });

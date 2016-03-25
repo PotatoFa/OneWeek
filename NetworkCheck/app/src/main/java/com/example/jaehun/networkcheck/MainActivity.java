@@ -10,11 +10,12 @@ import java.io.File;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class MainActivity extends SetFontActiviry {
 
     Realm realm;
-    int i = 10;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,9 @@ public class MainActivity extends SetFontActiviry {
         //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
 
+    }
+    public void status(View view){
+        Log.i("STATUS : ", String.valueOf(NetworkUtil.getConnectivityStatus(this)));
     }
 
     public void unregist(View view){
@@ -36,18 +40,24 @@ public class MainActivity extends SetFontActiviry {
 
     public void realm(View view){
 
+        i++;
+
         Realm realm1 = Realm.getInstance(getApplicationContext());
         Log.i("Realm Path :", realm1.getPath());
 
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(getApplicationContext())
-                .name("name.realm")
+                .name("name"+i+".realm")
                 .build();
 
         realm = Realm.getInstance(realmConfiguration);
 
         Log.i("Realm Path :", realm.getPath());
 
+        RealmResults<Match> results = realm.where(Match.class).findAll();
+        for(Match match : results){
+            Log.i("match_id :", match.getMatch_id());
+        }
     }
 
     public void test(View view){

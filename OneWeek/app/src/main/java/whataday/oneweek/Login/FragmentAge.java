@@ -58,6 +58,9 @@ public class FragmentAge extends android.support.v4.app.Fragment {
 
                 ((JoinActivity) getActivity()).editor.putInt("age", year_picker.getValue());
                 ((JoinActivity) getActivity()).editor.commit();
+
+                ((JoinActivity) getActivity()).user.setAge(String.valueOf(year_picker.getValue()));
+
                 ((JoinActivity) getActivity()).nextPage();
             }
         });

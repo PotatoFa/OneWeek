@@ -91,6 +91,10 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
 
                 //TODO 나라/도시 추가해야함 서버요청
 
+                ((JoinActivity) getActivity()).user.setLatitude(Float.parseFloat(String.valueOf(gpsTracker.getLatitude())));
+                ((JoinActivity) getActivity()).user.setLongitude(Float.parseFloat(String.valueOf(gpsTracker.getLongitude())));
+
+
                 ((JoinActivity) getActivity()).editor.commit();
                 ((JoinActivity) getActivity()).nextPage();
             }
