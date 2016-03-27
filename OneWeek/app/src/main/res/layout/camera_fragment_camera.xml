@@ -25,7 +25,7 @@
         <LinearLayout
             android:id="@+id/flash"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:orientation="horizontal">
@@ -34,15 +34,16 @@
                 android:id="@+id/flash_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/icon_flash"/>
 
             <TextView
-                android:id="@+id/auto_flash_icon"
+                android:id="@+id/text_flash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_gravity="center_vertical"
-                android:text="Auto"
+                android:text="Off"
                 android:textColor="@android:color/white"
                 android:textSize="10sp"/>
 

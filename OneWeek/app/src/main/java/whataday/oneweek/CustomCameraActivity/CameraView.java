@@ -18,6 +18,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
     private SurfaceHolder mHolder;
     private Camera mCamera;
 
+    private Camera.Parameters parameters;
+
 
     String TAG = "CAMERAVIEW ";
 
@@ -58,6 +60,21 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
             Log.d("ERROR", "Camera error on surfaceChanged " + e.getMessage());
         }
 
+    }
+
+
+    public void setFlashMode(String setFlashMode) {
+        parameters.setFlashMode(setFlashMode);
+        mCamera.setParameters(parameters);
+        //mCamera.startPreview();
+        Log.i("SET FLASH MODE:", "change start");
+
+
+    }
+
+    public String getFlashMode() {
+        parameters = mCamera.getParameters();
+        return parameters.getFlashMode();
     }
 
 

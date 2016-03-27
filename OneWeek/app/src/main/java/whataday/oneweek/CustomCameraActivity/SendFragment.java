@@ -106,6 +106,7 @@ public class SendFragment extends android.support.v4.app.Fragment {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO 서버전송 & DB저장
                 getActivity().finish();
 
             }

@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -37,7 +39,9 @@ public class CameraFragment extends android.support.v4.app.Fragment {
     int cameraId_current;
 
     RelativeLayout top_cover, bottom_cover;
-    ImageView capture_image_button, change_camera;
+    LinearLayout flash;
+    ImageView capture_image_button, change_camera, flash_icon;
+    TextView text_flash;
 
     String TAG = "CAMERA TEST : ";
 
@@ -102,6 +106,9 @@ public class CameraFragment extends android.support.v4.app.Fragment {
         bottom_cover = (RelativeLayout) rootView.findViewById(R.id.bottom_cover);
         capture_image_button = (ImageView) rootView.findViewById(R.id.capture_image_button);
         change_camera = (ImageView) rootView.findViewById(R.id.change_camera);
+        flash = (LinearLayout) rootView.findViewById(R.id.flash);
+        flash_icon = (ImageView) rootView.findViewById(R.id.flash_icon);
+        text_flash = (TextView) rootView.findViewById(R.id.text_flash);
 
 
         change_camera.setOnClickListener(new View.OnClickListener() {
@@ -115,13 +122,11 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                 }
                 Log.i("CURRENT CAMERA :", String.valueOf(cameraId_current));
 
-
                 mCamera.release();
                 mCamera = null;
                 mCamera = Camera.open(cameraId_current);
 
                 mCameraView.setCamera(mCamera);
-
 
             }
         });
@@ -129,6 +134,8 @@ public class CameraFragment extends android.support.v4.app.Fragment {
         capture_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //TODO 설정한 카메라 오토포커싱기능 체크 후 일반촬영/포커싱촬영
 
                 mCamera.autoFocus(new Camera.AutoFocusCallback() {
                     @Override
@@ -138,8 +145,28 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                         }
                     }
                 });
+
             }
         });
+
+
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(cameraId_current == 0){
+                    if(mCameraView.getFlashMode().equals(Camera.Parameters.FLASH_MODE_OFF)){
+                        mCameraView.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                        text_flash.setText("On");
+                    }else if(mCameraView.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)){
+                        mCameraView.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                        text_flash.setText("Off");
+                    }
+                    Log.i("FLASH MODE :", mCameraView.getFlashMode());
+                }
+            }
+        });
+
 
         resizeBottomCover(bottom_height);
 
@@ -157,7 +184,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
             }else if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
                 cameraId_back = i;
             }
-            cameraId_current = cameraId_front;
+            cameraId_current = cameraId_back;
 
         }
 
