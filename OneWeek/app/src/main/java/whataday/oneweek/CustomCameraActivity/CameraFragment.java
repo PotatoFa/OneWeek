@@ -20,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.IOException;
+
 import whataday.oneweek.Camera.EditSavePhotoFragment;
 import whataday.oneweek.R;
 
@@ -27,10 +29,15 @@ import whataday.oneweek.R;
  * Created by jaehun on 16. 3. 18..
  */
 public class CameraFragment extends android.support.v4.app.Fragment {
+
     View rootView;
 
+    int cameraId_back;
+    int cameraId_front;
+    int cameraId_current;
+
     RelativeLayout top_cover, bottom_cover;
-    ImageView capture_image_button;
+    ImageView capture_image_button, change_camera;
 
     String TAG = "CAMERA TEST : ";
 
@@ -77,6 +84,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        setCameraId();
 
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         view_width = dm.widthPixels;
@@ -93,20 +101,69 @@ public class CameraFragment extends android.support.v4.app.Fragment {
         top_cover = (RelativeLayout) rootView.findViewById(R.id.top_cover);
         bottom_cover = (RelativeLayout) rootView.findViewById(R.id.bottom_cover);
         capture_image_button = (ImageView) rootView.findViewById(R.id.capture_image_button);
+        change_camera = (ImageView) rootView.findViewById(R.id.change_camera);
 
+
+        change_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(cameraId_current == cameraId_back){
+                    cameraId_current = cameraId_front;
+                }else if(cameraId_current == cameraId_front){
+                    cameraId_current = cameraId_back;
+                }
+                Log.i("CURRENT CAMERA :", String.valueOf(cameraId_current));
+
+
+                mCamera.release();
+                mCamera = null;
+                mCamera = Camera.open(cameraId_current);
+
+                mCameraView.setCamera(mCamera);
+
+
+            }
+        });
 
         capture_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
+
+                mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                    @Override
+                    public void onAutoFocus(boolean success, Camera camera) {
+                        if (success) {
+                            takePicture();
+                        }
+                    }
+                });
             }
         });
 
         resizeBottomCover(bottom_height);
 
-
     }
 
+
+    private void setCameraId(){
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for(int i = 0; i < numberOfCameras; i++){
+            Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, cameraInfo);
+
+            if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
+                cameraId_front = i;
+            }else if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
+                cameraId_back = i;
+            }
+            cameraId_current = cameraId_front;
+
+        }
+
+        Log.i("FRONT CAMERA :", String.valueOf(cameraId_front));
+        Log.i("BACK CAMERA :", String.valueOf(cameraId_back));
+    }
 
 
     private void takePicture() {
@@ -138,10 +195,10 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
 
     }
-    private void setCamera(){
+    private void setCamera(int i){
 
         try{
-            mCamera = Camera.open();//you can use open(int) to use different cameras
+            mCamera = Camera.open(i);//you can use open(int) to use different cameras
         } catch (Exception e){
             Log.d("ERROR", "Failed to get camera: " + e.getMessage());
         }
@@ -150,6 +207,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
             mCameraView = new CameraView(getActivity(), mCamera);//create a SurfaceView to show camera data
             FrameLayout camera_view = (FrameLayout)rootView.findViewById(R.id.camera_view);
             camera_view.addView(mCameraView);//add the SurfaceView to the layout
+
 
         }
     }
@@ -171,7 +229,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         mCamera = null;
-        setCamera();
+        setCamera(cameraId_current);
 
         if(mOrientationEventListener == null){
             mOrientationEventListener = new OrientationEventListener(getActivity(), SensorManager.SENSOR_DELAY_NORMAL) {

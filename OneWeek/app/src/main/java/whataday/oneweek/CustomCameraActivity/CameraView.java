@@ -32,6 +32,36 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
         Log.i(TAG, "create");
 
     }
+
+    public void setCamera(Camera camera) {
+        mCamera = camera;
+        if(mHolder.getSurface() == null) //check if the surface is ready to receive camera data
+
+            return;
+
+        try{
+            mCamera.stopPreview();
+            Log.i(TAG, "change stop");
+
+        } catch (Exception e){
+            //this will happen when you are trying the camera if it's not running
+        }
+
+        //now, recreate the camera preview
+        try{
+            mCamera.setDisplayOrientation(90);
+            mCamera.setPreviewDisplay(mHolder);
+            mCamera.startPreview();
+            Log.i(TAG, "change start");
+
+        } catch (IOException e) {
+            Log.d("ERROR", "Camera error on surfaceChanged " + e.getMessage());
+        }
+
+    }
+
+
+
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
 

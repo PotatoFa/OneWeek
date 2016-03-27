@@ -227,6 +227,26 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         }
     }
 
+
+
+    private void restartPreview() {
+        if (mCamera != null) {
+            stopCameraPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+
+        getCamera(mCameraID);
+        startCameraPreview();
+    }
+
+
+    private void stopCameraPreview() {
+        // Nulls out callbacks, stops face detection
+        mCamera.stopPreview();
+        mPreviewView.setCamera(null);
+    }
+
     /**
      * Start the camera preview
      */
@@ -246,11 +266,6 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     /**
      * Stop the camera preview
      */
-    private void stopCameraPreview() {
-        // Nulls out callbacks, stops face detection
-        mCamera.stopPreview();
-        mPreviewView.setCamera(null);
-    }
 
     /**
      * Determine the current display orientation and rotate the camera preview
@@ -364,16 +379,6 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         return bestSize;
     }
 
-    private void restartPreview() {
-        if (mCamera != null) {
-            stopCameraPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-
-        getCamera(mCameraID);
-        startCameraPreview();
-    }
 
     private int getFrontCameraID() {
         PackageManager pm = getActivity().getPackageManager();

@@ -355,6 +355,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     public void run() {
                         store_house_ptr_frame.refreshComplete();
                         getActivity().startActivity(new Intent(getActivity(), CameraFragmentActivity.class));
+                        //getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
+
                         getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
                     }
                 }, 100);

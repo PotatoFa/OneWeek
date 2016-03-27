@@ -98,9 +98,9 @@ public class SplashActivity extends SetFontActivity implements
                 delay_handler.removeCallbacks(changeImage);
                 //startActivity(new Intent(getApplicationContext(), AccountActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
-                //startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
-                registerInBackground();
+                //registerInBackground();
 
             }else{
                 image_splash.setImageResource(image_resource[count++]);
