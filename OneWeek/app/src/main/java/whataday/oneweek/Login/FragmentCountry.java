@@ -59,7 +59,7 @@ public class FragmentCountry extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                if( gpsTracker.canGetLocation() ){
+                if(gpsTracker.canGetLocation()){
                     if(!btn_check){
                         ViewAnimation.grayToYellow(btn_next_country);
                         ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);

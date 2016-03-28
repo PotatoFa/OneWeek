@@ -1,6 +1,7 @@
 package whataday.oneweek.Controller;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
 
@@ -32,6 +33,7 @@ public class ApplicationController extends Application {
     private static  ApplicationController instance;
     public static ApplicationController getInstance() {return instance;}
     private static GPSTracker gpsTracker;
+    public static void setGpsTracker(Context context) {ApplicationController.gpsTracker = new GPSTracker(context);}
     public static GPSTracker getGpsTracker() {return gpsTracker;}
     private static Realm realm;
     public static Realm getRealm() {return realm;}
@@ -42,7 +44,6 @@ public class ApplicationController extends Application {
     public void onCreate() {
         super.onCreate();
         ApplicationController.instance = this;
-        ApplicationController.gpsTracker = new GPSTracker(getApplicationContext());
         buildServerInterface(getResources().getString(R.string.server_path));
 
         createRealm();

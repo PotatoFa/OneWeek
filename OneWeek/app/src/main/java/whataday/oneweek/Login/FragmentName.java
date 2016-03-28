@@ -79,6 +79,10 @@ public class FragmentName extends android.support.v4.app.Fragment {
                                     Log.i("POST status :", String.valueOf(response.getStatus()));
                                     Log.i("POST response :", response.getBody().toString());
 
+                                    ((JoinActivity) getActivity()).editor.putString("login_history",
+                                            ((JoinActivity) getActivity()).pref.getString("id", null));
+                                    ((JoinActivity) getActivity()).editor.commit();
+
                                     ApplicationController.setDefaultRealm(
                                             ((JoinActivity) getActivity()).pref.getString("id", null));
 

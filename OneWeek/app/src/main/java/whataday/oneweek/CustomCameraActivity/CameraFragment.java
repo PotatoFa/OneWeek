@@ -1,5 +1,6 @@
 package whataday.oneweek.CustomCameraActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -40,7 +41,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
     RelativeLayout top_cover, bottom_cover;
     LinearLayout flash;
-    ImageView capture_image_button, change_camera, flash_icon;
+    ImageView capture_image_button, change_camera, flash_icon, gallery;
     TextView text_flash;
 
     String TAG = "CAMERA TEST : ";
@@ -106,8 +107,9 @@ public class CameraFragment extends android.support.v4.app.Fragment {
         bottom_cover = (RelativeLayout) rootView.findViewById(R.id.bottom_cover);
         capture_image_button = (ImageView) rootView.findViewById(R.id.capture_image_button);
         change_camera = (ImageView) rootView.findViewById(R.id.change_camera);
-        flash = (LinearLayout) rootView.findViewById(R.id.flash);
+        gallery = (ImageView) rootView.findViewById(R.id.gallery);
         flash_icon = (ImageView) rootView.findViewById(R.id.flash_icon);
+        flash = (LinearLayout) rootView.findViewById(R.id.flash);
         text_flash = (TextView) rootView.findViewById(R.id.text_flash);
 
 
@@ -137,14 +139,21 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
                 //TODO 설정한 카메라 오토포커싱기능 체크 후 일반촬영/포커싱촬영
 
-                mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        if (success) {
-                            takePicture();
+                if(mCamera.getParameters().getSupportedFocusModes().contains(
+                        Camera.Parameters.FOCUS_MODE_AUTO)){
+                    mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                        @Override
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            if (success) {
+                                takePicture();
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    takePicture();
+
+                }
+
 
             }
         });
@@ -164,6 +173,17 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                     }
                     Log.i("FLASH MODE :", mCameraView.getFlashMode());
                 }
+            }
+        });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                getActivity().startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                        ((CameraFragmentActivity)getActivity()).PICK_IMAGE_REQUEST);
             }
         });
 
@@ -415,8 +435,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                     .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
                     .replace(
                             R.id.custom_fragment_container,
-                            EditSaveFragment.newInstance(bitmap_resize, bottom_param.height,
-                                    view_width, view_height - (top_height + bottom_param.height), view_width))
+                            EditSaveFragment.newInstance(bitmap_resize, view_width))
                     .addToBackStack(null)
                     .commit();
 

@@ -32,20 +32,19 @@ public class GPSTracker extends Service implements LocationListener {
     double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 100;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000;
+    private static final long MIN_TIME_BW_UPDATES = 10;
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
-        //TODO 마시멜로우 대비 런타임권한요청 추가 수정 필요.
     }
 
     public Location getLocation() {
-        try {
+
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -61,28 +60,7 @@ public class GPSTracker extends Service implements LocationListener {
                 //GPS/NETWORK 둘 중 하나라도 사용가능할 경우. 위치값을 불러온다.
                 this.canGetLocation = true;
                 //위치정보 flag인 canGerLocation을 TRUE로 변환시켜준 후
-                if (isNetworkEnabled) {
-                    Log.i(Log_tag, " using Network Provider");
-                    //NETWORK를 통해 Location불러올때
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    //NetworkProvider의 가장 최신 Location을 로딩
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    //LocationListener를 설정해서 위치데이터를 업데이트 시켜준다.
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        //locationListener를 설정한 후 다시 한번 위치를 업데이트 시켜준다.
-                        if (location != null) {
-                            //불러온 Location데이터가 NULL값이 아니라면 lat/lon값으로 저장한다.
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                            using_provider = "network";
-                            Log.i(Log_tag, " result network location "+latitude+"/"+longitude);
-                        }
-                    }
-                }
+
                 // if GPS Enabled get lat/long using GPS Services
 
                 if (isGPSEnabled) {
@@ -106,10 +84,31 @@ public class GPSTracker extends Service implements LocationListener {
                         }
                     }
                 }
+
+                if (isNetworkEnabled) {
+                    Log.i(Log_tag, " using Network Provider");
+                    //NETWORK를 통해 Location불러올때
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    //NetworkProvider의 가장 최신 Location을 로딩
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    //LocationListener를 설정해서 위치데이터를 업데이트 시켜준다.
+                    if (locationManager != null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        //locationListener를 설정한 후 다시 한번 위치를 업데이트 시켜준다.
+                        if (location != null) {
+                            //불러온 Location데이터가 NULL값이 아니라면 lat/lon값으로 저장한다.
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                            using_provider = "network";
+                            Log.i(Log_tag, " result network location "+latitude+"/"+longitude);
+                        }
+                    }
+                }
+
             }
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
 
         return location;
     }
@@ -133,17 +132,21 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public double getLatitude(){
-        if(location != null){
-            latitude = location.getLatitude();
-        }
+        latitude = location.getLatitude();
         return latitude;
     }
 
     public double getLongitude(){
-        if(location != null){
-            longitude = location.getLongitude();
-        }
+        longitude = location.getLongitude();
         return longitude;
+    }
+
+    public boolean nullCheck(){
+        if(location == null){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean canGetLocation() {
@@ -177,16 +180,21 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         //위치 변동 있을때마다 location 업데이트
+        Log.i("GPSTRACKER :", "OnCHANGE");
         longitude = location.getLongitude();
         latitude = location.getLatitude();
     }
 
     @Override
     public void onProviderDisabled(String provider) {
+        Log.i("GPSTRACKER :", "DISABLED");
+
     }
 
     @Override
     public void onProviderEnabled(String provider) {
+        Log.i("GPSTRACKER :", "ENABLED");
+
     }
 
     @Override

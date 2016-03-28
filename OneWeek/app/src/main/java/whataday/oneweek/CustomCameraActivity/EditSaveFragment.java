@@ -27,13 +27,10 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     static int view_width;
 
 
-    public static EditSaveFragment newInstance(Bitmap bitmap, int bottom_cover, int img_width, int img_height,
-                                               int dv_width) {
+    public static EditSaveFragment newInstance(Bitmap bitmap, int dv_width) {
+
         EditSaveFragment editSaveFragment = new EditSaveFragment();
         getBitmap = bitmap;
-        bottom_cover_height = bottom_cover;
-        image_width = img_width;
-        image_height = img_height;
         view_width = dv_width;
 
         return editSaveFragment;

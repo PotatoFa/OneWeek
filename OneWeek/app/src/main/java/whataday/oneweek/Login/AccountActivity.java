@@ -230,6 +230,8 @@ public class AccountActivity extends SetFontActivity implements
 
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        Log.d(TAG, "handleSignInStatus:" + result.getStatus());
+
         if (result.isSuccess()) {
             Log.d(TAG, "sign in SUCCESS");
             // 요청 및 응답이 성공적으로 이루어졌을때. DB저장/UI업데이트 등
