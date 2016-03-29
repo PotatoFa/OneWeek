@@ -157,7 +157,6 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                     });
                 }else{
                     takePicture();
-
                 }
 
 
@@ -198,6 +197,10 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
     }
 
+    Matrix matrixFront;
+
+    float[] mirrorY = { -1, 0, 0, 0, 1, 0, 0, 0, 1};
+    Matrix matrixMirrorY = new Matrix();
 
     private void setCameraId(){
         int numberOfCameras = Camera.getNumberOfCameras();
@@ -208,6 +211,8 @@ public class CameraFragment extends android.support.v4.app.Fragment {
             if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
                 cameraId_front = i;
                 frontCameraEnabled = true;
+                matrixMirrorY.setValues(mirrorY);
+
             }else if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
                 cameraId_back = i;
                 backCameraEnabled = true;
@@ -345,6 +350,11 @@ public class CameraFragment extends android.support.v4.app.Fragment {
     private void setRotate_matrix(int rotate){
         rotate_matrix = new Matrix();
         rotate_matrix.postRotate(rotate);
+
+        matrixFront = new Matrix();
+        matrixFront.postConcat(matrixMirrorY);
+        matrixFront.postRotate(rotate);
+
     }
 
     private void changeRotation(int orientation, int lastOrientation) {
@@ -431,11 +441,20 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
             Log.i("resize size :", String.valueOf(bitmap_resize_width) + "/" + String.valueOf(bitmap_resize_height));
 
+            Bitmap bitmap_resize;
 
-            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
-                    bitmap_top_cover, crop_height/2,
-                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover), bitmap_resize_height
-                    , rotate_matrix, true);
+            if(cameraId_current != cameraId_front){
+                bitmap_resize = Bitmap.createBitmap(bitmap,
+                        bitmap_top_cover, crop_height/2,
+                        bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover), bitmap_resize_height
+                        , rotate_matrix, true);
+            }else{
+                bitmap_resize = Bitmap.createBitmap(bitmap,
+                        bitmap_top_cover, crop_height/2,
+                        bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover), bitmap_resize_height
+                        , matrixFront, true);
+            }
+
 
             Log.i("resize width :", String.valueOf(bitmap_resize.getWidth()));
 
