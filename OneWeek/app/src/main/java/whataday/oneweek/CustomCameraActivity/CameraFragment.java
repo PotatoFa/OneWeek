@@ -35,6 +35,8 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
     View rootView;
 
+    boolean frontCameraEnabled, backCameraEnabled;
+
     int cameraId_back;
     int cameraId_front;
     int cameraId_current;
@@ -118,9 +120,13 @@ public class CameraFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
 
                 if(cameraId_current == cameraId_back){
+                    if(frontCameraEnabled){
                     cameraId_current = cameraId_front;
+                    }
                 }else if(cameraId_current == cameraId_front){
-                    cameraId_current = cameraId_back;
+                    if(backCameraEnabled) {
+                        cameraId_current = cameraId_back;
+                    }
                 }
                 Log.i("CURRENT CAMERA :", String.valueOf(cameraId_current));
 
@@ -201,16 +207,22 @@ public class CameraFragment extends android.support.v4.app.Fragment {
 
             if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
                 cameraId_front = i;
+                frontCameraEnabled = true;
             }else if(cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
                 cameraId_back = i;
+                backCameraEnabled = true;
             }
-            cameraId_current = cameraId_back;
+
+            if(backCameraEnabled){
+                cameraId_current = cameraId_back;
+            }
 
         }
 
         Log.i("FRONT CAMERA :", String.valueOf(cameraId_front));
         Log.i("BACK CAMERA :", String.valueOf(cameraId_back));
     }
+
 
 
     private void takePicture() {
