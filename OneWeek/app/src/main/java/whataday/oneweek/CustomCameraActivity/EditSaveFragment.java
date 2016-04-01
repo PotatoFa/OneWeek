@@ -1,11 +1,14 @@
 package whataday.oneweek.CustomCameraActivity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -55,11 +58,14 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     ImageView image_save;
     AutoResizeEditText edit_save_text;
     ImageButton btn_save_send, btn_save_text, btn_save_cancel;
+    InputMethodManager inputMethodManager;
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         //initView > setViewSize > setEvent
         initView();
 
@@ -96,13 +102,6 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
             image_box.setLayoutParams(image_box_param);
             image_save.setImageBitmap(getBitmap);
 
-
-            /*
-            bottom_cover_param = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            bottom_cover_param.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            bottom_cover_param.addRule(RelativeLayout.BELOW, image_save.getId());
-            bottom_cover.setLayoutParams(bottom_cover_param);
-            */
         }else{
             //가로 이미지
             width = view_width;
@@ -135,9 +134,30 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     }
 
     private void setEvent(){
+
+        edit_save_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+            }
+        });
+
+
         btn_save_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.i("FOCUS", String.valueOf(edit_save_text.hasFocus()));
+
+                if (edit_save_text.hasFocus()) {
+                    inputMethodManager.hideSoftInputFromWindow(edit_save_text.getWindowToken(), 0);
+                    image_box.requestFocus();
+                } else {
+                    edit_save_text.requestFocus();
+                    inputMethodManager.showSoftInput(edit_save_text, 0);
+                }
+
+
+
                 //에디트텍스트 포커싱 / 키보드
             }
         });
@@ -145,7 +165,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                ((CameraFragmentActivity)getActivity()).onCancel(v);
+                ((CameraFragmentActivity) getActivity()).onCancel(v);
                 //캔슬버튼 백스택프래그먼트
 
             }

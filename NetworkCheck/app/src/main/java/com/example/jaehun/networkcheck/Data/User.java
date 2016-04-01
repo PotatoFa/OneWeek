@@ -6,14 +6,33 @@ import io.realm.RealmObject;
  * Created by jaehun on 16. 3. 25..
  */
 public class User extends RealmObject {
-    public String getUser_id() {
-        return user_id;
+    private String name;
+    private String number;
+
+
+    public String getMail() {
+        return mail;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
-    private String user_id;
+    private String mail;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 }

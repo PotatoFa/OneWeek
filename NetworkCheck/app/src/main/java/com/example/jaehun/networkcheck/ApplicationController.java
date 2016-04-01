@@ -5,8 +5,16 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import com.example.jaehun.networkcheck.Data.Match;
+import com.example.jaehun.networkcheck.Data.Test;
+import com.example.jaehun.networkcheck.Data.User;
+
+import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
+import io.realm.RealmSchema;
+import io.realm.annotations.RealmModule;
 
 /**
  * Created by jaehun on 16. 3. 22..
@@ -18,7 +26,6 @@ public class ApplicationController extends Application {
     public static ApplicationController getInstance() {return applicationController;}
     IntentFilter intentFilter;
 
-    Realm realm;
 
     @Override
     public void onCreate() {
@@ -26,14 +33,18 @@ public class ApplicationController extends Application {
         this.applicationController = this;
         networkChangeReceiver = null;
 
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this).build();
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+                .name("jaehun.realm")
+                .schemaVersion(4)
+                .setModules(new com.example.jaehun.networkcheck.Data.RealmModule())
+                .migration(migration)
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
 
         intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
 
-
     }
-
 
     public void startReceiver(){
 
@@ -59,5 +70,30 @@ public class ApplicationController extends Application {
         }
 
     }
+
+    RealmMigration migration = new RealmMigration() {
+        @Override
+        public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+
+            RealmSchema schema = realm.getSchema();
+
+            if (oldVersion == 0) {
+                schema.get("User")
+                        .addField("mail", String.class);
+                oldVersion++;
+            }
+            if (oldVersion == 1){
+                schema.get("User").addField("address", String.class);
+                oldVersion++;
+
+            }
+            if (oldVersion == 2){
+                schema.get("User").removeField("address");
+            }
+            if (oldVersion == 3){
+                schema.remove("Test");
+            }
+        }
+    };
 
 }

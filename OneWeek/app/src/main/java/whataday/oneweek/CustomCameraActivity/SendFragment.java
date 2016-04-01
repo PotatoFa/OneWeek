@@ -2,6 +2,9 @@ package whataday.oneweek.CustomCameraActivity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -81,11 +85,9 @@ public class SendFragment extends android.support.v4.app.Fragment {
 
         RealmResults<MatchedUser> results =
                 realm.where(MatchedUser.class).notEqualTo("id", "empty").findAll();
-        for(MatchedUser matchedUser : results){
+        for(final MatchedUser matchedUser : results){
 
-            RelativeLayout matched_user = (RelativeLayout) inflater.inflate(R.layout.send_matched_user, null);
-
-            matched_user.setBackgroundResource(R.drawable.test4);
+            final RelativeLayout matched_user = (RelativeLayout) inflater.inflate(R.layout.send_matched_user, null);
 
             RelativeLayout.LayoutParams item_param =
                     new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600);
@@ -93,10 +95,33 @@ public class SendFragment extends android.support.v4.app.Fragment {
             TextView user_country = (TextView) matched_user.findViewById(R.id.user_country);
             TextView user_city = (TextView) matched_user.findViewById(R.id.user_city);
 
+            final ImageView user_image = (ImageView) matched_user.findViewById(R.id.user_image);
+
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.test2);
+
+            user_image.setImageBitmap(bm);
+
             user_country.setText(matchedUser.getCountry());
             user_city.setText(matchedUser.getCity());
 
             user_list.addView(matched_user);
+
+            matched_user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("CLCLCLCL", matchedUser.getCity());
+
+                        ColorMatrix matrix = new ColorMatrix();
+                        matrix.setSaturation(0); //0 means grayscale
+                        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+                    if(user_image.getColorFilter() == null){
+                        user_image.setColorFilter(cf);
+                    }else{
+                        user_image.clearColorFilter();
+                    }
+
+                }
+            });
 
         }
     }

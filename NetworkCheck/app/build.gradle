@@ -26,4 +26,6 @@ dependencies {
     compile 'io.realm:realm-android:0.87.4'
     compile 'com.github.ParkSangGwon:TedPermission:v1.0.6'
 
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+
 }

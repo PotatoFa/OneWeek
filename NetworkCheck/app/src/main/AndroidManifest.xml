@@ -20,7 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PermissionActivity"></activity>
+        <activity android:name=".PermissionActivity" />
+        <activity android:name=".CheckActivity" />
+        <activity android:name=".ActivityGallery" />
+        <activity android:name=".TintActivity"></activity>
     </application>
 
 </manifest>
