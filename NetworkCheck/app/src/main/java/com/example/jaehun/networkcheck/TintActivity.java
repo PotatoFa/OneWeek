@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -144,8 +146,6 @@ public class TintActivity extends AppCompatActivity {
 
     int convert_color;
 
-
-
     int i = 0;
 
     public void changeTint(View view) {
@@ -170,6 +170,7 @@ public class TintActivity extends AppCompatActivity {
 
         testImage.setColorFilter(convert_color, PorterDuff.Mode.SCREEN);
 
+        testImage.setColorFilter(new LightingColorFilter());
     }
 
     Bitmap thumb_image;
@@ -234,10 +235,6 @@ public class TintActivity extends AppCompatActivity {
 
             filter.addView(thumbnail);
         }
-
-
-
-
     }
 
 
