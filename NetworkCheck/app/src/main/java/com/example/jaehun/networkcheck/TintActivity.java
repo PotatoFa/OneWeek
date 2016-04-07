@@ -170,7 +170,6 @@ public class TintActivity extends AppCompatActivity {
 
         testImage.setColorFilter(convert_color, PorterDuff.Mode.SCREEN);
 
-        testImage.setColorFilter(new LightingColorFilter());
     }
 
     Bitmap thumb_image;

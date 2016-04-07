@@ -95,6 +95,7 @@ public class SplashActivity extends SetFontActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+
         permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -112,6 +113,7 @@ public class SplashActivity extends SetFontActivity implements
             }
         };
 
+
         tedPermission = new TedPermission(getApplicationContext())
                 .setPermissionListener(permissionListener)
                 .setRationaleMessage("We need permission for location and write storage, camera")
@@ -121,6 +123,7 @@ public class SplashActivity extends SetFontActivity implements
                         , android.Manifest.permission.ACCESS_COARSE_LOCATION
                         , android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                         , Manifest.permission.CAMERA);
+
 
         delay_handler = new Handler(Looper.getMainLooper());
         delay_handler.postDelayed(changeImage, 30);

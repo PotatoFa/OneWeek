@@ -14,7 +14,8 @@ import whataday.oneweek.NetworkObject.User;
  */
 public interface ServerInterface {
 
-    @GET("/custom/login")
+
+    @GET("business/signin/login")
     void getLogin(@Query("id") String id,
                   @Query("token") String token,
                   Callback<Response> callback);
@@ -23,5 +24,7 @@ public interface ServerInterface {
     @Headers("Content-Type: application/json")
     @POST("/custom/regi")
     void postRegister(@Body User user, Callback<Response> callback);
+
+
 
 }

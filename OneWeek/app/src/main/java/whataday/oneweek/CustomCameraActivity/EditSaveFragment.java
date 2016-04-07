@@ -133,15 +133,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
         setEvent();
     }
 
-    private void setEvent(){
-
-        edit_save_text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-            }
-        });
-
-
+    private void setEvent() {
         btn_save_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,18 +141,14 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
                 Log.i("FOCUS", String.valueOf(edit_save_text.hasFocus()));
 
                 if (edit_save_text.hasFocus()) {
-                    inputMethodManager.hideSoftInputFromWindow(edit_save_text.getWindowToken(), 0);
-                    image_box.requestFocus();
+                    EditFocusOff();
                 } else {
-                    edit_save_text.requestFocus();
-                    inputMethodManager.showSoftInput(edit_save_text, 0);
+                    EditFocusOn();
                 }
-
-
-
                 //에디트텍스트 포커싱 / 키보드
             }
         });
+
         btn_save_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,14 +175,28 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
 
     }
 
-
-
-
     @Override
     public void onResume() {
         super.onResume();
+        EditFocusOn();
+
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        Log.i("Pause ", "pppp");
+        EditFocusOff();
+    }
+
+    private void EditFocusOn(){
+        edit_save_text.requestFocus();
+        inputMethodManager.showSoftInput(edit_save_text, 0);
+    }
+    private void EditFocusOff(){
+        inputMethodManager.hideSoftInputFromWindow(edit_save_text.getWindowToken(), 0);
+        image_box.requestFocus();
+    }
 
 }

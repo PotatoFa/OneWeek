@@ -39,20 +39,20 @@
 
 
     <Button
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Add"
-        android:onClick="add"/>
+        android:text="Add"/>
 
 
     <Button
+        android:id="@+id/view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="View"
-        android:onClick="view"/>
+        android:text="View"/>
 
 
 

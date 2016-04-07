@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.jaehun.networkcheck.Data.Test;
 import com.example.jaehun.networkcheck.Data.User;
+import com.example.jaehun.networkcheck.Network.NetworkActivity;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -17,10 +22,13 @@ public class MainActivity extends SetFontActiviry {
 
     Realm realm;
 
-    EditText name, number, mail;
     TextView text_view;
 
     String TAG = "LOG";
+
+    @Bind(R.id.mail) EditText mail;
+    @Bind(R.id.name) EditText name;
+    @Bind(R.id.number) EditText number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +39,13 @@ public class MainActivity extends SetFontActiviry {
 
         setContentView(R.layout.activity_main);
 
-        mail = (EditText)findViewById(R.id.mail);
-        name = (EditText)findViewById(R.id.name);
-        number = (EditText)findViewById(R.id.number);
         text_view = (TextView)findViewById(R.id.text_view);
-
-        startActivity(new Intent(getApplicationContext(), TintActivity.class));
-        finish();
 
 
     }
-    public void add(View view){
+
+    @OnClick(R.id.add)
+    public void add(){
 
         realm.beginTransaction();
 
@@ -57,7 +61,8 @@ public class MainActivity extends SetFontActiviry {
 
     }
 
-    public void view(View view){
+    @OnClick(R.id.view)
+    public void view(){
         text_view.setText("");
         RealmResults<User> results = realm.where(User.class).findAll();
         for(User user : results){
