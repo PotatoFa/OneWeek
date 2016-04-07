@@ -19,6 +19,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import whataday.oneweek.CustomView.AutoResizeTextView;
 import whataday.oneweek.Data.ImageData;
 import whataday.oneweek.R;
@@ -102,24 +105,29 @@ public class DetailRecyclerAdapter extends RecyclerView.Adapter {
 class ViewHolder extends RecyclerView.ViewHolder {
 
     private Context context;
-
-    private RelativeLayout detail_textbox, detail_layout;
-    private ImageView detail_background;
-    private TextView detail_time;
-    private AutoResizeTextView detail_text;
-
-
     private boolean visible = true;
+
+    @Bind(R.id.detail_layout) RelativeLayout detail_layout;
+    @Bind(R.id.detail_textbox) RelativeLayout detail_textbox;
+    @Bind(R.id.detail_background) ImageView detail_background;
+    @Bind(R.id.detail_text) AutoResizeTextView detail_text;
+    @Bind(R.id.detail_time) TextView detail_time;
+
+    @OnClick(R.id.detail_layout)
+    public void setDetail_layout(){
+        if (visible) {
+            visible = false;
+            detail_textbox.setVisibility(View.INVISIBLE);
+        } else {
+            visible = true;
+            detail_textbox.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     public ViewHolder(View view) {
         super(view);
-
-        detail_layout = (RelativeLayout)view.findViewById(R.id.detail_layout);
-        detail_textbox = (RelativeLayout)view.findViewById(R.id.detail_textbox);
-        detail_background = (ImageView)view.findViewById(R.id.detail_background);
-        detail_text = (AutoResizeTextView)view.findViewById(R.id.detail_text);
-        detail_time = (TextView)view.findViewById(R.id.detail_time);
-
+        ButterKnife.bind(this, view);
         this.context = view.getContext();
 
     }
@@ -132,17 +140,5 @@ class ViewHolder extends RecyclerView.ViewHolder {
         detail_text.setText(imageData.getText());
         detail_time.setText(string_time_date);
 
-        detail_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (visible) {
-                    visible = false;
-                    detail_textbox.setVisibility(View.INVISIBLE);
-                } else {
-                    visible = true;
-                    detail_textbox.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 }

@@ -138,9 +138,9 @@ public class SplashActivity extends BaseActivity implements
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
 
-                startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                //startActivity(new Intent(getApplicationContext(), AccountActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
-                //startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
                 finish();
 

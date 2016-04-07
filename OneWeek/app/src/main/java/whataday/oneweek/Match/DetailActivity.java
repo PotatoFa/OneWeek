@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -34,21 +35,21 @@ import whataday.oneweek.R;
 
 public class DetailActivity extends BaseActivity {
 
-    Toolbar toolbar_detail;
     Intent intent;
     Realm realm;
     String matchId;
     MatchedUser matchedUser;
 
-    boolean toolbar_visible = true;
     int scroll_y = 0;
 
 
+    @Bind(R.id.detail_refresh) PtrFrameLayout detail_refresh;
+    @Bind(R.id.toolbar_detail) Toolbar toolbar_detail;
+    @Bind(R.id.detail_toolbar_camera_icon) ImageView detail_toolbar_camera_icon;
+    @Bind(R.id.text_location) TextView text_location;
 
-    ImageView detail_toolbar_camera_icon;
-    TextView text_location;
-    PtrFrameLayout detail_refresh;
-    RecyclerView recyclerview_detail;
+    @Bind(R.id.recyclerview_detail) RecyclerView recyclerview_detail;
+
     LinearLayoutManager manager;
     DetailRecyclerAdapter adapter;
 
@@ -75,9 +76,8 @@ public class DetailActivity extends BaseActivity {
     }
 
 
+
     private void initView(){
-        recyclerview_detail = (RecyclerView)findViewById(R.id.recyclerview_detail);
-        detail_refresh = (PtrFrameLayout) findViewById(R.id.detail_refresh);
         setDetail_refresh();
         setRecyclerview_detail();
 
@@ -106,22 +106,20 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+
+
     private void setToolbar(){
-        toolbar_detail = (Toolbar)findViewById(R.id.toolbar_detail);
-        detail_toolbar_camera_icon = (ImageView)findViewById(R.id.detail_toolbar_camera_icon);
-        text_location = (TextView)findViewById(R.id.text_location);
         setSupportActionBar(toolbar_detail);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_back);
         text_location.setText(matchedUser.getCity() + ", " + matchedUser.getCountry());
     }
-    StoreHouseHeader header;
 
     private void setDetail_refresh(){
 
 
-        header = new StoreHouseHeader(getApplicationContext());
+        StoreHouseHeader header = new StoreHouseHeader(getApplicationContext());
         header.initWithPointList(getPointList());
 
         detail_refresh.setHeaderView(header);
@@ -188,9 +186,6 @@ public class DetailActivity extends BaseActivity {
             }
             */
         });
-
-
-
     }
 
     private void changeCameraVisible(){
@@ -198,32 +193,13 @@ public class DetailActivity extends BaseActivity {
             if(detail_toolbar_camera_icon.getVisibility() == View.VISIBLE){
                 ViewAnimation.alphaOut(detail_toolbar_camera_icon, 1000);
                 ViewAnimation.alphaIn(text_location, 1000);
-                /*
-                detail_toolbar_camera_icon.setVisibility(View.GONE);
-                text_location.setVisibility(View.VISIBLE);
-                */
             }
         }else{
             if(detail_toolbar_camera_icon.getVisibility() == View.GONE){
-
                 ViewAnimation.alphaOut(text_location, 1000);
                 ViewAnimation.alphaIn(detail_toolbar_camera_icon, 1000);
-                /*
-                text_location.setVisibility(View.GONE);
-                detail_toolbar_camera_icon.setVisibility(View.VISIBLE);
-                */
             }
         }
-    }
-
-    private void hide_toolbar(){
-        toolbar_detail.animate().translationY(-toolbar_detail.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-        toolbar_visible = false;
-    }
-
-    private void show_toolbar(){
-        toolbar_detail.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        toolbar_visible = true;
     }
 
     @Override
