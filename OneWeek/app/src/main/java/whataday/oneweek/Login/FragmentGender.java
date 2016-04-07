@@ -11,6 +11,10 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
@@ -34,84 +38,75 @@ public class FragmentGender extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.login_fragment_gender, container, false);
         this.rootView = rootView;
-
+        ButterKnife.bind(this, rootView);
         return rootView;
-
-
     }
-
-    Button btn_next_gender;
-    RadioGroup radio_group_gender;
-    RadioButton radio_man, radio_woman;
 
     String gender;
     boolean checked_flag = false;
     int currentCheck;
 
+
+    @Bind(R.id.btn_next_gender) Button btn_next_gender;
+    @OnClick(R.id.btn_next_gender)
+    public void next_gender(){
+        Toast.makeText(getActivity(), "save your gender : "+gender, Toast.LENGTH_SHORT).show();
+        ((JoinActivity) getActivity()).editor.putString("gender", gender);
+        ((JoinActivity) getActivity()).editor.commit();
+
+        ((JoinActivity) getActivity()).user.setGender(gender);
+
+        ((JoinActivity) getActivity()).nextPage();
+    }
+
+    @Bind(R.id.radio_man) RadioButton radio_man;
+    @Bind(R.id.radio_woman) RadioButton radio_woman;
+    @OnClick({ R.id.radio_man, R.id.radio_woman })
+    public void onRadioButtonClicked(RadioButton radioButton) {
+
+        if(!checked_flag){
+            checked_flag = true;
+            ViewAnimation.grayToYellow(btn_next_gender);
+            ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);
+            if(radioButton.getId() == R.id.radio_man){
+                ViewAnimation.startTransition(radio_man, 300);
+                currentCheck = R.id.radio_man;
+                gender = "man";
+            }else{
+                ViewAnimation.startTransition(radio_woman, 300);
+                currentCheck = R.id.radio_woman;
+                gender = "woman";
+
+            }
+        }
+
+        if(!(currentCheck == radioButton.getId())){
+            if(radioButton.getId() == R.id.radio_man){
+                currentCheck = R.id.radio_man;
+                gender = "man";
+                ViewAnimation.startTransition(radio_man, 300);
+                ViewAnimation.reverseTransition(radio_woman, 300);
+            }else{
+                currentCheck = R.id.radio_woman;
+                gender = "woman";
+                ViewAnimation.startTransition(radio_woman, 300);
+                ViewAnimation.reverseTransition(radio_man, 300);
+            }
+
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-        btn_next_gender = (Button) rootView.findViewById(R.id.btn_next_gender);
-        radio_man = (RadioButton) rootView.findViewById(R.id.radio_man);
-        radio_woman = (RadioButton) rootView.findViewById(R.id.radio_woman);
-
-        btn_next_gender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "save your gender : "+gender, Toast.LENGTH_SHORT).show();
-                ((JoinActivity) getActivity()).editor.putString("gender", gender);
-                ((JoinActivity) getActivity()).editor.commit();
-
-                ((JoinActivity) getActivity()).user.setGender(gender);
-
-                ((JoinActivity) getActivity()).nextPage();
-            }
-        });
-
-        radio_group_gender = (RadioGroup) rootView.findViewById(R.id.radio_group_gender);
+    }
 
 
-
-        radio_group_gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-
-                if(!checked_flag){
-                    checked_flag = true;
-                    ViewAnimation.grayToYellow(btn_next_gender);
-                    ViewAnimation.alphaOut(rootView.findViewById(R.id.background_image), 500);
-                    if(checkedId == R.id.radio_man){
-                        ViewAnimation.startTransition(radio_man, 300);
-                        currentCheck = R.id.radio_man;
-                        gender = "man";
-                    }else{
-                        ViewAnimation.startTransition(radio_woman, 300);
-                        currentCheck = R.id.radio_woman;
-                        gender = "woman";
-
-                    }
-                }
-
-                if(!(currentCheck == checkedId)){
-                    if(checkedId == R.id.radio_man){
-                        currentCheck = R.id.radio_man;
-                        gender = "man";
-                        ViewAnimation.startTransition(radio_man, 300);
-                        ViewAnimation.reverseTransition(radio_woman, 300);
-                    }else{
-                        currentCheck = R.id.radio_woman;
-                        gender = "woman";
-                        ViewAnimation.startTransition(radio_woman, 300);
-                        ViewAnimation.reverseTransition(radio_man, 300);
-                    }
-
-                }
-            }
-        });
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
 
     }
 

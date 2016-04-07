@@ -8,7 +8,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import whataday.oneweek.CustomView.NumberPicker;
 import whataday.oneweek.R;
 
 /**
@@ -36,37 +39,17 @@ public class FragmentAge extends android.support.v4.app.Fragment {
 
     }
 
-    Button btn_next_age;
-    whataday.oneweek.CustomView.NumberPicker year_picker, month_picker;
+    @Bind(R.id.year_picker) NumberPicker year_picker;
+    @Bind(R.id.month_picker) NumberPicker month_picker;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-        btn_next_age = (Button) rootView.findViewById(R.id.btn_next_age);
-        year_picker = (whataday.oneweek.CustomView.NumberPicker) rootView.findViewById(R.id.year_picker);
-        month_picker = (whataday.oneweek.CustomView.NumberPicker) rootView.findViewById(R.id.month_picker);
-
         initPicker();
-
-        btn_next_age.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), year_picker.getValue() + "/" + month_picker.getValue(), Toast.LENGTH_SHORT).show();
-
-                ((JoinActivity) getActivity()).editor.putInt("age", year_picker.getValue());
-                ((JoinActivity) getActivity()).editor.commit();
-
-                ((JoinActivity) getActivity()).user.setAge(String.valueOf(year_picker.getValue()));
-
-                ((JoinActivity) getActivity()).nextPage();
-            }
-        });
 
 
     }
-
 
     private void initPicker(){
         year_picker.setMinValue(1916);
@@ -79,4 +62,23 @@ public class FragmentAge extends android.support.v4.app.Fragment {
         month_picker.setWrapSelectorWheel(false);
     }
 
+
+    @OnClick(R.id.btn_next_age)
+    public void clickNext(){
+
+        Toast.makeText(getActivity(), year_picker.getValue() + "/" + month_picker.getValue(), Toast.LENGTH_SHORT).show();
+
+        ((JoinActivity) getActivity()).editor.putInt("age", year_picker.getValue());
+        ((JoinActivity) getActivity()).editor.commit();
+
+        ((JoinActivity) getActivity()).user.setAge(String.valueOf(year_picker.getValue()));
+
+        ((JoinActivity) getActivity()).nextPage();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }

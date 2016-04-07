@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.Login.AccountActivity;

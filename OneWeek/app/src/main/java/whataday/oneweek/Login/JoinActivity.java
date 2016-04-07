@@ -9,16 +9,14 @@ import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
+import butterknife.Bind;
 import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.NetworkObject.User;
 import whataday.oneweek.R;
 
 public class JoinActivity extends BaseActivity {
 
-    CustomViewPager viewpager_join;
-    CirclePageIndicator viewpager_indicator;
     JoinPagerAdapter joinPagerAdapter;
-    Toolbar toolbar_join;
     public SharedPreferences pref;
     public SharedPreferences.Editor editor;
 
@@ -36,7 +34,6 @@ public class JoinActivity extends BaseActivity {
 
         setIndicator();
 
-        toolbar_join = (Toolbar)findViewById(R.id.toolbar_join);
         setSupportActionBar(toolbar_join);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -45,10 +42,12 @@ public class JoinActivity extends BaseActivity {
 
     }
 
+    @Bind(R.id.toolbar_join) Toolbar toolbar_join;
+    @Bind(R.id.viewpager_join) CustomViewPager viewpager_join;
+    @Bind(R.id.viewpager_indicator) CirclePageIndicator viewpager_indicator;
+
     private void setIndicator(){
 
-        viewpager_join = (CustomViewPager) findViewById(R.id.viewpager_join);
-        viewpager_indicator = (CirclePageIndicator) findViewById(R.id.viewpager_indicator);
         joinPagerAdapter = new JoinPagerAdapter(getSupportFragmentManager());
         viewpager_join.setAdapter(joinPagerAdapter);
         viewpager_indicator.setViewPager(viewpager_join);

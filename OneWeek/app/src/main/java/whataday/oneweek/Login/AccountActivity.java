@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
