@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
 import whataday.oneweek.R;
 
 /**
@@ -30,6 +31,7 @@ public class FragmentAge extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.login_fragment_age, container, false);
         this.rootView = rootView;
+        ButterKnife.bind(this, rootView);
         return rootView;
 
     }

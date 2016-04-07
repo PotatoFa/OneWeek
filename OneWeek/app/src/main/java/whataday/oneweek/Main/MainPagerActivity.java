@@ -1,27 +1,20 @@
 package whataday.oneweek.Main;
 
-import android.graphics.Color;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
-import whataday.oneweek.CustomView.SetFontActivity;
-import whataday.oneweek.CustomView.ViewAnimation;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.Data.ImageData;
 import whataday.oneweek.Data.MatchedUser;
 import whataday.oneweek.Login.CustomViewPager;
 import whataday.oneweek.R;
 
-public class MainPagerActivity extends SetFontActivity {
+public class MainPagerActivity extends BaseActivity {
 
     CustomViewPager viewPager_main;
     Toolbar toolbar_main;

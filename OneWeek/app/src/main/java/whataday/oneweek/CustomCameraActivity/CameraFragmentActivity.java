@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
@@ -14,15 +12,13 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
-import java.io.File;
 import java.io.IOException;
 
-import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.R;
 
-public class CameraFragmentActivity extends SetFontActivity {
+public class CameraFragmentActivity extends BaseActivity {
 
     final static int PICK_IMAGE_REQUEST = 1;
     final static int CROP_IMAGE_REQUEST = 2;

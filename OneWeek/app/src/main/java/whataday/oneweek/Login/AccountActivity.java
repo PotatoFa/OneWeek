@@ -1,9 +1,7 @@
 package whataday.oneweek.Login;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,33 +20,29 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import butterknife.Bind;
+import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.Controller.ServerInterface;
-import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.CustomView.ViewAnimation;
 import whataday.oneweek.R;
 
-public class AccountActivity extends SetFontActivity implements
+public class AccountActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener{
 
     ServerInterface api;
@@ -58,20 +52,9 @@ public class AccountActivity extends SetFontActivity implements
     GoogleApiClient mGoogleApiClient;
     CallbackManager callbackManager;
 
-    Button btn_login_facebook, btn_login_google, btn_assign_exit, btn_assign_agree;
-    RelativeLayout box_assign, box_login_button;
-    ImageView background_image;
 
-
-    TextView text_asign;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "ACCOUNT_LOG";
-
-    private boolean isLogin_google;
-    private boolean isLogin_facebook;
-    private boolean isLogin_server;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,134 +77,82 @@ public class AccountActivity extends SetFontActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        initView();
-
-
-    }
-
-
-    private void initView(){
-
-        background_image = (ImageView)findViewById(R.id.background_image);
-
-        text_asign = (TextView)findViewById(R.id.text_asign);
-
-        box_assign = (RelativeLayout)findViewById(R.id.box_assign);
-        box_login_button = (RelativeLayout)findViewById(R.id.box_login_button);
-
-        btn_login_facebook = (Button)findViewById(R.id.btn_login_facebook);
-        btn_login_google = (Button)findViewById(R.id.btn_login_google);
-        btn_assign_exit = (Button)findViewById(R.id.btn_assign_exit);
-        btn_assign_agree = (Button)findViewById(R.id.btn_assign_agree);
-
-
-        setFacebook_login();
-        setGoogle_Login();
-
-
-
-        text_asign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TermsActivity.class));
-                overridePendingTransition(R.anim.down_top, R.anim.top_down);
-            }
-        });
-
-
-        btn_assign_exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        btn_assign_agree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ViewAnimation.slideToBottom(box_assign);
-                ViewAnimation.alphaIn(box_login_button, 1000);
-                ViewAnimation.alphaOut(background_image, 500);
-            }
-        });
 
     }
 
 
 
-    private void setFacebook_login(){
+    @Bind(R.id.box_assign) RelativeLayout box_assign;
+    @Bind(R.id.box_login_button) RelativeLayout box_login_button;
+    @Bind(R.id.background_image) ImageView background_image;
 
-        btn_login_facebook.setOnClickListener(new View.OnClickListener() {
+
+    @OnClick(R.id.text_asign)
+    public void click_asign_text(){
+        startActivity(new Intent(getApplicationContext(), TermsActivity.class));
+        overridePendingTransition(R.anim.down_top, R.anim.top_down);
+    }
+    @OnClick(R.id.btn_assign_exit)
+    public void click_exit(){
+        finish();
+    }
+    @OnClick(R.id.btn_assign_agree)
+    public void click_agree(){
+        ViewAnimation.slideToBottom(box_assign);
+        ViewAnimation.alphaIn(box_login_button, 1000);
+        ViewAnimation.alphaOut(background_image, 500);
+    }
+
+    @OnClick(R.id.btn_login_facebook)
+    public void login_facebook(){
+        LoginManager.getInstance().logInWithReadPermissions(AccountActivity.this, Arrays.asList("public_profile"));
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(AccountActivity.this, Arrays.asList("public_profile"));
-                LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        //로그인 제대로 성공했을때 데이터 요청
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        Log.i("GRAPH RESULT ::::: ", response.toString());
+            public void onSuccess(LoginResult loginResult) {
+                //로그인 제대로 성공했을때 데이터 요청
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.i("GRAPH RESULT ::::: ", response.toString());
 
-                                        try {
-                                            String id = (String) response.getJSONObject().get("id");
-                                            Log.i(TAG, "FacebookID:" + id.toString());
-                                            startActivity(new Intent(getApplicationContext(), JoinActivity.class));
-                                            finish();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id,name,email,gender");
-                        request.setParameters(parameters);
-                        request.executeAsync();
+                                try {
+                                    String id = (String) response.getJSONObject().get("id");
+                                    Log.i(TAG, "FacebookID:" + id.toString());
+                                    startActivity(new Intent(getApplicationContext(), JoinActivity.class));
+                                    finish();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender");
+                request.setParameters(parameters);
+                request.executeAsync();
 
-                    }
+            }
 
-                    @Override
-                    public void onCancel() {
-                        Log.i(TAG, "Facebook Cancel");
-                    }
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "Facebook Cancel");
+            }
 
-                    @Override
-                    public void onError(FacebookException error) {
+            @Override
+            public void onError(FacebookException error) {
 
 
-                        Log.i(TAG, "Facebook Error :" + error.toString());
-                    }
-                });
+                Log.i(TAG, "Facebook Error :" + error.toString());
             }
         });
-
-        setIsFacebookLogin();
-    }
-    private void setGoogle_Login(){
-        btn_login_google.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-                //signIn -> activityResult -> handlesignIn
-            }
-        });
     }
 
 
-
-    private void setIsFacebookLogin(){
-        if( AccessToken.getCurrentAccessToken() != null ){
-            Log.i("isLogin : ", "Facebook true");
-            isLogin_facebook = true;
-        }else{
-            Log.i("isLogin : ", "Facebook false");
-            isLogin_facebook = false;
-        }
+    @OnClick(R.id.btn_login_google)
+    public void login_google(){
+        signIn();
+        //signIn -> activityResult -> handlesignIn
     }
-
-
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);

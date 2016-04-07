@@ -1,14 +1,13 @@
 package whataday.oneweek.Login;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.R;
 
-public class TermsActivity extends SetFontActivity {
+public class TermsActivity extends BaseActivity {
 
     RelativeLayout btn_account_done;
 

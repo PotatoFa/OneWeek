@@ -1,6 +1,5 @@
 package whataday.oneweek;
 
-import android.*;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,14 +33,17 @@ import com.gun0912.tedpermission.TedPermission;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import whataday.oneweek.Controller.ApplicationController;
-import whataday.oneweek.CustomView.SetFontActivity;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.Login.AccountActivity;
 import whataday.oneweek.Main.MainPagerActivity;
 import whataday.oneweek.Service.NetworkUtil;
 
-public class SplashActivity extends SetFontActivity implements
+public class SplashActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener{
+
+    @Bind(R.id.image_splash) ImageView image_splash;
 
     private static final String TAG = "SPLASH_LOG";
 
@@ -54,16 +56,14 @@ public class SplashActivity extends SetFontActivity implements
     GoogleCloudMessaging gcm;
     GoogleApiClient mGoogleApiClient;
 
-
     private boolean isLogin_google;
     private boolean isLogin_facebook;
     private boolean isLogin_server;
 
-
     Intent intent;
 
     Handler delay_handler;
-    ImageView image_splash;
+
     int count = 0;
     int image_resource[] = { R.drawable.splash1, R.drawable.splash2, R.drawable.splash3 };
 
@@ -75,7 +75,6 @@ public class SplashActivity extends SetFontActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        image_splash = (ImageView)findViewById(R.id.image_splash);
 
         pref = getSharedPreferences("user", MODE_PRIVATE);
         editor = pref.edit();
@@ -138,14 +137,13 @@ public class SplashActivity extends SetFontActivity implements
             if( count > image_resource.length-1 ){
                 delay_handler.removeCallbacks(changeImage);
 
-                //startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+                startActivity(new Intent(getApplicationContext(), AccountActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CustomCameraAcivity.class));
-                startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
+                //startActivity(new Intent(getApplicationContext(), MainPagerActivity.class));
                 //startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
                 finish();
 
                 //tedPermission.check();
-
                 //registerInBackground();
 
             }else{

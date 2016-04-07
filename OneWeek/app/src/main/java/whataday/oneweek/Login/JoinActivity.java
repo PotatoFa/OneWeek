@@ -1,23 +1,19 @@
 package whataday.oneweek.Login;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.tsengvn.typekit.TypekitContextWrapper;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import whataday.oneweek.CustomView.SetFontActivity;
-import whataday.oneweek.Data.UserInfo;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.NetworkObject.User;
 import whataday.oneweek.R;
 
-public class JoinActivity extends SetFontActivity {
+public class JoinActivity extends BaseActivity {
 
     CustomViewPager viewpager_join;
     CirclePageIndicator viewpager_indicator;
