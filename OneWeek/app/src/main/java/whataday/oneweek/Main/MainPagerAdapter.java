@@ -24,10 +24,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
                 return MenuFragment.newInstance();
             case 1: // Fragment # 0 - This will show FirstFragment different title
                 return MatchFragment.newInstance();
-            /*
-            case 2: // Fragment # 1 - This will show SecondFragment
-                return MatchFragment.newInstance();
-            */
             default:
                 return null;
         }

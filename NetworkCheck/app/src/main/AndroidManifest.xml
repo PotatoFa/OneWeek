@@ -24,7 +24,9 @@
         <activity android:name=".CheckActivity" />
         <activity android:name=".ActivityGallery" />
         <activity android:name=".TintActivity" />
-        <activity android:name=".Network.NetworkActivity"></activity>
+        <activity android:name=".Network.NetworkActivity" />
+        <activity android:name=".ImageActivity" />
+        <activity android:name=".ImageTestActivity"></activity>
     </application>
 
 </manifest>

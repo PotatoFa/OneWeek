@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import com.example.jaehun.networkcheck.Data.Image;
 import com.example.jaehun.networkcheck.Data.Match;
 import com.example.jaehun.networkcheck.Data.Test;
 import com.example.jaehun.networkcheck.Data.User;
@@ -35,7 +36,7 @@ public class ApplicationController extends Application {
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
                 .name("jaehun.realm")
-                .schemaVersion(4)
+                .schemaVersion(5)
                 .setModules(new com.example.jaehun.networkcheck.Data.RealmModule())
                 .migration(migration)
                 .build();
@@ -83,15 +84,23 @@ public class ApplicationController extends Application {
                 oldVersion++;
             }
             if (oldVersion == 1){
-                schema.get("User").addField("address", String.class);
+                schema.get("User")
+                        .addField("address", String.class);
                 oldVersion++;
-
             }
             if (oldVersion == 2){
-                schema.get("User").removeField("address");
+                schema.get("User")
+                        .removeField("address");
+                oldVersion++;
             }
             if (oldVersion == 3){
                 schema.remove("Test");
+                oldVersion++;
+            }
+            if (oldVersion == 4){
+                schema.create("Image")
+                .addField("binary", Byte[].class);
+                oldVersion++;
             }
         }
     };

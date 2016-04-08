@@ -455,6 +455,10 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                         , matrixFront, true);
             }
 
+            bitmap.recycle();
+
+            ((CameraFragmentActivity)getActivity()).bitmap = bitmap_resize;
+
 
             Log.i("resize width :", String.valueOf(bitmap_resize.getWidth()));
 

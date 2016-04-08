@@ -32,6 +32,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -53,14 +56,10 @@ import whataday.oneweek.R;
  */
 public class MatchFragment extends android.support.v4.app.Fragment {
 
-    PtrFrameLayout store_house_ptr_frame;
     StoreHouseHeader header;
 
     Handler handler;
     View rootView;
-
-    MyScrollView match_scroll;
-    LinearLayout match_vertical;
 
     int view_width, view_height;
     int[] content_height = new int[3];
@@ -101,9 +100,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     RelativeLayout.LayoutParams[] time_textview_param = new RelativeLayout.LayoutParams[3];
     RelativeLayout.LayoutParams[] box_text_param = new RelativeLayout.LayoutParams[3];
 
-
-    RelativeLayout toolbar_match;
-
     Realm realm;
 
     public static MatchFragment newInstance() {
@@ -118,6 +114,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.main_fragment_match, container, false);
         this.rootView = rootView;
+        ButterKnife.bind(this, rootView);
         return rootView;
     }
 
@@ -146,11 +143,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     }
 
-    String set_matchid;
     Intent intent;
-    ImageView toolbar_camera_icon;
-    RelativeLayout btn_match_menu;
-
 
     private void addEmptyView(int i){
 
@@ -262,9 +255,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
     }
     private void addMatchingView(int i){
 
-        set_matchid = matchedUsers.get(i).getId();
-
-
         box_text[i] = new RelativeLayout(getActivity());
         box_text[i].setGravity(Gravity.CENTER);
         box_text[i].setLayoutParams(box_text_param[i]);
@@ -319,18 +309,21 @@ public class MatchFragment extends android.support.v4.app.Fragment {
 
     }
 
+
+    @OnClick(R.id.btn_match_menu)
+    public void setBtn_match_menu(){
+        ((MainPagerActivity)getActivity()).changeViewPager(0);
+    }
+
+
+    @Bind(R.id.toolbar_match) RelativeLayout toolbar_match;
+    @Bind(R.id.match_scroll) MyScrollView match_scroll;
+    @Bind(R.id.match_vertical) LinearLayout match_vertical;
+    @Bind(R.id.store_house_ptr_frame) PtrFrameLayout store_house_ptr_frame;
+    @Bind(R.id.toolbar_camera_icon)ImageView toolbar_camera_icon;
+
+
     private void initView(){
-
-        store_house_ptr_frame = (PtrFrameLayout) rootView.findViewById(R.id.store_house_ptr_frame);
-        toolbar_camera_icon = (ImageView) rootView.findViewById(R.id.toolbar_camera_icon);
-        btn_match_menu = (RelativeLayout) rootView.findViewById(R.id.btn_match_menu);
-
-        btn_match_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainPagerActivity)getActivity()).changeViewPager(0);
-            }
-        });
 
         header = new StoreHouseHeader(getActivity().getApplicationContext());
         header.initWithPointList(getPointList());
@@ -344,7 +337,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
                 return PtrDefaultHandler.checkContentCanBePulledDown(frame, match_scroll, header);
             }
-
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 //리프레시 시작 및 끝
@@ -355,8 +347,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     public void run() {
                         store_house_ptr_frame.refreshComplete();
                         getActivity().startActivity(new Intent(getActivity(), CameraFragmentActivity.class));
-                        //getActivity().startActivity(new Intent(getActivity(), CameraActivity.class));
-
                         getActivity().overridePendingTransition(R.anim.down_top, R.anim.top_down);
                     }
                 }, 100);
@@ -365,12 +355,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 //리프레시 완료
             }
         });
-
-        toolbar_match = (RelativeLayout)rootView.findViewById(R.id.toolbar_match);
-        match_scroll = (MyScrollView)rootView.findViewById(R.id.match_scroll);
-        match_vertical = (LinearLayout)rootView.findViewById(R.id.match_vertical);
-
-
 
         focus_item = 0;
 
@@ -443,33 +427,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 Log.i("scroll ::", String.valueOf(scroll_max_y));
             }
         });
-        match_scroll.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if(!toolbar_visible){
-                        show_toolbar();
-                    }
-                    match_scroll.startScrollerTask();
-                }else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if(toolbar_visible){
-                        hide_toolbar();
-                    }
-                    match_scroll.startScrollerTask();
-                }
-                return false;
-            }
-        });
-
-        match_scroll.setOnScrollStoppedListener(new MyScrollView.OnScrollStoppedListener() {
-            @Override
-            public void onScrollStopped() {
-                if (!toolbar_visible) {
-                    //show_toolbar();
-
-                }
-            }
-        });
 
         match_scroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
 
@@ -478,24 +435,13 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                 pre_y = current_y;
                 current_y = match_scroll.getScrollY();
 
-                if (current_y < 40) {
+                if (current_y < 60) {
                     if(!(toolbar_camera_icon.getVisibility() == View.VISIBLE)){
                         ViewAnimation.alphaIn(toolbar_camera_icon, 300);
                     }
                 }else {
                     if(toolbar_camera_icon.getVisibility() == View.VISIBLE){
                         ViewAnimation.alphaOut(toolbar_camera_icon, 300);
-                    }
-                }
-
-                if (toolbar_visible) {
-                    //툴바가 보여지고 있을때
-                    scrolled_distance += current_y - pre_y;
-                    if (Math.abs(scrolled_distance) > HIDE_THRESHOLD) {
-                        //이동시킨 스크롤 값이 문턱치 이상일때
-                        //hide_toolbar();
-                        scrolled_distance = 0;
-                        //툴바를 숨기고 이동거리를 초기화. -> 툴바가 보여지는 부분은 stopListener
                     }
                 }
 
@@ -537,9 +483,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
                     dark_alpha[i] = convert_float_map(content_height[i], view_width / 2, view_width, max_alpha, min_alpha);
                     imageView_background_dark[i].setAlpha(dark_alpha[i]);
 
-
                 }
-                Log.i("FOCUS :", String.valueOf(current_y));
                 hide_tiem_text(focus_item);
             }
         });
@@ -547,7 +491,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         setClick();
 
     }
-
 
     private void setClick(){
         content_layout[0].setOnClickListener(new View.OnClickListener() {
@@ -575,14 +518,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             }
         });
     }
-    private void hide_toolbar(){
-        toolbar_match.animate().translationY(-toolbar_match.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-        toolbar_visible = false;
-    }
-    private void show_toolbar(){
-        toolbar_match.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        toolbar_visible = true;
-    }
     private void hide_tiem_text(int focus){
 
         for(int i = 0; i < 3; i++){
@@ -605,7 +540,6 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             }
         }
     }
-
     private Runnable timer_text = new Runnable() {
         @Override
         public void run() {
@@ -642,22 +576,8 @@ public class MatchFragment extends android.support.v4.app.Fragment {
             }
             resize_background[i] = Bitmap.createScaledBitmap(bitmap_image, view_width, view_width, true);
 
+            bitmap_image.recycle();
         }
-    }
-
-    @Override
-    public void onPause() {
-        if (handler != null)
-            handler.removeCallbacks(timer_text);
-
-        super.onPause();
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (handler != null)
-            handler.post(timer_text);
     }
 
     private ArrayList<float[]> getPointList() {
@@ -737,4 +657,22 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         return list;
     }
 
+    @Override
+    public void onPause() {
+        if (handler != null)
+            handler.removeCallbacks(timer_text);
+        super.onPause();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (handler != null)
+            handler.post(timer_text);
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }

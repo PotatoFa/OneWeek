@@ -26,6 +26,8 @@ public class CameraFragmentActivity extends BaseActivity {
 
     int view_width;
 
+    public Bitmap bitmap;
+
 
 
     @Override

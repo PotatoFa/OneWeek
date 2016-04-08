@@ -130,8 +130,6 @@ public class SplashActivity extends BaseActivity implements
 
     }
 
-
-
     Runnable changeImage = new Runnable() {
         @Override
         public void run() {
@@ -350,4 +348,10 @@ public class SplashActivity extends BaseActivity implements
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
 }

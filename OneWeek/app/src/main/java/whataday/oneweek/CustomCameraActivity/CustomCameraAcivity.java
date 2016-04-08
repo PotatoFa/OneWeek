@@ -31,12 +31,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import butterknife.Bind;
+import butterknife.OnClick;
+import whataday.oneweek.CustomView.BaseActivity;
 import whataday.oneweek.R;
 
-public class CustomCameraAcivity extends AppCompatActivity {
-
-    RelativeLayout top_cover, bottom_cover;
-    ImageView capture_image_button;
+public class CustomCameraAcivity extends BaseActivity {
 
     String TAG = "CAMERA TEST : ";
 
@@ -69,14 +69,6 @@ public class CustomCameraAcivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        /*
-
-            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
-                    top_height, 0,
-                    view_height-(top_height+bottom_param.height), view_width
-                    ,rotate_matrix, true);
-         */
-
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         view_width = dm.widthPixels;
         view_height = dm.heightPixels;
@@ -90,26 +82,14 @@ public class CustomCameraAcivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_custom_camera_acivity);
 
-        top_cover = (RelativeLayout) findViewById(R.id.top_cover);
-        bottom_cover = (RelativeLayout) findViewById(R.id.bottom_cover);
-        capture_image_button = (ImageView) findViewById(R.id.capture_image_button);
-
-        capture_image_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                takePicture();
-            }
-        });
-
-        //setCamera();
-
         resizeBottomCover(bottom_height);
 
     }
 
-
-
-    private void takePicture() {
+    @Bind(R.id.top_cover)RelativeLayout top_cover;
+    @Bind(R.id.bottom_cover)RelativeLayout bottom_cover;
+    @OnClick(R.id.capture_image_button)
+    public void setCapture_image_button(){
         mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
     }
 
@@ -131,13 +111,9 @@ public class CustomCameraAcivity extends AppCompatActivity {
                 bottom_cover.setLayoutParams(bottom_param);
             }
         }
-        Log.d("Bottom :",String.valueOf(bottom_param.height));
-
-
-
-
-
+        Log.d("Bottom :", String.valueOf(bottom_param.height));
     }
+
     private void setCamera(){
 
         try{
@@ -150,10 +126,150 @@ public class CustomCameraAcivity extends AppCompatActivity {
             mCameraView = new CameraView(this, mCamera);//create a SurfaceView to show camera data
             FrameLayout camera_view = (FrameLayout)findViewById(R.id.camera_view);
             camera_view.addView(mCameraView);//add the SurfaceView to the layout
-
         }
     }
 
+    private Drawable getRotatedImage(int drawableId, int degrees) {
+        Bitmap original = BitmapFactory.decodeResource(getResources(), drawableId);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+
+        Bitmap rotated = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), matrix, true);
+        return new BitmapDrawable(rotated);
+    }
+
+    public Matrix rotate_matrix;
+    private void setRotate_matrix(int rotate){
+        rotate_matrix = new Matrix();
+        rotate_matrix.postRotate(rotate);
+    }
+
+    private void changeRotation(int orientation, int lastOrientation) {
+        switch (orientation) {
+            case ORIENTATION_PORTRAIT_NORMAL:
+                //TODO set button  rotation 270, 0, 90, 180
+                //mSnapButton.setImageDrawable(getRotatedImage(android.R.drawable.ic_menu_camera, 270));
+                Log.v("CameraActivity", "Orientation = 90");
+                setRotate_matrix(90);
+                break;
+            case ORIENTATION_LANDSCAPE_NORMAL:
+                Log.v("CameraActivity", "Orientation = 0");
+                setRotate_matrix(0);
+                break;
+            case ORIENTATION_PORTRAIT_INVERTED:
+                Log.v("CameraActivity", "Orientation = 270");
+                setRotate_matrix(270);
+                break;
+            case ORIENTATION_LANDSCAPE_INVERTED:
+                Log.v("CameraActivity", "Orientation = 180");
+                setRotate_matrix(180);
+                break;
+        }
+    }
+
+    Camera.PictureCallback rawCallback = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+
+        }
+    };
+    Camera.ShutterCallback shutterCallback = new Camera.ShutterCallback() {
+        @Override
+        public void onShutter() {
+
+        }
+    };
+    Camera.PictureCallback jpegCallback = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
+                    data.length);
+
+            Log.i("bitmap width", String.valueOf(bitmap.getWidth()));
+            Log.i("bitmap heigh", String.valueOf(bitmap.getHeight()));
+
+
+            Log.i("bitmap top_height", String.valueOf(top_height));
+            Log.i("bitmap view_height", String.valueOf(view_height));
+            Log.i("bitmap bottom_param", String.valueOf(bottom_param.height));
+            Log.i("bitmap view_width", String.valueOf(view_width));
+
+            int bitmap_top_cover =
+                    convert_int_map(top_height, 0, view_height, 0, bitmap.getWidth());
+
+            Log.i("bitmap top cover :", String.valueOf(bitmap_top_cover));
+
+
+            int bitmap_bottom_cover =
+                    convert_int_map(bottom_param.height, 0, view_height, 0, bitmap.getWidth());
+
+            Log.i("bitmap bottom cover :", String.valueOf(bitmap_bottom_cover));
+
+            int bitmap_resize_width =
+                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover);
+
+            int bitmap_resize_height =
+                    bitmap_resize_width * 3 / 4;
+
+            int crop_height = bitmap.getHeight() - bitmap_resize_height;
+            int crop_start_height = crop_height/2;
+            int crop_stop_height = bitmap.getHeight() - crop_start_height;
+            Log.i("crop_start_height :", String.valueOf(crop_start_height)+ " / "+ String.valueOf(crop_stop_height));
+
+
+            Log.i("resize size :", String.valueOf(bitmap_resize_width) + "/" + String.valueOf(bitmap_resize_height));
+
+
+            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
+                    bitmap_top_cover, crop_height/2,
+                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover), bitmap_resize_height
+                    , rotate_matrix, true);
+
+
+            Log.i("resize width :", String.valueOf(bitmap_resize.getWidth()));
+
+            Log.i("resize height :", String.valueOf(bitmap_resize.getHeight()));
+
+            bitmap.recycle();
+
+            /*
+
+            File path = new File(Dir_path);
+            if(!path.exists()){
+                path.mkdir();
+                Log.i("DIR", "CREATE");
+                Log.i("DIR PATH", Dir_path);
+                //저장경로 폴더가 존재하지 않으면 생성.
+            }
+
+            File image_file = new File(Dir_path+String.format(
+                    "/%d.jpg", System.currentTimeMillis()));
+
+            if(!image_file.exists()){
+                try {
+                    FileOutputStream outStream = new FileOutputStream(image_file);
+                    bitmap_resize.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+                    Log.d("Image path : ", image_file.getPath());
+
+                    outStream.close();
+                    Log.d("Log", "onPictureTaken - wrote bytes: " + data.length);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                }
+                Log.d("Log", "onPictureTaken - jpeg");
+            }
+*/
+        }
+    };
+
+
+    int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
+        return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
+    }
 
 
     @Override
@@ -214,149 +330,4 @@ public class CustomCameraAcivity extends AppCompatActivity {
         }
     }
 
-
-    private Drawable getRotatedImage(int drawableId, int degrees) {
-        Bitmap original = BitmapFactory.decodeResource(getResources(), drawableId);
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degrees);
-
-        Bitmap rotated = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), matrix, true);
-        return new BitmapDrawable(rotated);
-    }
-    public Matrix rotate_matrix;
-
-    private void setRotate_matrix(int rotate){
-        rotate_matrix = new Matrix();
-        rotate_matrix.postRotate(rotate);
-    }
-
-    private void changeRotation(int orientation, int lastOrientation) {
-        switch (orientation) {
-            case ORIENTATION_PORTRAIT_NORMAL:
-                //TODO set button  rotation 270, 0, 90, 180
-                //mSnapButton.setImageDrawable(getRotatedImage(android.R.drawable.ic_menu_camera, 270));
-                Log.v("CameraActivity", "Orientation = 90");
-                setRotate_matrix(90);
-                break;
-            case ORIENTATION_LANDSCAPE_NORMAL:
-                Log.v("CameraActivity", "Orientation = 0");
-                setRotate_matrix(0);
-                break;
-            case ORIENTATION_PORTRAIT_INVERTED:
-                Log.v("CameraActivity", "Orientation = 270");
-                setRotate_matrix(270);
-                break;
-            case ORIENTATION_LANDSCAPE_INVERTED:
-                Log.v("CameraActivity", "Orientation = 180");
-                setRotate_matrix(180);
-                break;
-        }
-    }
-
-
-
-
-    Camera.PictureCallback rawCallback = new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-
-        }
-    };
-    Camera.ShutterCallback shutterCallback = new Camera.ShutterCallback() {
-        @Override
-        public void onShutter() {
-
-        }
-    };
-    Camera.PictureCallback jpegCallback = new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0,
-                    data.length);
-
-
-            Log.i("bitmap width", String.valueOf(bitmap.getWidth()));
-            Log.i("bitmap heigh", String.valueOf(bitmap.getHeight()));
-
-
-            Log.i("bitmap top_height", String.valueOf(top_height));
-            Log.i("bitmap view_height", String.valueOf(view_height));
-            Log.i("bitmap bottom_param", String.valueOf(bottom_param.height));
-            Log.i("bitmap view_width", String.valueOf(view_width));
-
-
-            int bitmap_top_cover =
-                    convert_int_map(top_height, 0, view_height, 0, bitmap.getWidth());
-
-            Log.i("bitmap top cover :", String.valueOf(bitmap_top_cover));
-
-
-            int bitmap_bottom_cover =
-                    convert_int_map(bottom_param.height, 0, view_height, 0, bitmap.getWidth());
-
-            Log.i("bitmap bottom cover :", String.valueOf(bitmap_bottom_cover));
-
-            int bitmap_resize_width =
-                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover);
-
-            int bitmap_resize_height =
-                    bitmap_resize_width * 3 / 4;
-
-            int crop_height = bitmap.getHeight() - bitmap_resize_height;
-            int crop_start_height = crop_height/2;
-            int crop_stop_height = bitmap.getHeight() - crop_start_height;
-            Log.i("crop_start_height :", String.valueOf(crop_start_height)+ " / "+ String.valueOf(crop_stop_height));
-
-
-            Log.i("resize size :", String.valueOf(bitmap_resize_width) + "/" + String.valueOf(bitmap_resize_height));
-
-
-            Bitmap bitmap_resize = Bitmap.createBitmap(bitmap,
-                    bitmap_top_cover, crop_height/2,
-                    bitmap.getWidth() - (bitmap_top_cover + bitmap_bottom_cover), bitmap_resize_height
-                    , rotate_matrix, true);
-
-            Log.i("resize width :", String.valueOf(bitmap_resize.getWidth()));
-
-            Log.i("resize height :", String.valueOf(bitmap_resize.getHeight()));
-
-            /*
-
-            File path = new File(Dir_path);
-            if(!path.exists()){
-                path.mkdir();
-                Log.i("DIR", "CREATE");
-                Log.i("DIR PATH", Dir_path);
-                //저장경로 폴더가 존재하지 않으면 생성.
-            }
-
-            File image_file = new File(Dir_path+String.format(
-                    "/%d.jpg", System.currentTimeMillis()));
-
-            if(!image_file.exists()){
-                try {
-                    FileOutputStream outStream = new FileOutputStream(image_file);
-                    bitmap_resize.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                    Log.d("Image path : ", image_file.getPath());
-
-                    outStream.close();
-                    Log.d("Log", "onPictureTaken - wrote bytes: " + data.length);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                }
-                Log.d("Log", "onPictureTaken - jpeg");
-            }
-*/
-        }
-    };
-
-
-    int convert_int_map(int input, int input_min, int input_max, int convert_min, int convert_max){
-        return ( ((input - input_min) * (convert_max - convert_min)) / (input_max - input_min) ) + convert_min;
-    }
 }

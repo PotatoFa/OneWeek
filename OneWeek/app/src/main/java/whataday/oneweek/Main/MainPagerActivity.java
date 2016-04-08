@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 
+import butterknife.Bind;
 import io.realm.Realm;
 import whataday.oneweek.Controller.ApplicationController;
 import whataday.oneweek.CustomView.BaseActivity;
@@ -16,11 +17,7 @@ import whataday.oneweek.R;
 
 public class MainPagerActivity extends BaseActivity {
 
-    CustomViewPager viewPager_main;
-    Toolbar toolbar_main;
     MainPagerAdapter mainPagerAdapter;
-    ImageView toolbar_camera_icon;
-
     Realm realm;
 
 
@@ -28,44 +25,27 @@ public class MainPagerActivity extends BaseActivity {
             "Merry christmassdgsdgsdgs", "Wet tissue shitshitshit", "Good morning",
             "Shtttttt", "Hello world", "LuckyLucky dayday", "My job"};
 
+    @Bind(R.id.viewpager_main) CustomViewPager viewpager_main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_pager);
-        viewPager_main = (CustomViewPager)findViewById(R.id.viewpager_main);
 
         realm = ApplicationController.getRealm();
         setTestData();
 
-        //setToolbar();
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-        viewPager_main.setAdapter(mainPagerAdapter);
-        viewPager_main.setScrollDuration(500);
-        viewPager_main.setCurrentItem(1);
+        viewpager_main.setAdapter(mainPagerAdapter);
+        viewpager_main.setScrollDuration(500);
+        viewpager_main.setCurrentItem(1);
 
-        viewPager_main.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.i("pagechange ", "scrolled "+position);
-                //changeToolbar(position);
-            }
-            @Override
-            public void onPageSelected(int position) {
-                Log.i("pagechange ", "selected "+position);
-
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                Log.i("pagechange ", "state "+state);
-            }
-        });
     }
 
 
     public void changeViewPager(int i){
-        viewPager_main.setCurrentItem(i);
+        viewpager_main.setCurrentItem(i);
     }
-
 
     private void setTestData(){
         realm.beginTransaction();

@@ -36,8 +36,10 @@ public class MainActivity extends SetFontActiviry {
         Log.i(TAG, "ONCREATE");
         realm = Realm.getDefaultInstance();
 
-
         setContentView(R.layout.activity_main);
+
+        startActivity(new Intent(getApplicationContext(), ImageActivity.class));
+        finish();
 
         text_view = (TextView)findViewById(R.id.text_view);
 
