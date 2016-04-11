@@ -35,9 +35,8 @@ public class SendFragment extends android.support.v4.app.Fragment {
     static Bitmap getBitmap;
 
 
-    public static SendFragment newInstance(Bitmap bitmap) {
+    public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
-        getBitmap = bitmap;
 
         return sendFragment;
     }
@@ -45,6 +44,7 @@ public class SendFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getBitmap = ((CameraFragmentActivity) getActivity()).bitmap;
     }
 
 

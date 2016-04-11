@@ -1,16 +1,21 @@
 package com.example.jaehun.networkcheck;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.jaehun.networkcheck.Data.Image;
+import com.facebook.common.util.UriUtil;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.io.ByteArrayOutputStream;
 
@@ -58,23 +63,30 @@ public class ImageActivity extends AppCompatActivity {
     public void recycle(){
 
         imageView.setImageBitmap(null);
-        bmp.recycle();
+//        bmp.recycle();
         //recycleBitmap(imageView);
         Log.i("Image Test : ", "recycle");
 
     }
 
     Bitmap bmp;
+    Uri uri;
 
     @OnClick(R.id.setimage)
     public void setimage(){
 
+
         Log.i("Image Test : ", "setImage");
         byte[] byteArray = realm.where(Image.class).findFirst().getBinary();
+        /*
         bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         Log.i("Image Test : ", String.valueOf(byteArray.length));
         imageView.setImageBitmap(bmp);
+        */
 
+        Glide.with(this).load(byteArray).into(imageView);
+
+        //Glide.with(this).load(R.drawable.splash1).into(imageView);
 
     }
 
@@ -91,6 +103,8 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
+
         setContentView(R.layout.activity_image);
         ButterKnife.bind(this);
 
@@ -99,6 +113,7 @@ public class ImageActivity extends AppCompatActivity {
 
     }
 
+    /*
     private static void recycleBitmap(ImageView iv) {
         Drawable d = iv.getDrawable();
         if (d instanceof BitmapDrawable) {
@@ -118,4 +133,5 @@ public class ImageActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
+    */
 }

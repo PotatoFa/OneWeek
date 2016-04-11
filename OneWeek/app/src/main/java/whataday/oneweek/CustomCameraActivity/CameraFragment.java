@@ -455,14 +455,14 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                         , matrixFront, true);
             }
 
-            bitmap.recycle();
-
             ((CameraFragmentActivity)getActivity()).bitmap = bitmap_resize;
 
+            bitmap.recycle();
 
             Log.i("resize width :", String.valueOf(bitmap_resize.getWidth()));
 
             Log.i("resize height :", String.valueOf(bitmap_resize.getHeight()));
+            bitmap_resize.recycle();
 
 
             getFragmentManager()
@@ -470,7 +470,7 @@ public class CameraFragment extends android.support.v4.app.Fragment {
                     .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
                     .replace(
                             R.id.custom_fragment_container,
-                            EditSaveFragment.newInstance(bitmap_resize, view_width))
+                            EditSaveFragment.newInstance(view_width))
                     .addToBackStack(null)
                     .commit();
 

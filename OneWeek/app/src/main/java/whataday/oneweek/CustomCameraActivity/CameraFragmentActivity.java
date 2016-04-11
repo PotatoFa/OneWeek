@@ -28,8 +28,6 @@ public class CameraFragmentActivity extends BaseActivity {
 
     public Bitmap bitmap;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.squarecamera__CameraFullScreenTheme);
@@ -105,7 +103,6 @@ public class CameraFragmentActivity extends BaseActivity {
 
                     Bitmap rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-                    bitmap.recycle();
 
                     Log.d("PATH :", uri.getPath());
 
@@ -131,6 +128,9 @@ public class CameraFragmentActivity extends BaseActivity {
 
                     startActivityForResult(intent, CROP_IMAGE_REQUEST);
 
+                    bitmap.recycle();
+                    rotate_bitmap.recycle();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,12 +139,12 @@ public class CameraFragmentActivity extends BaseActivity {
             case CROP_IMAGE_REQUEST: {
                 Uri cropUri = data.getData();
                 try {
-                    Bitmap cropBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), cropUri);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), cropUri);
 
                     getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
-                            .replace(R.id.custom_fragment_container, EditSaveFragment.newInstance(cropBitmap, view_width))
+                            .replace(R.id.custom_fragment_container, EditSaveFragment.newInstance(view_width))
                             .addToBackStack(null).commitAllowingStateLoss();
 
                 }catch (Exception e){
@@ -168,5 +168,14 @@ public class CameraFragmentActivity extends BaseActivity {
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
+
+
+    @Override
+    protected void onDestroy() {
+        bitmap.recycle();
+        bitmap = null;
+        super.onDestroy();
+    }
+
 
 }

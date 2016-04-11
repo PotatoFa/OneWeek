@@ -31,7 +31,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
 
-
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
@@ -46,6 +45,7 @@ dependencies {
     compile 'io.realm:realm-android:0.87.4'
 
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.githang:viewpagerindicator:2.4.2@aar'
@@ -53,7 +53,6 @@ dependencies {
     compile 'com.tsengvn:Typekit:1.0.0'
 
     compile 'com.github.ParkSangGwon:TedPermission:v1.0.6'
-
 
 }
 

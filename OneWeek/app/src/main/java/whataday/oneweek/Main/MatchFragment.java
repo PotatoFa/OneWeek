@@ -131,7 +131,7 @@ public class MatchFragment extends android.support.v4.app.Fragment {
         view_width = dm.widthPixels;
         view_height = dm.heightPixels;
 
-        realm = ApplicationController.getRealm();
+        realm = Realm.getDefaultInstance();
 
         matchedUsers = realm.where(MatchedUser.class).findAll();
         for(int i = 0; i < 3; i++){

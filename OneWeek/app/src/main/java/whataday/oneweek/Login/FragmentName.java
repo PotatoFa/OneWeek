@@ -92,6 +92,13 @@ public class FragmentName extends android.support.v4.app.Fragment {
 
             ((JoinActivity) getActivity()).user.setNick(edit_name.getText().toString());
 
+
+            ApplicationController.setDefaultRealm(
+                    ((JoinActivity) getActivity()).pref.getString("id", null));
+
+            startActivity(new Intent(getActivity(), MainPagerActivity.class));
+            getActivity().finish();
+            /*
             ApplicationController.getServerInterface().postRegister(
                     ((JoinActivity) getActivity()).user, new Callback<Response>() {
                         @Override
@@ -116,7 +123,7 @@ public class FragmentName extends android.support.v4.app.Fragment {
                             error.printStackTrace();
                         }
                     });
-
+*/
             //TODO pref저장 / 서버가입포스트요청
 
         }

@@ -17,10 +17,12 @@ import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmMigration;
+import io.realm.RealmSchema;
 import io.realm.exceptions.RealmMigrationNeededException;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
+import whataday.oneweek.Data.RealmModule;
 import whataday.oneweek.MainActivity;
 import whataday.oneweek.R;
 import whataday.oneweek.Service.GPSTracker;
@@ -46,7 +48,7 @@ public class ApplicationController extends Application {
         ApplicationController.instance = this;
         buildServerInterface(getResources().getString(R.string.server_path));
 
-        createRealm();
+        setDefaultRealm("");
 
         Typekit.getInstance()
                 .addCustom1(Typeface.createFromAsset(getAssets(), "Radnika-Light.otf"))
@@ -64,7 +66,7 @@ public class ApplicationController extends Application {
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
                 .name("test.realm")
-                .schemaVersion(3)
+                .schemaVersion(4)
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
@@ -75,9 +77,10 @@ public class ApplicationController extends Application {
     public static void setDefaultRealm(String file_name){
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(getInstance())
-                .name(file_name + ".realm")
-                .schemaVersion(3)
-                .deleteRealmIfMigrationNeeded()
+                .name("jaehun.realm")
+                .schemaVersion(0)
+                .setModules(new RealmModule())
+                .migration(migration)
                 .build();
 
         Realm.setDefaultConfiguration(realmConfiguration);
@@ -118,4 +121,12 @@ public class ApplicationController extends Application {
         return String.format("http://%s", ip);
     }
 
+    public static RealmMigration migration = new RealmMigration() {
+        @Override
+        public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+
+            RealmSchema schema = realm.getSchema();
+
+        }
+    };
 }

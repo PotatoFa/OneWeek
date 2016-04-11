@@ -62,7 +62,7 @@ public class DetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        realm = ApplicationController.getRealm();
+        realm = Realm.getDefaultInstance();
         intent = getIntent();
 
         matchId = intent.getStringExtra("matchId");

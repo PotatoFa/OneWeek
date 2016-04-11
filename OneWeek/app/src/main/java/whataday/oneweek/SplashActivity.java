@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -146,8 +150,8 @@ public class SplashActivity extends BaseActivity implements
                 //registerInBackground();
 
             }else{
-                image_splash.setImageResource(image_resource[count++]);
-                delay_handler.postDelayed(changeImage, 30);
+                Glide.with(getApplicationContext()).load(image_resource[count++]).into(image_splash);
+                delay_handler.postDelayed(changeImage, 300);
             }
         }
     };
@@ -241,7 +245,6 @@ public class SplashActivity extends BaseActivity implements
         finish();
 
     }
-
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -348,10 +351,21 @@ public class SplashActivity extends BaseActivity implements
 
     }
 
+    private static void recycleBitmap(ImageView iv) {
+        Drawable d = iv.getDrawable();
+        if (d instanceof BitmapDrawable) {
+            Log.i("Image Test : ", "re");
 
+            Bitmap b = ((BitmapDrawable)d).getBitmap();
+            b = null;
+        } // 현재로서는 BitmapDrawable 이외의 drawable 들에 대한 직접적인 메모리 해제는 불가능하다.
+
+        d.setCallback(null);
+    }
     @Override
     protected void onDestroy() {
 
+        recycleBitmap(image_splash);
         super.onDestroy();
     }
 }

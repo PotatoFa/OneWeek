@@ -30,10 +30,9 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     static int view_width;
 
 
-    public static EditSaveFragment newInstance(Bitmap bitmap, int dv_width) {
+    public static EditSaveFragment newInstance(int dv_width) {
 
         EditSaveFragment editSaveFragment = new EditSaveFragment();
-        getBitmap = bitmap;
         view_width = dv_width;
 
         return editSaveFragment;
@@ -42,6 +41,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getBitmap = ((CameraFragmentActivity)getActivity()).bitmap;
     }
 
 
@@ -167,7 +167,7 @@ public class EditSaveFragment extends android.support.v4.app.Fragment {
                         .setCustomAnimations(R.anim.right_in, R.anim.left_out, R.anim.left_in, R.anim.right_out)
                         .replace(
                                 R.id.custom_fragment_container,
-                                SendFragment.newInstance(getBitmap))
+                                SendFragment.newInstance())
                         .addToBackStack(null)
                         .commit();
             }

@@ -32,13 +32,8 @@ public class MainPagerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_pager);
 
-        realm = ApplicationController.getRealm();
+        realm = Realm.getDefaultInstance();
         setTestData();
-
-        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-        viewpager_main.setAdapter(mainPagerAdapter);
-        viewpager_main.setScrollDuration(500);
-        viewpager_main.setCurrentItem(1);
 
     }
 
@@ -74,7 +69,12 @@ public class MainPagerActivity extends BaseActivity {
         }
 
         realm.commitTransaction();
-        Log.i("REALM","CREATED TEST DATA");
+        Log.i("REALM", "CREATED TEST DATA");
+
+        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        viewpager_main.setAdapter(mainPagerAdapter);
+        viewpager_main.setScrollDuration(500);
+        viewpager_main.setCurrentItem(1);
 
     }
 
