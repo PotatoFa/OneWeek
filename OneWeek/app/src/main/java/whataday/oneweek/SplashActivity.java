@@ -146,7 +146,7 @@ public class SplashActivity extends BaseActivity implements
                 //startActivity(new Intent(getApplicationContext(), CameraFragmentActivity.class));
                 finish();
 
-                //tedPermission.check();
+                tedPermission.check();
                 //registerInBackground();
 
             }else{

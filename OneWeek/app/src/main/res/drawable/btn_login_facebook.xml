@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape
-    android:shape="rectangle"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid android:color="#dd465792"/>
-    <stroke android:width="0dip" android:color="#465792" />
-    <corners
-        android:bottomLeftRadius="23dp"
-        android:topLeftRadius="23dp"
-        android:bottomRightRadius="23dp"
-        android:topRightRadius="23dp"/>
+    <item>
+        <shape
+            android:shape="rectangle"
+            xmlns:android="http://schemas.android.com/apk/res/android" >
 
-</shape>
+            <solid android:color="#16000000"/>
+            <stroke android:width="0dip" android:color="#465792" />
+            <corners
+                android:bottomLeftRadius="23dp"
+                android:topLeftRadius="23dp"
+                android:bottomRightRadius="23dp"
+                android:topRightRadius="23dp"/>
+
+        </shape>
+    </item>
+
+    <item>
+        <shape
+            android:shape="rectangle"
+            xmlns:android="http://schemas.android.com/apk/res/android" >
+
+            <padding android:top="1dp"
+                android:bottom="1dp"
+                android:left="1dp"/>
+
+            <solid android:color="#dd465792"/>
+            <stroke android:width="0dip" android:color="#465792" />
+            <corners
+                android:bottomLeftRadius="23dp"
+                android:topLeftRadius="23dp"
+                android:bottomRightRadius="23dp"
+                android:topRightRadius="23dp"/>
+
+        </shape>
+    </item>
+</layer-list>

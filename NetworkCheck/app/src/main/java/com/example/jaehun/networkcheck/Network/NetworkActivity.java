@@ -41,7 +41,6 @@ public class NetworkActivity extends AppCompatActivity {
 
     private void loadData(){
 
-
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
